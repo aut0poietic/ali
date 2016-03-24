@@ -1,9 +1,64 @@
-
-
 @mixin clearfix() {
 	&::after {
-		content: "";
-		display: table;
-		clear: both;
+		content : "";
+		display : table;
+		clear   : both;
+	}
+}
+
+@function lvalue( $hex-color-value ) {
+	$hex-color-value : $hex-color-value/ 255;
+
+	@if $hex-color-value < .03928 {
+		$hex-color-value : $hex-color-value / 12.92;
+	} @else {
+		$hex-color-value : pow(( $hex-color-value + .055 ) / 1.055, 2.4)
+	}
+
+	@return $hex-color-value;
+}
+
+@function luminance($color) {
+
+	$red : lvalue(red($color));
+	$green : lvalue(green($color));
+	$blue : lvalue(blue($color));
+	@return .2126 * $red + .7152 * $green + 0.0722 * $blue;
+
+}
+
+@function contrast( $color-1, $color-2 ) {
+	$lum-1 : luminance($color-1) + .05;
+	$lum-2 : luminance($color-2) + .05;
+
+	$ratio : $lum-1/$lum-2;
+
+	@if $lum-2 > $lum-1 {
+		$ratio : 1 / $ratio;
+	}
+	@return $ratio;
+}
+
+@function getContrastText( $background , $text-light : $color-text-light, $text-dark : $color-text-dark ) {
+	$ratio-light : contrast($background, $text-light);
+	$ratio-dark : contrast($background, $text-dark);
+
+	@if $ratio-light > $ratio-dark {
+		@return $text-light;
+	} @else {
+		@return $text-dark;
+	}
+}
+
+@mixin addContrastingColors( $background ) {
+	color            : getContrastText($background);
+	background-color : $background;
+}
+
+@mixin focusable() {
+	cursor : pointer;
+	&:focus {
+		outline        : 1px dashed $accent-color-bright;
+		outline-offset : -2px;
 	}
 }

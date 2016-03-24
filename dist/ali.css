@@ -1,5 +1,15 @@
+/*!
+ * --------------------------------------------------------------------------
+ * Ali - Accessible Learning Interactions (
+ * Copyright 2016 Jer Brand / Irresponsible Art
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
 /**
  * NORMALIZE SCSS
+ */
+/**
+ * Colors
  */
 /*! normalize-scss | MIT/GPLv2 License | bit.ly/normalize-scss */
 /**
@@ -9,7 +19,8 @@
  */
 html {
   font-size: 100%;
-  font-family: sans-serif;
+  line-height: 1.5em;
+  font-family: "Roboto", sans-serif;
   /* 1 */
   -ms-text-size-adjust: 100%;
   /* 2 */
@@ -135,32 +146,38 @@ dfn {
  */
 h1 {
   font-size: 2em;
+  line-height: 1.5em;
   /* Set 1 unit of vertical rhythm on the top and bottom margins. */
   margin: 0.75em 0;
 }
 
 h2 {
   font-size: 1.5em;
+  line-height: 2em;
   margin: 1em 0;
 }
 
 h3 {
   font-size: 1.17em;
+  line-height: 1.28205em;
   margin: 1.28205em 0;
 }
 
 h4 {
   font-size: 1em;
+  line-height: 1.5em;
   margin: 1.5em 0;
 }
 
 h5 {
   font-size: 0.83em;
+  line-height: 1.80723em;
   margin: 1.80723em 0;
 }
 
 h6 {
   font-size: 0.67em;
+  line-height: 2.23881em;
   margin: 2.23881em 0;
 }
 
@@ -228,8 +245,18 @@ ul {
   margin: 1.5em 0;
 }
 
+/**
+ * Turn off margins on nested lists.
+ */
+ol ol,
+ol ul,
+ul ol,
+ul ul {
+  margin: 0;
+}
+
 dd {
-  margin: 0 0 0 40px;
+  margin: 0 0 0 24px;
 }
 
 /**
@@ -238,7 +265,7 @@ dd {
 menu,
 ol,
 ul {
-  padding: 0 0 0 40px;
+  padding: 0 0 0 24px;
 }
 
 /**
@@ -254,14 +281,14 @@ nav ol {
  * Set 1 unit of vertical rhythm on the top and bottom margin.
  */
 blockquote {
-  margin: 1.5em 40px;
+  margin: 1.5em 24px;
 }
 
 /**
  * Address margin not present in IE 8/9 and Safari.
  */
 figure {
-  margin: 1.5em 40px;
+  margin: 1.5em 24px;
 }
 
 /**
@@ -331,7 +358,7 @@ textarea {
   /* 2 */
   margin: 0;
   /* 3 */
-  *font-family: sans-serif;
+  *font-family: "Roboto", sans-serif;
   /* 4 */
   *vertical-align: middle;
   /* 5 */
@@ -502,4 +529,51 @@ table {
 td,
 th {
   padding: 0;
+}
+
+.accordion {
+  position: relative;
+}
+.accordion .accordion-tab {
+  color: #fff;
+  background-color: #283593;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  padding: 12px 24px;
+  box-shadow: inset 0 24px 24px -24px rgba(255, 255, 255, 0.3);
+  transition: box-shadow .2s ease-in;
+}
+.accordion .accordion-tab:focus {
+  outline: 1px dashed #FF9800;
+  outline-offset: -2px;
+}
+.accordion .accordion-tab:focus, .accordion .accordion-tab:hover {
+  box-shadow: inset 0 72px 72px -72px rgba(255, 255, 255, 0.3);
+}
+.accordion .accordion-tab[aria-expanded="true"] {
+  cursor: pointer;
+  box-shadow: inset 0 120px 120px -120px rgba(255, 255, 255, 0.2);
+}
+.accordion .accordion-panel {
+  color: #222;
+  background-color: #fcfcfc;
+  cursor: pointer;
+  position: relative;
+  margin: 0;
+  padding: 1px 24px;
+  border-right: 1px solid rgba(34, 34, 34, 0.1);
+  border-left: 1px solid rgba(34, 34, 34, 0.1);
+  border-bottom: 2px solid #FF9800;
+  max-height: 300px;
+  overflow: hidden;
+  transition: all .7s ease-out;
+}
+.accordion .accordion-panel:focus {
+  outline: 1px dashed #FF9800;
+  outline-offset: -2px;
+}
+.accordion .accordion-panel[aria-hidden="true"] {
+  padding: 0 24px;
+  max-height: 0;
 }

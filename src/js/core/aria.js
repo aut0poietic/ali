@@ -1,6 +1,6 @@
 'use strict';
 
-/**
+/*
  * --------------------------------------------------------------------------
  * Ali: aria.es6
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
@@ -23,11 +23,10 @@
  *      'expanded' : 'false',
  *      'tabindex' : -1
  * } );
- *
- * @todo Extend behavior to allow for near-automatic component creation such as:
- * $('li.tab').not(':first').aria.init('tab') ;
- * $('li.tab:first').aria.init('tab', {'selected' : true, 'expanded' : 'true', 'tabindex' : 0 }
  */
+///TODO: Extend behavior to allow for near-automatic component creation such as:
+///TODO: $('li.tab').not(':first').aria.init('tab') ;
+///TODO: $('li.tab:first').aria.init('tab', {'selected' : true, 'expanded' : 'true', 'tabindex' : 0 }
 
 var ARIA = function ($) {
 	var _attrs = ['role', 'tabindex', 'activedescendant', 'atomic', 'autocomplete', 'busy', 'checked', 'controls', 'describedby', 'disabled', 'dropeffect', 'expanded', 'flowto', 'grabbed', 'haspopup', 'hidden', 'invalid', 'label', 'labelledby', 'level', 'live', 'multiline', 'multiselectable', 'orientation', 'owns', 'posinset', 'pressed', 'readonly', 'relevant', 'required', 'selected', 'setsize', 'sort', 'valuemax', 'valuemin', 'valuenow', 'valuetext'];

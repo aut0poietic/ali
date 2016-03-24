@@ -8,7 +8,9 @@ module.exports = function ( grunt ) {
 			babel : {
 				es6 : {
 					options : {
-						presets: ['babel-preset-es2015']
+						presets   : [
+							'babel-preset-es2015'
+						]
 					},
 					files   : [
 						{
@@ -27,7 +29,8 @@ module.exports = function ( grunt ) {
 				dist    : {
 					src  : [
 						'src/js/ali.js',
-						'src/js/core/aria.js'
+						'src/js/core/aria.js',
+						'src/js/interactions/accordion.js'
 					],
 					dest : 'dist/ali.js'
 				}
@@ -58,7 +61,8 @@ module.exports = function ( grunt ) {
 
 			uglify : {
 				options : {
-					sourceMap : true
+					sourceMap        : true,
+					preserveComments : /(?:^!|@(?:license|preserve|cc_on))/
 				},
 				main    : {
 					files : {
@@ -131,5 +135,5 @@ module.exports = function ( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
 	grunt.loadNpmTasks( 'grunt-contrib-watch' );
 
-	grunt.registerTask( 'default', [ 'sass', 'autoprefixer', 'cssmin', /*'jshint',*/ 'babel', 'concat', 'uglify'] );
+	grunt.registerTask( 'default', [ 'sass', 'autoprefixer', 'cssmin', /*'jshint',*/ 'babel', 'concat', 'uglify' ] );
 };

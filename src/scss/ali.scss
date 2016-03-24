@@ -1,6 +1,16 @@
+/*!
+ * --------------------------------------------------------------------------
+ * Ali - Accessible Learning Interactions (
+ * Copyright 2016 Jer Brand / Irresponsible Art
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+@import "../../node_modules/mathsass/dist/math";
 @import "variables";
 @import "mixins";
 @import "normalize";
+
 @include normalize();
 @import "shared";
-@import "tabControl";
+
+@import "interactions/accordion";
