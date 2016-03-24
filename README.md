@@ -20,5 +20,6 @@ The components currently require [jQuery 2.x](https://code.jquery.com). Future i
 
 Learners utilizing the components require a modern browser (last 4 versions), IE 10+ and any version of Edge.
 
-Take a look at the [issues](https://github.com/aut0poietic/ali/issues/) for this project to 
+Take a look at the [issues](https://github.com/aut0poietic/ali/issues/) for this project to see where we're going, 
+make suggestions or tell us if something doesn't quite work. 
 

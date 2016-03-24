@@ -18,11 +18,13 @@
  * $('li.tab').aria( {
  *      'role' : 'tab',
  *      'selected' : 'false',
- *      'tabindex' : 0
- * } )
+ *      'expanded' : 'false',
+ *      'tabindex' : -1
+ * } );
  *
- * @todo Extend behavior to allow for near-automatic component initialisation such as:
- * $('li.tab').aria.init('tab') ;
+ * @todo Extend behavior to allow for near-automatic component creation such as:
+ * $('li.tab').not(':first').aria.init('tab') ;
+ * $('li.tab:first').aria.init('tab', {'selected' : true, 'expanded' : 'true', 'tabindex' : 0 }
  */
 
 const ARIA = (( $ ) => {
@@ -72,7 +74,7 @@ const ARIA = (( $ ) => {
 	}
 
 	function _isValidAria( prop ) {
-		return _attrs.indexOf( prop ) > -1;
+		return _attrs.indexOf( prop ) > - 1;
 	}
 
 	$.fn.aria = function ( prop, value ) {
