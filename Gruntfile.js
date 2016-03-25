@@ -30,6 +30,7 @@ module.exports = function ( grunt ) {
 					src  : [
 						'src/js/ali.js',
 						'src/js/core/aria.js',
+						'src/js/core/interaction.js',
 						'src/js/interactions/accordion.js'
 					],
 					dest : 'dist/ali.js'

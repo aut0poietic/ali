@@ -8,7 +8,7 @@
 
 "use strict";
 jQuery( function ( $ ) {
-	if ( window.ali_ManualInit === undefined ) {
+	if ( window.aliAutolInit !== false ) {
 		$('[data-ali="accordion"]').accordion() ;
 	}
 } );

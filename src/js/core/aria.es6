@@ -23,7 +23,8 @@
  * } );
  */
 ///TODO: Extend behavior to allow for near-automatic component creation such as:
-///TODO: $('li.tab').not(':first').aria.init('tab') ;
+///TODO: $('li.tab').aria.init('tab') ;
+///TODO: Allow for overridding the defaults, like
 ///TODO: $('li.tab:first').aria.init('tab', {'selected' : true, 'expanded' : 'true', 'tabindex' : 0 }
 
 const ARIA = (( $ ) => {
@@ -79,7 +80,9 @@ const ARIA = (( $ ) => {
 	$.fn.aria = function ( prop, value ) {
 		if ( 'object' === $.type( prop ) ) {
 			for ( let i in prop ) {
-				this.aria( i, prop[ i ] );
+                if( prop.hasOwnProperty(i)){
+                    this.aria( i, prop[ i ] );
+                }
 			}
 		} else if ( undefined !== prop && undefined !== value ) {
 			this.each( function () {
@@ -89,6 +92,8 @@ const ARIA = (( $ ) => {
 					$el.attr( attr, value );
 				}
 			} );
+		} else if(undefined !== prop ) {
+			return this.attr(_addARIA(prop));
 		}
 		return this;
 	};
