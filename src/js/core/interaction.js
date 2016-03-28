@@ -9,64 +9,132 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Ali: interaction.es6
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
+ */
+
+/**
  * aliInteraction
  * The parent class for all interactions.
  */
 
 var aliInteraction = function () {
-    function aliInteraction(element, type) {
-        _classCallCheck(this, aliInteraction);
+	/**
+  *
+  * @param element
+  * @param type
+  */
 
-        this.$el = $(element);
-        var d = new Date();
-        this._data = {
-            'id': this.$el.attr('id'),
-            'start': d.getTime(),
-            'type': type,
-            'correct_responses': [],
-            'learner_response': [],
-            'result': null,
-            'latency': 0,
-            'description': 'Ali Interaction'
-        };
-    }
+	function aliInteraction(element) {
+		var type = arguments.length <= 1 || arguments[1] === undefined ? ali.TYPE.other : arguments[1];
+		var description = arguments.length <= 2 || arguments[2] === undefined ? 'Ali Interaction' : arguments[2];
 
-    _createClass(aliInteraction, [{
-        key: 'setDescription',
-        value: function setDescription(description) {
-            this._data.description = description;
-        }
+		_classCallCheck(this, aliInteraction);
 
-        ///TODO: We'll have to do this once all the interactions are built.
-        ///TODO: I don't have a clear idea of what all this will need to encompass.
+		this.$el = $(element);
+		var d = new Date();
+		this._data = {
+			'id': this.$el.attr('id'),
+			'start': d.getTime(),
+			'type': type,
+			'correct_responses': [],
+			'learner_response': [],
+			'result': 'unknown',
+			'latency': 0,
+			'description': description
+		};
+	}
 
-    }, {
-        key: 'setResponses',
-        value: function setResponses(responses) {}
+	/**
+  * Event data object for the interaction.
+  * @returns {{id: string, start: number, type: string, correct_responses: Array, learner_response: Array, result: string, latency: number, description: string}|*}
+  */
 
-        ///TODO: We'll have to do this once all the interactions are built.
-        ///TODO: I don't have a clear idea of what all this will need to encompass.
 
-    }, {
-        key: 'setCorrectResponses',
-        value: function setCorrectResponses(responses) {}
-    }, {
-        key: 'ready',
-        value: function ready() {}
-    }, {
-        key: 'selectionChanged',
-        value: function selectionChanged($item) {}
-    }, {
-        key: 'itemComplete',
-        value: function itemComplete($item) {
-            var status = arguments.length <= 1 || arguments[1] === undefined ? 'complete' : arguments[1];
-        }
-    }, {
-        key: 'complete',
-        value: function complete() {
-            var status = arguments.length <= 0 || arguments[0] === undefined ? 'complete' : arguments[0];
-        }
-    }]);
+	_createClass(aliInteraction, [{
+		key: 'makeTargetID',
 
-    return aliInteraction;
+
+		/**
+   * Utility function that creates an ID using the the ID of the passed element or the text of the passed element.
+   * @param $el Element used to define the ID.
+   * @returns {string} Target ID for use with `aria-controls`
+   */
+		value: function makeTargetID($el) {
+			var str = $el.attr('id');
+			if (str === undefined) {
+				str = $el.text().replace(/[\W_]+/g, "").toLowerCase();
+				if (str.length > 10) {
+					str = str.substring(0, 10);
+				}
+			} else {
+				str += '-target';
+			}
+			return str;
+		}
+
+		/**
+   * Forces a method to be called later, just before the next UI update.
+   * @param callback
+   */
+
+	}, {
+		key: 'defer',
+		value: function defer(callback) {
+			var func = function func() {
+				callback.apply(this);
+			};
+			requestAnimationFrame(func.bind(this));
+		}
+	}, {
+		key: 'complete',
+
+
+		/**
+   * Complete event. Fired when all unique user actions have been performed for this interaction.
+   * This could be once all items have been viewed, or when the question or questions have been judged.
+   * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
+   * correct or incorrect, if appropriate.
+   */
+		value: function complete() {
+			var status = arguments.length <= 0 || arguments[0] === undefined ? 'complete' : arguments[0];
+
+			var d = new Date();
+			this.data.result = status;
+			this.data.latency = d.getTime() - this.data.start;
+			var e = new jQuery.Event('ali:complete');
+			this.$el.trigger(e, [this.data]);
+		}
+	}, {
+		key: 'data',
+		get: function get() {
+			return this._data;
+		}
+	}, {
+		key: 'learnerResponses',
+
+
+		/**
+   * Allows interactions to set their learner responses for this interaction.
+   * @param responses : array An array of responses specific to the interaction
+   */
+		set: function set(responses) {
+			if ($.getType(responses) === 'array') {
+				this.data.learner_response = responses;
+			}
+		}
+
+		/**
+   * Allows interactions to set their correct responses for this interaction.
+   * @param responses : array An array of responses specific to the interaction
+   */
+
+	}, {
+		key: 'correctResponses',
+		set: function set(responses) {
+			if ($.getType(responses) === 'array') {
+				this.data.correct_responses = responses;
+			}
+		}
+	}]);
+
+	return aliInteraction;
 }();

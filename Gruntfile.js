@@ -8,7 +8,7 @@ module.exports = function ( grunt ) {
 			babel : {
 				es6 : {
 					options : {
-						presets   : [
+						presets : [
 							'babel-preset-es2015'
 						]
 					},
@@ -29,8 +29,10 @@ module.exports = function ( grunt ) {
 				dist    : {
 					src  : [
 						'src/js/ali.js',
+						'src/js/core/ali.js',
 						'src/js/core/aria.js',
 						'src/js/core/interaction.js',
+						'src/js/core/multipartinteraction.js',
 						'src/js/interactions/accordion.js'
 					],
 					dest : 'dist/ali.js'
