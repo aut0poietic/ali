@@ -388,7 +388,7 @@ var aliAccordion = function ($) {
 			} else {
 				_this.getFirstTab().aria('tabindex', 0);
 			}
-			$(window).on('resize', _this.requestResize.bind(_this));
+			$(window).on('resize', _this._requestResize.bind(_this));
 			return _this;
 		}
 

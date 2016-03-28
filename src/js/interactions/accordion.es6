@@ -65,7 +65,7 @@ const aliAccordion = (( $ ) => {
 			} else {
 				this.getFirstTab().aria( 'tabindex', 0 );
 			}
-			$( window ).on( 'resize', this.requestResize.bind( this ) );
+			$( window ).on( 'resize', this._requestResize.bind( this ) );
 		}
 
 		/**
@@ -368,7 +368,7 @@ const aliAccordion = (( $ ) => {
 			} );
 		}
 	}
-	
+
 	/**
 	 * JQUERY PLUGIN
 	 */
