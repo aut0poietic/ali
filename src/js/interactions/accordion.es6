@@ -116,8 +116,10 @@ const aliAccordion = (( $ ) => {
 					'tabindex' : '0'
 				}
 			).addClass( 'viewed' ).focus();
+
 			this.itemSelected( $tab );
-			if ( $( '.viewed', this.$el ).length === this.$tabs.length && this.data.status === ali.STATUS.incomplete ) {
+
+			if ( $( '.viewed', this.$el ).length === this.$tabs.length && this.data.result === ali.STATUS.incomplete ) {
 				this.complete();
 			}
 		}
