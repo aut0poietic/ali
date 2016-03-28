@@ -5,7 +5,10 @@
  * --------------------------------------------------------------------------
  */
 
-
+/**
+ * Parent class for any interaction that contains multiple pieces that can be completed independently.
+ * Note that not all interactions use both the "itemSelected" and "itemComplete" events.
+ */
 class aliMultipartInteraction extends aliInteraction {
 
 	constructor( element, type = ali.TYPE.other, description = 'Ali Interaction' ) {
@@ -14,12 +17,22 @@ class aliMultipartInteraction extends aliInteraction {
 		this.lastPartEnd = this.data.start;
 	}
 
+	/**
+	 * Event trigger method to indicate that an item has been selected.
+	 * @param $item : jQuery object for the element selected.
+	 */
 	itemSelected( $item ) {
 		let e = new jQuery.Event( 'ali:itemSelected' );
 		this.$el.trigger( e, [ this.data, $item ] );
 	}
 
-	itemComplete( status, $item = this.$el ) {
+	/**
+	 * Event trigger method to indicate that an item has been completed.
+	 * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
+	 * correct or incorrect, if appropriate.
+	 * @param $item : jQuery object for the element selected.
+	 */
+	itemComplete( status = ali.STATUS.complete, $item = this.$el ) {
 		let clonedData = Object.assign( {}, this.data );
 		let d = new Date();
 		clonedData.result = status;

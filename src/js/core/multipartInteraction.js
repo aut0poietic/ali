@@ -15,6 +15,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * --------------------------------------------------------------------------
  */
 
+/**
+ * Parent class for any interaction that contains multiple pieces that can be completed independently.
+ * Note that not all interactions use both the "itemSelected" and "itemComplete" events.
+ */
+
 var aliMultipartInteraction = function (_aliInteraction) {
 	_inherits(aliMultipartInteraction, _aliInteraction);
 
@@ -30,15 +35,30 @@ var aliMultipartInteraction = function (_aliInteraction) {
 		return _this;
 	}
 
+	/**
+  * Event trigger method to indicate that an item has been selected.
+  * @param $item : jQuery object for the element selected.
+  */
+
+
 	_createClass(aliMultipartInteraction, [{
 		key: 'itemSelected',
 		value: function itemSelected($item) {
 			var e = new jQuery.Event('ali:itemSelected');
 			this.$el.trigger(e, [this.data, $item]);
 		}
+
+		/**
+   * Event trigger method to indicate that an item has been completed.
+   * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
+   * correct or incorrect, if appropriate.
+   * @param $item : jQuery object for the element selected.
+   */
+
 	}, {
 		key: 'itemComplete',
-		value: function itemComplete(status) {
+		value: function itemComplete() {
+			var status = arguments.length <= 0 || arguments[0] === undefined ? ali.STATUS.complete : arguments[0];
 			var $item = arguments.length <= 1 || arguments[1] === undefined ? this.$el : arguments[1];
 
 			var clonedData = Object.assign({}, this.data);

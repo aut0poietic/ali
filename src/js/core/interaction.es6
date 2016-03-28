@@ -24,7 +24,7 @@ class aliInteraction {
 			'type'              : type,
 			'correct_responses' : [],
 			'learner_response'  : [],
-			'result'            : 'unknown',
+			'result'            : ali.STATUS.incomplete,
 			'latency'           : 0,
 			'description'       : description
 		};

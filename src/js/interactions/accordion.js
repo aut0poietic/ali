@@ -11,7 +11,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var aliAccordion = function ($) {
 
 	var DESCRIPTION = 'Accordion interaction.';
+	var TYPE = ali.TYPE.other;
 
+	/**
+  * Saved jQuery paths.
+  */
 	var TAB = '.accordion-tab';
 	var OPEN_TAB = '.accordion-tab[aria-expanded="true"]';
 	var PANEL = '.accordion-panel';
@@ -22,14 +26,18 @@ var aliAccordion = function ($) {
 		function Accordion(element) {
 			_classCallCheck(this, Accordion);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Accordion).call(this, element, DESCRIPTION));
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Accordion).call(this, element, TYPE, DESCRIPTION));
 
 			_this.$el.aria({
 				'role': "tablist",
 				'multiselectable': 'true'
 			});
 			_this.$tabs = $(TAB, _this.$el);
+			// before we begin manipulation, fetch a reference to any
+			// tabs that were set to expanded so we can restore them
+			// after initialization
 			var $openTabs = $(OPEN_TAB);
+
 			_this.$tabs.each(function (i, el) {
 				var $tab = $(el);
 				var id = _this.makeTargetID($tab);
@@ -47,18 +55,30 @@ var aliAccordion = function ($) {
 					'hidden': "true"
 				}).attr({
 					'id': id,
-					'data-height': _this.getMeasuredHeight($panel)
+					'data-height': _this._getMeasuredHeight($panel)
 				}).off('keydown.ali').on('keydown.ali', _this.panel_onKeyDown.bind(_this));
 			});
 
+			// If there was an expanded tab set by the user, expand that tab.
+			// Otherwise, just make the first element in the list active
 			if ($openTabs.length > 0) {
-				_this.show($($openTabs[0]));
+				/// DIRTY HACK: deferring this "show" call so that event handlers have a chance to be attached
+				/// before it fires.
+				_this.defer(function () {
+					_this.show($($openTabs[0]));
+				});
 			} else {
 				_this.getFirstTab().aria('tabindex', 0);
 			}
 			$(window).on('resize', _this.requestResize.bind(_this));
 			return _this;
 		}
+
+		/**
+   * Hides the panel corresponding to the provided tab and sets that tab to unexpanded.
+   * @param $tab
+   */
+
 
 		_createClass(Accordion, [{
 			key: 'hide',
@@ -69,16 +89,27 @@ var aliAccordion = function ($) {
 				}).removeAttr('style');
 				$tab.aria('expanded', 'false');
 			}
+
+			/**
+    *  Hides all panels
+    */
+
 		}, {
 			key: 'hideAll',
 			value: function hideAll() {
+				var _this2 = this;
+
 				this.$tabs.each(function (i, el) {
-					this.hide($(el));
-				}.bind(this));
-				if (this.firstRun) {
-					$('#panel-0').aria('hidden', 'true');
-				}
+					_this2.hide($(el));
+				});
 			}
+
+			/**
+    * Shows the panel corresponding to the provided $tab and fires an `ali:itemSelected`.
+    * If all tabs have been viewed, fires an `ali:complete` event.
+    * @param $tab
+    */
+
 		}, {
 			key: 'show',
 			value: function show($tab) {
@@ -98,20 +129,44 @@ var aliAccordion = function ($) {
 					'tabindex': '0'
 				}).addClass('viewed').focus();
 				this.itemSelected($tab);
-				if ($('.viewed', this.$el).length === this.$tabs.length) {
+				if ($('.viewed', this.$el).length === this.$tabs.length && this.data.status === ali.STATUS.incomplete) {
 					this.complete();
 				}
 			}
+
+			/**
+    * Returns a panel controlled by the provided tab.
+    * @param $tab : jQuery
+    * @returns jQuery object for the panel.
+    */
+
 		}, {
 			key: 'getPanelFromTab',
 			value: function getPanelFromTab($tab) {
 				return $('#' + $tab.aria('controls'));
 			}
+
+			/**
+    * Returns a tab that controls the provided panel.
+    * @param $panel : jQuery
+    * @returns jQuery object for the tab
+    */
+
 		}, {
 			key: 'getTabFromPanel',
 			value: function getTabFromPanel($panel) {
 				return $(TAB + '[aria-controls="' + $panel.attr('id') + '"]');
 			}
+
+			/**
+    * Iterates through all siblings following the provided tab until another tab is found.
+    * If no tab is found, returns an empty jQuery object.
+    * @param $tab
+    * @returns {jQuery}
+    * @note Maximum iterations is 2 * {number of tabs}
+    * @private
+    */
+
 		}, {
 			key: '_nextTab',
 			value: function _nextTab($tab) {
@@ -122,6 +177,13 @@ var aliAccordion = function ($) {
 				}
 				return $next;
 			}
+
+			/**
+    * Returns the next tab in the accordion or the first tab if no next tab can be found.
+    * @param $tab
+    * @returns {jQuery}
+    */
+
 		}, {
 			key: 'getNextTab',
 			value: function getNextTab($tab) {
@@ -132,6 +194,16 @@ var aliAccordion = function ($) {
 					return $next;
 				}
 			}
+
+			/**
+    * Iterates over all siblings preceding the provided tab until another tab is found.
+    * If no tab is found, returns an empty jQuery object.
+    * @param $tab
+    * @returns {jQuery}
+    * @note Maximum iterations is 2 * {number of tabs}
+    * @private
+    */
+
 		}, {
 			key: '_previousTab',
 			value: function _previousTab($tab) {
@@ -142,6 +214,13 @@ var aliAccordion = function ($) {
 				}
 				return $prev;
 			}
+
+			/**
+    * Returns the previous tab in the accordion or the last tab if no previous tab can be found.
+    * @param $tab
+    * @returns {jQuery}
+    */
+
 		}, {
 			key: 'getPreviousTab',
 			value: function getPreviousTab($tab) {
@@ -152,16 +231,34 @@ var aliAccordion = function ($) {
 					return $prev;
 				}
 			}
+
+			/**
+    * Gets the first tab in the list.
+    * @returns {jQuery}
+    */
+
 		}, {
 			key: 'getFirstTab',
 			value: function getFirstTab() {
 				return this.$tabs.first();
 			}
+
+			/**
+    * Gets the last tab in the list.
+    * @returns {jQuery}
+    */
+
 		}, {
 			key: 'getLastTab',
 			value: function getLastTab() {
 				return this.$tabs.last();
 			}
+
+			/**
+    * Keyboard event handler for when keyboard focus in on the tabs.
+    * @private
+    */
+
 		}, {
 			key: 'tab_onKeyDown',
 			value: function tab_onKeyDown(e) {
@@ -201,6 +298,12 @@ var aliAccordion = function ($) {
 						break;
 				}
 			}
+
+			/**
+    * Tab click event
+    * @private
+    */
+
 		}, {
 			key: 'tab_onClick',
 			value: function tab_onClick(e) {
@@ -212,6 +315,12 @@ var aliAccordion = function ($) {
 					this.hide($target);
 				}
 			}
+
+			/**
+    * Keyboard event handler for when keyboard focus is in a panel.
+    * @private
+    */
+
 		}, {
 			key: 'panel_onKeyDown',
 			value: function panel_onKeyDown(e) {
@@ -248,44 +357,77 @@ var aliAccordion = function ($) {
 					}
 				}
 			}
+
+			/**
+    * Window resize handler.
+    * @param e
+    */
+
 		}, {
 			key: 'onResize',
 			value: function onResize(e) {
 				this._width = $(document).width();
-				this.requestResize();
+				this._requestResize();
 			}
+
+			/**
+    * Requests a resize event if the current control is not currently performing a resize event.
+    * Events are handled before the next paint and debounced using requestAnimationFrame
+    * @private
+    */
+
 		}, {
-			key: 'requestResize',
-			value: function requestResize() {
+			key: '_requestResize',
+			value: function _requestResize() {
 				if (!this._resizing) {
-					requestAnimationFrame(this.resizePanels.bind(this));
+					requestAnimationFrame(this._resizePanels.bind(this));
 					this._resizing = true;
 				}
 			}
+
+			/**
+    * Callback passed to requestAnimationFrame; sets the max-height for each panel, adjusting the height
+    * for any panel currently open.
+    * @private
+    */
+
 		}, {
-			key: 'resizePanels',
-			value: function resizePanels() {
-				var _this2 = this;
+			key: '_resizePanels',
+			value: function _resizePanels() {
+				var _this3 = this;
 
 				this.$tabs.each(function (i, el) {
 					var $panel = $(el).next(PANEL);
-					$panel.attr('data-height', _this2.getMeasuredHeight($panel));
+					$panel.attr('data-height', _this3._getMeasuredHeight($panel));
 					if ($panel.aria('hidden') === 'false') {
-						$panel.css('min-height', _this2.getMeasuredHeight($panel) + 'px');
+						$panel.css('min-height', _this3._getMeasuredHeight($panel) + 'px');
 					}
 				});
-
 				this._resizing = false;
 			}
+
+			/**
+    * Creates an clone element on the DOM of the provided panel and measures it's height.
+    * @param $panel
+    * @returns {int} height of element
+    * @private
+    */
+
 		}, {
-			key: 'getMeasuredHeight',
-			value: function getMeasuredHeight($panel) {
+			key: '_getMeasuredHeight',
+			value: function _getMeasuredHeight($panel) {
 				var $div = $('<div id="ali-temp" aria-hidden="true" style="overflow:hidden;height:1px;width:100%;visibility: hidden"></div>').appendTo(this.$el);
 				var $tmp = $('<dd class="accordion-panel"></dd>').html($panel.html()).appendTo($div);
 				var h = $tmp.height();
 				$div.remove();
 				return h;
 			}
+
+			/**
+    * jQuery Plugin interface method -- simply creates a new Accordion instance
+    * for each element in the current query.
+    */
+
 		}], [{
 			key: '_jQuery',
 			value: function _jQuery() {
@@ -297,6 +439,10 @@ var aliAccordion = function ($) {
 
 		return Accordion;
 	}(aliMultipartInteraction);
+
+	/**
+  * JQUERY PLUGIN
+  */
 
 	$.fn.accordion = Accordion._jQuery;
 	$.fn.accordion.Constructor = Accordion;

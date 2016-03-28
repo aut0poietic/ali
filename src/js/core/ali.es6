@@ -8,7 +8,8 @@ const ali = {
 		complete      : 'complete',
 		correct       : 'correct',
 		incorrect     : 'incorrect',
-		unanticipated : 'unanticipated'
+		unanticipated : 'unanticipated',
+		incomplete    : 'incomplete'
 	},
 
 	TYPE : {

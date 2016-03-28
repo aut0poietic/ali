@@ -1,0 +1,95 @@
+<!doctype html>
+<html class="no-js" lang="en-US">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Ali Development</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="../ali.css">
+	<style>
+		.container {
+			max-width : 960px;
+			margin    : 64px auto;
+		}
+
+		@media ( max-width : 959px ) {
+			.container {
+				margin : 64px 32px;
+			}
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<h1>Ali Accordion</h1>
+	<div class="docs">
+		<p>A simple accordion interaction.</p>
+		<p>Information used in this example is from the Wikipedia article <a href="https://en.wikipedia.org/wiki/List_of_cognitive_biases" target="blank" rel="external">"List of cognitive biases"</a>.</p>
+	</div>
+	<hr>
+	<!------------------------------------------>
+	<!-- BEGIN INTERACTION TEMPLATE CODE HERE -->
+	<!------------------------------------------>
+	<dl class="accordion" data-ali="accordion">
+		<dt class="accordion-tab" aria-expanded="true">Confirmation Bias</dt>
+		<dd class="accordion-panel" aria-hidden="true">
+			<p>Confirmation bias, also called myside bias, is the tendency to search for, interpret, or recall information in a way that confirms one's beliefs or hypotheses. It is a type of cognitive bias and a systematic error of inductive reasoning. People
+				display this bias when they gather or remember information selectively, or when they interpret it in a biased way. The effect is stronger for emotionally charged issues and for deeply entrenched beliefs. People also tend to interpret ambiguous
+				evidence as supporting their existing position. Biased search, interpretation and memory have been invoked to explain attitude polarization (when a disagreement becomes more extreme even though the different parties are exposed to the same evidence),
+				belief perseverance (when beliefs persist after the evidence for them is shown to be false), the irrational primacy effect (a greater reliance on information encountered early in a series) and illusory correlation (when people falsely perceive
+				an association between two events or situations).</p>
+
+			<p>Original article:
+				<cite><a href="https://en.wikipedia.org/wiki/Confirmation_bias" target="_blank" rel="external">Wikipedia: Confirmation Bias</a></cite>
+			</p>
+		</dd>
+		<dt class="accordion-tab">Choice-supportive bias</dt>
+		<dd class="accordion-panel" aria-hidden="true">
+			<p>In cognitive science, choice-supportive bias is the tendency to retroactively ascribe positive attributes to an option one has selected. It is a cognitive bias. For example, if a person buys a computer from Apple instead of a computer (PC) running
+				Windows, they are likely to ignore or downplay the faults of Apple computers while amplifying those of Windows computers. Conversely, they are also likely to notice and amplify advantages of Apple computers and not notice or de-emphasize those
+				of Windows computers.</p>
+
+			<p>What is remembered about a decision can be as important as the decision itself, especially in determining how much regret or satisfaction one experiences. Research indicates that the process of making and remembering choices yields memories that
+				tend to be distorted in predictable ways. In cognitive science, one predictable way that memories of choice options are distorted is that positive aspects tend to be remembered as part of the chosen option, whether or not they originally were
+				part of that option, and negative aspects tend to be remembered as part of rejected options. Once an action has been taken, the ways in which we evaluate the effectiveness of what we did may be biased. It is believed this may influence our future
+				decision-making. These biases may be stored as memories, which are attributions that we make about our mental experiences based on their subjective qualities, our prior knowledge and beliefs, our motives and goals, and the social context. True
+				and false memories arise by the same mechanism because when the brain processes and stores information, it cannot tell the difference from where they came from.</p>
+
+			<p>Original article:
+				<cite><a href="https://en.wikipedia.org/wiki/Choice-supportive_bias" target="_blank" rel="external">Wikipedia: Choice-supportive bias</a></cite>
+			</p>
+		</dd>
+		<dt class="accordion-tab">Dunning–Kruger effect</dt>
+		<dd class="accordion-panel" aria-hidden="true">
+			<p>The Dunning–Kruger effect is a cognitive bias wherein unskilled individuals suffer from illusory superiority, mistakenly assessing their ability to be much higher than is accurate. This bias is attributed to a metacognitive inability of the unskilled to recognize their ineptitude. Conversely, highly skilled individuals tend to underestimate their relative competence, erroneously assuming that tasks which are easy for them are also easy for others.</p>
+			<p>As David Dunning and Justin Kruger of Cornell University conclude:</p>
+			<q>The miscalibration of the incompetent stems from an error about the self, whereas the miscalibration of the highly competent stems from an error about others.</q>
+			<p>Original article:
+				<cite><a href="https://en.wikipedia.org/wiki/Dunning-Kruger_effect" target="_blank" rel="external">Wikipedia: Dunning–Kruger effect</a></cite>
+			</p>
+		</dd>
+	</dl>
+	<!---------------------------------------->
+	<!-- END INTERACTION TEMPLATE CODE HERE -->
+	<!---------------------------------------->
+</div>
+<script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+<script src="../ali.js"></script>
+<script>
+	jQuery( function ( $ ) {
+		$( document ).on( 'ali:complete', $( 'dl.accordion' ), function ( e, data) {
+			// e: Object, the original event object
+			// data: Object interaction event object
+			console.log( e, data );
+		} ).on( 'ali:itemSelected', $( 'dl.accordion' ), function ( e, data, $item) {
+			// e: Object, the original event object
+			// data: Object interaction event object
+			// $item : the source of the event
+			console.log( e, data, $item );
+		} );
+	} );
+</script>
+</body>
+</html>
