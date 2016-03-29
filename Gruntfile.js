@@ -5,7 +5,8 @@ module.exports = function ( grunt ) {
 		'src/js/core/aria.js',
 		'src/js/core/ali.js',
 		'src/js/core/interaction.js',
-		'src/js/interactions/accordion.js'
+		'src/js/interactions/accordion.js',
+		'src/js/interactions/tab-control.js'
 	];
 
 	grunt.initConfig(

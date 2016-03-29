@@ -1,53 +1,58 @@
 
 .accordion {
-  position   : relative;
-  box-shadow : 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+	position   : relative;
+	box-shadow : 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
-  .accordion-tab {
-	@include addContrastingColors(#fcfcfc);
-	@include focusable;
+	.accordion-tab {
+		@include addContrastingColors(#fcfcfc);
+		@include focusable;
 
-	position    : relative;
-	display     : block;
-	padding     : $base-line-height / 2 $base-line-height;
-	font-weight : 700;
-	$amount : $base-line-height;
-	box-shadow  : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.1);
-	transition  : box-shadow .2s ease-in;
+		position    : relative;
+		display     : block;
+		padding     : $base-line-height / 2 $base-line-height;
+		font-weight : 700;
+		$amount : $base-line-height;
+		box-shadow  : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.1);
+		transition  : box-shadow .2s ease-in;
 
-	&:focus,
-	&:hover {
-	  $amount : $base-line-height * 5;
-	  box-shadow : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.2);
+		&:focus,
+		&:hover {
+			$amount : $base-line-height * 5;
+			box-shadow : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.2);
+		}
+		&:focus {
+			z-index : 1;
+		}
+
+		&[aria-expanded="true"] {
+			$amount : $base-line-height * 2;
+			box-shadow : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.1);
+		}
 	}
 
-	&[aria-expanded="true"] {
-	  $amount : $base-line-height * 2;
-	  box-shadow : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.1);
+	.accordion-panel {
+		@include addContrastingColors(#fcfcfc);
+		@include focusRect();
+
+		position      : relative;
+		padding       : 0 $base-line-height;
+		border-bottom : 2px solid rgba($key-color, .3);
+		margin        : 0;
+		overflow      : hidden;
+		transition    : all .6s .001s cubic-bezier(0.86, 0, 0.07, 1), visibility .001s;
+
+		&:focus {
+			z-index : 1;
+		}
+		&[role="tabpanel"] {
+			max-height : 300px;
+		}
+
+		&[aria-hidden="true"] {
+			padding    : 0 $base-line-height;
+			max-height : 0;
+			visibility : hidden;
+			transition : all .6s cubic-bezier(0.86, 0, 0.07, 1), visibility .001s .6s;
+		}
 	}
-  }
-
-  .accordion-panel {
-	@include addContrastingColors(#fcfcfc);
-	@include focusRect();
-
-	position      : relative;
-	z-index       : 1;
-	padding       : 0 $base-line-height;
-	border-bottom : 2px solid rgba($key-color, .3);
-	margin        : 0;
-	overflow      : hidden;
-	transition    : all .6s .001s cubic-bezier(0.86, 0, 0.07, 1), visibility .001s;
-
-	&[role="tabpanel"] {
-	  max-height : 300px;
-	}
-
-	&[aria-hidden="true"] {
-	  padding    : 0 $base-line-height;
-	  max-height : 0;
-	  visibility : hidden;
-	  transition : all .6s cubic-bezier(0.86, 0, 0.07, 1), visibility .001s .6s;
-	}
-  }
 }

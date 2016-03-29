@@ -1,0 +1,71 @@
+.tab-control {
+	position   : relative;
+	box-shadow : 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+	ul[role="tablist"] {
+		position        : relative;
+		display         : flex;
+		flex-direction  : row;
+		flex-wrap       : nowrap;
+		justify-content : space-between;
+		align-items     : stretch;
+		margin          : 0;
+		padding         : 0;
+		list-style      : none;
+		border-bottom   : 5px solid #dfdfdf;
+		transition      : border .3s ease-in;
+
+		.vi {
+			position         : absolute;
+			bottom           : -5px;
+			left             : 0;
+			z-index          : 1;
+			display          : block;
+			height           : 5px;
+			background-color : $key-color;
+			transition       : all .3s cubic-bezier(0.645, 0.045, 0.355, 1);
+		}
+
+		&[aria-hidden="true"] {
+			height        : 1px;
+			border-bottom : 1px solid transparent;
+		}
+
+		li {
+			@include addContrastingColors(#fcfcfc);
+			@include focusable;
+
+			position    : relative;
+			flex-grow   : 1;
+			padding     : 16px 4px;
+			text-align  : center;
+			font-weight : 700;
+			transition  : all .2s ease-in;
+
+			&[aria-selected="true"] {
+				$amount : $base-line-height;
+				box-shadow : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.1);
+			}
+			&:focus,
+			&:hover,
+			&[aria-expanded="true"] {
+				$amount : $base-line-height * 2;
+				box-shadow : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.1);
+			}
+		}
+	}
+
+	.tab-control-panel {
+		@include addContrastingColors(#fcfcfc);
+		@include focusRect();
+
+		position      : relative;
+		padding       : 0 $base-line-height;
+		border-bottom : 2px solid rgba($key-color, .3);
+		margin        : 0;
+
+		&[aria-hidden="true"] {
+			display : none;
+		}
+	}
+}

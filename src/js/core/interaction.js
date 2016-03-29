@@ -117,7 +117,6 @@
 	 * @param $item : jQuery object for the element selected.
 	 */
 	ali.Interaction.prototype.itemSelected = function ( $item ) {
-		console.log( this.$el.trigger, this.$el );
 		var e = new jQuery.Event( 'ali:itemSelected' );
 		this.$el.trigger( e, [ this.data, $item ] );
 	};

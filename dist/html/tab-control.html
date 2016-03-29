@@ -7,7 +7,7 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="../ali.css">
+	<link rel="stylesheet" href="ali.css">
 	<style>
 		.container {
 			max-width : 960px;
@@ -20,33 +20,37 @@
 			}
 		}
 	</style>
+
 </head>
 <body>
 <div class="container">
 	<h1>Ali Accordion</h1>
 	<div class="docs">
-		<p>A simple accordion interaction.</p>
+		<p>A simple tab interaction.</p>
 		<p>Information used in this example is from the Wikipedia article <a href="https://en.wikipedia.org/wiki/List_of_cognitive_biases" target="blank" rel="external">"List of cognitive biases"</a>.</p>
 	</div>
 	<hr>
 	<!------------------------------------------>
 	<!-- BEGIN INTERACTION TEMPLATE CODE HERE -->
 	<!------------------------------------------>
-	<dl id="ac-1" class="accordion" data-ali="accordion">
-		<dt class="accordion-tab" aria-expanded="true">Confirmation Bias</dt>
-		<dd class="accordion-panel" aria-hidden="true">
+	<div id="tc-1" class="tab-control" data-ali="tab-control">
+		<ul class="tab-control-tablist">
+			<li>Confirmation Bias</li>
+			<li>Choice-supportive bias</li>
+			<li>Dunning–Kruger effect</li>
+		</ul>
+		<div class="tab-control-panel">
+			<h2>Confirmation Bias</h2>
 			<p>Confirmation bias, also called myside bias, is the tendency to search for, interpret, or recall information in a way that confirms one's beliefs or hypotheses. It is a type of cognitive bias and a systematic error of inductive reasoning. People
 				display this bias when they gather or remember information selectively, or when they interpret it in a biased way. The effect is stronger for emotionally charged issues and for deeply entrenched beliefs. People also tend to interpret ambiguous
 				evidence as supporting their existing position. Biased search, interpretation and memory have been invoked to explain attitude polarization (when a disagreement becomes more extreme even though the different parties are exposed to the same evidence),
 				belief perseverance (when beliefs persist after the evidence for them is shown to be false), the irrational primacy effect (a greater reliance on information encountered early in a series) and illusory correlation (when people falsely perceive
 				an association between two events or situations).</p>
+			<p>Original article: <cite><a href="https://en.wikipedia.org/wiki/Confirmation_bias" target="_blank" rel="external">Wikipedia: Confirmation Bias</a></cite></p>
+		</div>
 
-			<p>Original article:
-				<cite><a href="https://en.wikipedia.org/wiki/Confirmation_bias" target="_blank" rel="external">Wikipedia: Confirmation Bias</a></cite>
-			</p>
-		</dd>
-		<dt class="accordion-tab">Choice-supportive bias</dt>
-		<dd class="accordion-panel" aria-hidden="true">
+		<div class="tab-control-panel">
+			<h2>Choice-supportive bias </h2>
 			<p>In cognitive science, choice-supportive bias is the tendency to retroactively ascribe positive attributes to an option one has selected. It is a cognitive bias. For example, if a person buys a computer from Apple instead of a computer (PC) running
 				Windows, they are likely to ignore or downplay the faults of Apple computers while amplifying those of Windows computers. Conversely, they are also likely to notice and amplify advantages of Apple computers and not notice or de-emphasize those
 				of Windows computers.</p>
@@ -56,27 +60,23 @@
 				part of that option, and negative aspects tend to be remembered as part of rejected options. Once an action has been taken, the ways in which we evaluate the effectiveness of what we did may be biased. It is believed this may influence our future
 				decision-making. These biases may be stored as memories, which are attributions that we make about our mental experiences based on their subjective qualities, our prior knowledge and beliefs, our motives and goals, and the social context. True
 				and false memories arise by the same mechanism because when the brain processes and stores information, it cannot tell the difference from where they came from.</p>
+			<p>Original article: <cite><a href="https://en.wikipedia.org/wiki/Choice-supportive_bias" target="_blank" rel="external">Wikipedia: Choice-supportive bias</a></cite></p>
+		</div>
 
-			<p>Original article:
-				<cite><a href="https://en.wikipedia.org/wiki/Choice-supportive_bias" target="_blank" rel="external">Wikipedia: Choice-supportive bias</a></cite>
-			</p>
-		</dd>
-		<dt class="accordion-tab">Dunning–Kruger effect</dt>
-		<dd class="accordion-panel" aria-hidden="true">
-			<p>The Dunning–Kruger effect is a cognitive bias wherein unskilled individuals suffer from illusory superiority, mistakenly assessing their ability to be much higher than is accurate. This bias is attributed to a metacognitive inability of the unskilled to recognize their ineptitude. Conversely, highly skilled individuals tend to underestimate their relative competence, erroneously assuming that tasks which are easy for them are also easy for others.</p>
-			<p>As David Dunning and Justin Kruger of Cornell University conclude:</p>
-			<q>The miscalibration of the incompetent stems from an error about the self, whereas the miscalibration of the highly competent stems from an error about others.</q>
-			<p>Original article:
-				<cite><a href="https://en.wikipedia.org/wiki/Dunning-Kruger_effect" target="_blank" rel="external">Wikipedia: Dunning–Kruger effect</a></cite>
-			</p>
-		</dd>
-	</dl>
+		<div class="tab-control-panel">
+			<h2>Dunning–Kruger effect</h2>
+			<p>The Dunning–Kruger effect is a cognitive bias wherein unskilled individuals suffer from illusory superiority, mistakenly assessing their ability to be much higher than is accurate. This bias is attributed to a metacognitive inability of the unskilled
+				to recognize their ineptitude. Conversely, highly skilled individuals tend to underestimate their relative competence, erroneously assuming that tasks which are easy for them are also easy for others.</p>
+			<p>As David Dunning and Justin Kruger of Cornell University conclude: <q>The miscalibration of the incompetent stems from an error about the self, whereas the miscalibration of the highly competent stems from an error about others.</q></p>
+			<p>Original article: <cite><a href="https://en.wikipedia.org/wiki/Dunning-Kruger_effect" target="_blank" rel="external">Wikipedia: Dunning–Kruger effect</a></cite></p>
+		</div>
+	</div>
 	<!---------------------------------------->
 	<!-- END INTERACTION TEMPLATE CODE HERE -->
 	<!---------------------------------------->
 </div>
 <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
-<script src="../ali.js"></script>
+<script src="ali.js"></script>
 <script>
 	jQuery( function ( $ ) {
 		$( document ).on( 'ali:complete', $( 'dl.accordion' ), function ( e, data) {

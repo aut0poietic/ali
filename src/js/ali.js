@@ -33,5 +33,6 @@ jQuery( function ( $ ) {
 	"use strict";
 	if ( window.aliAutolInit !== false ) {
 		$( '[data-ali="accordion"]' ).accordion();
+		$( '[data-ali="tab-control"]' ).tabcontrol();
 	}
 } );

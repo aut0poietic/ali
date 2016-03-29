@@ -38,7 +38,7 @@
 	ali.Accordion.prototype.$tabs = undefined;
 
 	/**
-	 * Initilizes the Interaction. Called from contstructor.
+	 * Initializes the Interaction. Called from constructor.
 	 */
 	ali.Accordion.prototype.init = function () {
 		var $initOpen = $( OPEN_TAB );
@@ -137,7 +137,6 @@
 		$tab.aria(
 			{
 				'expanded' : 'true',
-				'selected' : 'true',
 				'tabindex' : '0'
 			}
 		).addClass( 'viewed' ).focus();
@@ -286,7 +285,6 @@
 		}
 	};
 
-
 	/**
 	 * Tab click event
 	 * @private
@@ -294,13 +292,11 @@
 	ali.Accordion.prototype.tab_onClick = function ( e ) {
 		var $target = $( e.target );
 		if ( $target.aria( 'expanded' ) !== 'true' ) {
-			this.hideAll();
 			this.show( $target );
 		} else {
 			this.hide( $target );
 		}
 	};
-
 
 	/**
 	 * Keyboard event handler for when keyboard focus is in a panel.
@@ -391,7 +387,7 @@
 	};
 
 	/*
-	 * jQuery Plugin methods -- shamelessly inspired by Bootstrap because I didn't want to think about it.
+	 * jQuery Plugin
 	 */
 	function Plugin() {
 		return this.each( function () {
