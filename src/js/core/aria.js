@@ -27,8 +27,10 @@
 ///TODO: Allow for overridding the defaults, like
 ///TODO: $('li.tab:first').aria.init('tab', {'selected' : true, 'expanded' : 'true', 'tabindex' : 0 }
 
-const ARIA = (( $ ) => {
-	const _attrs = [
+
+(function ( $ ) {
+	"use strict";
+	var _attrs = [
 		'role',
 		'tabindex',
 		'activedescendant',
@@ -79,23 +81,22 @@ const ARIA = (( $ ) => {
 
 	$.fn.aria = function ( prop, value ) {
 		if ( 'object' === $.type( prop ) ) {
-			for ( let i in prop ) {
-                if( prop.hasOwnProperty(i)){
-                    this.aria( i, prop[ i ] );
-                }
+			for ( var i in prop ) {
+				if ( prop.hasOwnProperty( i ) ) {
+					this.aria( i, prop[ i ] );
+				}
 			}
 		} else if ( undefined !== prop && undefined !== value ) {
 			this.each( function () {
 				if ( _isValidAria( prop ) ) {
-					let $el = $( this );
-					let attr = _addARIA( prop );
+					var $el = $( this );
+					var attr = _addARIA( prop );
 					$el.attr( attr, value );
 				}
 			} );
-		} else if(undefined !== prop ) {
-			return this.attr(_addARIA(prop));
+		} else if ( undefined !== prop ) {
+			return this.attr( _addARIA( prop ) );
 		}
 		return this;
 	};
-
 })( jQuery );

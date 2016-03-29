@@ -1,39 +1,46 @@
 module.exports = function ( grunt ) {
 
-	var es6Files = [
-		'src/js/ali.es6',
-		'src/js/core/ali.es6',
-		'src/js/core/aria.es6',
-		'src/js/core/interaction.es6',
-		'src/js/core/multipartinteraction.es6',
-		'src/js/interactions/accordion.es6'
+	var jsFiles = [
+		'src/js/ali.js',
+		'src/js/core/aria.js',
+		'src/js/core/ali.js',
+		'src/js/core/interaction.js',
+		'src/js/interactions/accordion.js'
 	];
 
 	grunt.initConfig(
 		{
 			pkg : grunt.file.readJSON( 'package.json' ),
 
+
+			jshint : {
+				options     : {
+					curly     : true,
+					browser   : true,
+					forin     : true,
+					immed     : true,
+					latedef   : true,
+					newcap    : true,
+					undef     : true,
+					strict    : true,
+					smarttabs : true,
+					sub       : true,
+					globals   : {
+						console : true,
+						jQuery  : true
+					}
+				},
+				beforeconcat: jsFiles//,
+				//afterconcat: ['dist/ali.js']
+			},
+
 			concat : {
 				options : {
 					separator : grunt.util.linefeed + ';' + grunt.util.linefeed
 				},
 				dist    : {
-					src  : es6Files,
-					dest : '.tmp/ali.es6'
-				}
-			},
-
-			babel : {
-				es6 : {
-					options : {
-						presets : [
-							'babel-preset-es2015'
-						]
-					},
-					files   : {
-						'dist/ali.js' : '.tmp/ali.es6'
-					}
-
+					src  : jsFiles,
+					dest : 'dist/ali.js'
 				}
 			},
 
@@ -87,8 +94,8 @@ module.exports = function ( grunt ) {
 
 			watch : {
 				javascript : {
-					files   : [ 'src/js/*.es6', 'src/js/**/*.es6' ],
-					tasks   : [ 'concat', 'babel', 'uglify' ],
+					files   : [ 'src/js/*.js', 'src/js/**/*.js' ],
+					tasks   : [ 'jshint', 'concat', 'uglify' ],
 					options : {
 						spawn : false
 					}
@@ -104,7 +111,6 @@ module.exports = function ( grunt ) {
 
 		} );
 
-	grunt.loadNpmTasks( 'grunt-babel' );
 	grunt.loadNpmTasks( 'grunt-contrib-concat' );
 	grunt.loadNpmTasks( 'grunt-contrib-sass' );
 	grunt.loadNpmTasks( 'grunt-autoprefixer' );
@@ -113,5 +119,5 @@ module.exports = function ( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
 	grunt.loadNpmTasks( 'grunt-contrib-watch' );
 
-	grunt.registerTask( 'default', [ 'sass', 'autoprefixer', 'cssmin', 'concat', 'babel', 'uglify' ] );
+	grunt.registerTask( 'default', [ 'sass', 'autoprefixer', 'cssmin', 'jshint', 'concat', 'uglify' ] );
 };
