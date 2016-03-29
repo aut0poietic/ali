@@ -8,13 +8,20 @@
 
 "use strict";
 
-jQuery(function ($) {
-  if (window.aliAutolInit !== false) {
-    $('[data-ali="accordion"]').accordion();
-  }
-});
-;'use strict';
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+jQuery(function ($) {
+	if (window.aliAutolInit !== false) {
+		$('[data-ali="accordion"]').accordion();
+	}
+});
+;
 var ali = {
 	EVENT: {
 		ready: 'ali:ready',
@@ -37,8 +44,7 @@ var ali = {
 		other: 'other'
 	}
 };
-;'use strict';
-
+;
 /*
  * --------------------------------------------------------------------------
  * Ali: aria.es6
@@ -101,12 +107,8 @@ var ARIA = function ($) {
 		return this;
 	};
 }(jQuery);
-;'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+;
 /*
  * --------------------------------------------------------------------------
  * Ali: interaction.es6
@@ -241,16 +243,8 @@ var aliInteraction = function () {
 
 	return aliInteraction;
 }();
-;'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
+;
 /*
  * --------------------------------------------------------------------------
  * Ali: multipartinteraction.es6
@@ -316,16 +310,8 @@ var aliMultipartInteraction = function (_aliInteraction) {
 
 	return aliMultipartInteraction;
 }(aliInteraction);
-;'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
+;
 var aliAccordion = function ($) {
 
 	var DESCRIPTION = 'Accordion interaction.';
@@ -344,28 +330,28 @@ var aliAccordion = function ($) {
 		function Accordion(element) {
 			_classCallCheck(this, Accordion);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Accordion).call(this, element, TYPE, DESCRIPTION));
+			var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Accordion).call(this, element, TYPE, DESCRIPTION));
 
-			_this.$el.aria({
+			_this2.$el.aria({
 				'role': "tablist",
 				'multiselectable': 'true'
 			});
-			_this.$tabs = $(TAB, _this.$el);
+			_this2.$tabs = $(TAB, _this2.$el);
 			// before we begin manipulation, fetch a reference to any
 			// tabs that were set to expanded so we can restore them
 			// after initialization
 			var $openTabs = $(OPEN_TAB);
 
-			_this.$tabs.each(function (i, el) {
+			_this2.$tabs.each(function (i, el) {
 				var $tab = $(el);
-				var id = _this.makeTargetID($tab);
+				var id = _this2.makeTargetID($tab);
 				var $panel = $tab.next(PANEL);
 				$tab.aria({
 					'role': "tab",
 					'tabindex': "0",
 					'expanded': "false",
 					'controls': id
-				}).off('click.ali').on('click.ali', _this.tab_onClick.bind(_this)).off('keydown.ali').on('keydown.ali', _this.tab_onKeyDown.bind(_this));
+				}).off('click.ali').on('click.ali', _this2.tab_onClick.bind(_this2)).off('keydown.ali').on('keydown.ali', _this2.tab_onKeyDown.bind(_this2));
 
 				$panel.aria({
 					'role': "tabpanel",
@@ -373,8 +359,8 @@ var aliAccordion = function ($) {
 					'hidden': "true"
 				}).attr({
 					'id': id,
-					'data-height': _this._getMeasuredHeight($panel)
-				}).off('keydown.ali').on('keydown.ali', _this.panel_onKeyDown.bind(_this));
+					'data-height': _this2._getMeasuredHeight($panel)
+				}).off('keydown.ali').on('keydown.ali', _this2.panel_onKeyDown.bind(_this2));
 			});
 
 			// If there was an expanded tab set by the user, expand that tab.
@@ -382,14 +368,14 @@ var aliAccordion = function ($) {
 			if ($openTabs.length > 0) {
 				/// DIRTY HACK: deferring this "show" call so that event handlers have a chance to be attached
 				/// before it fires.
-				_this.defer(function () {
-					_this.show($($openTabs[0]));
+				_this2.defer(function () {
+					_this2.show($($openTabs[0]));
 				});
 			} else {
-				_this.getFirstTab().aria('tabindex', 0);
+				_this2.getFirstTab().aria('tabindex', 0);
 			}
-			$(window).on('resize', _this._requestResize.bind(_this));
-			return _this;
+			$(window).on('resize', _this2._requestResize.bind(_this2));
+			return _this2;
 		}
 
 		/**
@@ -415,10 +401,10 @@ var aliAccordion = function ($) {
 		}, {
 			key: 'hideAll',
 			value: function hideAll() {
-				var _this2 = this;
+				var _this3 = this;
 
 				this.$tabs.each(function (i, el) {
-					_this2.hide($(el));
+					_this3.hide($(el));
 				});
 			}
 
@@ -714,13 +700,13 @@ var aliAccordion = function ($) {
 		}, {
 			key: '_resizePanels',
 			value: function _resizePanels() {
-				var _this3 = this;
+				var _this4 = this;
 
 				this.$tabs.each(function (i, el) {
 					var $panel = $(el).next(PANEL);
-					$panel.attr('data-height', _this3._getMeasuredHeight($panel));
+					$panel.attr('data-height', _this4._getMeasuredHeight($panel));
 					if ($panel.aria('hidden') === 'false') {
-						$panel.css('min-height', _this3._getMeasuredHeight($panel) + 'px');
+						$panel.css('min-height', _this4._getMeasuredHeight($panel) + 'px');
 					}
 				});
 				this._resizing = false;
