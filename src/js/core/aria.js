@@ -92,6 +92,11 @@
 					var $el = $( this );
 					var attr = _addARIA( prop );
 					$el.attr( attr, value );
+
+					// special cases...
+					if ( prop === 'disabled' ) {
+						$el.attr( 'disabled', value );
+					}
 				}
 			} );
 		} else if ( undefined !== prop ) {

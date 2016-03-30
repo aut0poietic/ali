@@ -535,6 +535,233 @@ th {
   box-sizing: border-box;
 }
 
+select,
+textarea,
+input[type="text"] {
+  display: block;
+  width: 100%;
+  height: 36px;
+  padding: 6px 12px;
+  line-height: 24px;
+  background-image: none;
+  border: 1px solid #d1d1d1;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: box-shadow .2s ease-in, background-color .2s ease-in, color .2s ease-in;
+}
+select:focus,
+textarea:focus,
+input[type="text"]:focus {
+  outline: 1px dashed #FF9800;
+  outline-offset: -2px;
+}
+select::-ms-expand,
+textarea::-ms-expand,
+input[type="text"]::-ms-expand {
+  border: 0;
+  background-color: transparent;
+}
+select:focus,
+textarea:focus,
+input[type="text"]:focus {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.24);
+}
+select[disabled], select[readonly], fieldset[disabled] select,
+textarea[disabled],
+textarea[readonly], fieldset[disabled]
+textarea,
+input[type="text"][disabled],
+input[type="text"][readonly], fieldset[disabled]
+input[type="text"] {
+  background-color: #d1d1d1;
+  opacity: 1;
+}
+select[disabled], fieldset[disabled] select,
+textarea[disabled], fieldset[disabled]
+textarea,
+input[type="text"][disabled], fieldset[disabled]
+input[type="text"] {
+  cursor: not-allowed;
+}
+
+textarea {
+  height: auto;
+}
+
+button,
+.btn {
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 0;
+  height: 36px;
+  padding: 6px 24px;
+  line-height: 24px;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  color: #fff;
+  background-color: #283593;
+  background-image: none;
+  border: 1px solid #283593;
+  white-space: nowrap;
+  transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
+}
+button:focus,
+.btn:focus {
+  outline: 1px dashed #FF9800;
+  outline-offset: -2px;
+}
+button:hover, button:focus,
+.btn:hover,
+.btn:focus {
+  color: #fff;
+  background-color: #1d276b;
+  border-color: #1b2463;
+  text-decoration: none;
+}
+button.focus,
+.btn.focus {
+  background-color: #1d276b;
+  border-color: #0d112f;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+button.secondary,
+.btn.secondary {
+  background-color: #004D40;
+  border: 1px solid #004D40;
+}
+button.secondary:hover, button.secondary:focus,
+.btn.secondary:hover,
+.btn.secondary:focus {
+  background-color: #001a16;
+  border-color: #00100d;
+}
+button.secondary.focus,
+.btn.secondary.focus {
+  background-color: #001a16;
+  border-color: black;
+}
+button.cancel, button.danger,
+.btn.cancel,
+.btn.danger {
+  background-color: #500;
+  border: 1px solid #500;
+}
+button.cancel:hover, button.cancel:focus, button.danger:hover, button.danger:focus,
+.btn.cancel:hover,
+.btn.cancel:focus,
+.btn.danger:hover,
+.btn.danger:focus {
+  background-color: #220000;
+  border-color: #180000;
+}
+button.cancel.focus, button.danger.focus,
+.btn.cancel.focus,
+.btn.danger.focus {
+  background-color: #220000;
+  border-color: black;
+}
+button[aria-disabled="true"], button[disabled],
+.btn[aria-disabled="true"],
+.btn[disabled] {
+  cursor: not-allowed;
+  opacity: .65;
+  box-shadow: none;
+  pointer-events: none;
+}
+button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-disabled="true"]:focus, button[disabled], button[disabled]:hover, button[disabled]:focus,
+.btn[aria-disabled="true"],
+.btn[aria-disabled="true"]:hover,
+.btn[aria-disabled="true"]:focus,
+.btn[disabled],
+.btn[disabled]:hover,
+.btn[disabled]:focus {
+  color: #000;
+  background-color: #c4c4c4;
+  border-color: #bebebe;
+}
+
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10000;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+      -ms-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.dialog .dialog-window {
+  cursor: pointer;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-flex-wrap: nowrap;
+      -ms-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+  position: relative;
+  max-height: calc(100% - 48px);
+  padding-top: 12px;
+  margin: 24px 48px;
+  background: #f6f6f6;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+.dialog .dialog-window:focus {
+  outline: 1px dashed #FF9800;
+  outline-offset: -2px;
+}
+.dialog .dialog-window-inner {
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  overflow: scroll;
+  padding: 0 12px;
+  color: #444;
+}
+.dialog .dialog-window-inner h2, .dialog .dialog-window-inner h3, .dialog .dialog-window-inner h4, .dialog .dialog-window-inner h5, .dialog .dialog-window-inner h6 {
+  margin-top: 0;
+  color: #000;
+}
+.dialog .dialog-window-actions {
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+  -webkit-flex-grow: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  min-height: 48px;
+  height: 48px;
+  text-align: right;
+  background-color: #dfdfdf;
+  border-top: 1px solid rgba(40, 53, 147, 0.4);
+  padding: 6px;
+}
+.dialog[aria-hidden="true"] {
+  display: none;
+}
+
+body.dialog-open {
+  overflow: hidden;
+}
+
 .accordion {
   position: relative;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -668,4 +895,101 @@ th {
 }
 .tab-control .tab-control-panel[aria-hidden="true"] {
   display: none;
+}
+
+.answer-set {
+  position: relative;
+  padding: 1px;
+}
+.answer-set form {
+  position: relative;
+  margin: 48px 0 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.answer-set form label {
+  display: block;
+  line-height: 24px;
+  padding: 12px 12px 0;
+  font-weight: 700;
+}
+.answer-set form .answer-set-submit {
+  padding: 12px;
+  border-top: 1px solid rgba(40, 53, 147, 0.5);
+  background-color: #f6f6f6;
+}
+.answer-set form .answer-set-select {
+  padding: 12px;
+}
+.answer-set form .flag {
+  position: absolute;
+  top: -30px;
+  right: 24px;
+  height: -30px;
+  line-height: 24px;
+  background-color: #ccc;
+  box-shadow: inset 0 -1px 3px -3px rgba(0, 0, 0, 0.12), inset 0 -1px 2px -2px rgba(0, 0, 0, 0.24);
+  transition: opacity .4s ease-in;
+}
+.answer-set form .flag[aria-hidden="true"] {
+  opacity: 0;
+}
+.answer-set form .flag span {
+  display: block;
+  padding: 3px 24px;
+}
+.answer-set form .flag.correct {
+  color: #fff;
+  background-color: #005700;
+}
+.answer-set form .flag.incorrect {
+  color: #fff;
+  background-color: #500;
+}
+@media (min-width: 768px) {
+  .answer-set form {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+            flex-wrap: nowrap;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-align-items: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+    text-align: left;
+    background-color: #f6f6f6;
+  }
+  .answer-set form label {
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    display: inline-block;
+    padding: 24px;
+  }
+  .answer-set form .answer-set-select,
+  .answer-set form .answer-set-submit {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .answer-set form .answer-set-select button, .answer-set form .answer-set-select select,
+  .answer-set form .answer-set-submit button,
+  .answer-set form .answer-set-submit select {
+    margin-top: 6px;
+  }
+  .answer-set form .answer-set-submit {
+    background-color: transparent;
+    border-top: none;
+    padding-right: 24px;
+  }
+}
+.answer-set .dialog-content {
+  display: none !important;
 }

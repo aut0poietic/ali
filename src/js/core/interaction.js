@@ -3,8 +3,8 @@
 
 	// Make the global object available and abort if this file is used without it.
 	var ali = window.ali;
-	if( $.type( ali ) !== 'object'){
-		return ;
+	if ( $.type( ali ) !== 'object' ) {
+		return;
 	}
 
 	/**
@@ -40,11 +40,17 @@
 	};
 
 	/**
-	 *
+	 * The timestamp of the completion of the last item. Used only for multi-part interactions.
 	 * @type {number}
 	 * @private
 	 */
 	ali.Interaction.prototype.__last = 0;
+
+	/**
+	 * Reference to dialog instance. Should only ever hold one element.
+	 * @type {jQuery|undefined}
+	 */
+	ali.Interaction.prototype.$dialog = undefined;
 
 	/**
 	 * Utility function that creates an ID using the the ID of the passed element or the text of the passed element.
@@ -106,6 +112,7 @@
 		if ( 'undefined' === $.type( status ) || '' === status.trim() ) {
 			status = 'complete';
 		}
+		this.data.id = this.$el.attr( 'id' );
 		this.data.result = status;
 		this.data.latency = d.getTime() - this.data.start;
 		e = new jQuery.Event( 'ali:complete' );
@@ -117,8 +124,10 @@
 	 * @param $item : jQuery object for the element selected.
 	 */
 	ali.Interaction.prototype.itemSelected = function ( $item ) {
+		var clonedData = Object.assign( {}, this.data );
+		clonedData.id = $item.attr( 'id' );
 		var e = new jQuery.Event( 'ali:itemSelected' );
-		this.$el.trigger( e, [ this.data, $item ] );
+		this.$el.trigger( e, [ clonedData, $item ] );
 	};
 
 	/**
@@ -134,13 +143,66 @@
 		if ( 'undefined' === $.type( $item ) || 0 === $item.length ) {
 			$item = this.$el;
 		}
+
 		var clonedData = Object.assign( {}, this.data );
+		clonedData.id = $item.attr( 'id' );
 		var d = new Date();
 		var e = new jQuery.Event( 'ali:itemComplete' );
 		clonedData.result = status;
 		clonedData.latency = d.getTime() - this.__last;
 		this.__last = d.getTime();
 		this.$el.trigger( e, [ clonedData, $item ] );
+	};
+
+
+	ali.Interaction.prototype.showDialog = function ( $el, title ) {
+
+		this.$dialog = $( '<div class="dialog" role="alertdialog"></div>' );
+		var $window = $( '<div class="dialog-window"></div>' )
+			.aria( {
+				       'role'        : 'document',
+				       'tabindex'    : '0',
+				       'label'       : title,
+				       'describedby' : 'dialog-inner',
+
+			       } );
+		var $inner = $( '<div id="dialog-inner" class="dialog-window-inner"></div>' )
+			.append( $el );
+
+		var $buttons = $( '<div class="dialog-window-actions"></div>' );
+
+		var $ok = $( '<button type="button" class="dialog-window-actions-close">OK</button>' );
+
+		$buttons.append( $ok );
+		$window.append( $inner, $buttons );
+		this.$dialog.append( $window );
+
+		$( 'body' ).append( this.$dialog ).addClass( 'dialog-open' );
+
+		this._enforceFocus();
+		$ok.off( 'click.ali' ).on( 'click.ali', this._hideDialog.bind( this ) );
+		$window.focus();
+
+	};
+
+	ali.Interaction.prototype._enforceFocus = function () {
+		$( document )
+			.off( 'focusin.ali' )
+			.on( 'focusin.ali', (function ( e ) {
+				if ( ! this.$dialog.has( e.target ).length ) {
+					$( '.dialog-window', this.$dialog ).trigger( 'focus' );
+				}
+			}).bind( this ) );
+	};
+
+	ali.Interaction.prototype._hideDialog = function ( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+		if ( $.type( this.$dialog ) !== 'undefined' ) {
+			this.$dialog.remove();
+		}
+		$( document ).off( 'focusin.bs.modal' );
+		$( 'body' ).removeClass( 'dialog-open' );
 	};
 
 })( jQuery );

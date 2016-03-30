@@ -6,13 +6,13 @@ module.exports = function ( grunt ) {
 		'src/js/core/ali.js',
 		'src/js/core/interaction.js',
 		'src/js/interactions/accordion.js',
-		'src/js/interactions/tab-control.js'
+		'src/js/interactions/tab-control.js',
+		'src/js/interactions/answer-set.js'
 	];
 
 	grunt.initConfig(
 		{
 			pkg : grunt.file.readJSON( 'package.json' ),
-
 
 			jshint : {
 				options     : {

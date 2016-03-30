@@ -7,11 +7,10 @@
  */
 @import "../../node_modules/mathsass/dist/math";
 @import "variables";
-@import "mixins";
 @import "normalize";
-
 @include normalize();
-@import "shared";
+@import "common/common";
 
 @import "interactions/accordion";
 @import "interactions/tab-control";
+@import "interactions/answer-set";

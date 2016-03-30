@@ -34,5 +34,6 @@ jQuery( function ( $ ) {
 	if ( window.aliAutolInit !== false ) {
 		$( '[data-ali="accordion"]' ).accordion();
 		$( '[data-ali="tab-control"]' ).tabcontrol();
+		$( '[data-ali="answer-set"]' ).answerset();
 	}
 } );
