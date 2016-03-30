@@ -36,20 +36,18 @@
 	 * @type {jQuery}
 	 */
 	ali.Accordion.prototype.$tabs = undefined;
+
 	/**
 	 * Saved jQuery reference to the visual indicator for this interaction.
 	 * @type {jQuery}
 	 */
 	ali.Accordion.prototype.$vi = undefined;
+	ali.Accordion.prototype.__activeTab = undefined;
 
 	/**
 	 * Initializes the Interaction. Called from constructor.
 	 */
 	ali.TabControl.prototype.init = function () {
-		this.createTabs();
-	};
-
-	ali.TabControl.prototype.createTabs = function () {
 		var $tablist = $( TABLIST, this.$el );
 		this.$tabs = $( TABS, this.$el );
 		var $selected = $( SELECTED_TAB, this.$el );
@@ -94,6 +92,8 @@
 		} else {
 			$selected = $( this.$tabs[ 0 ] );
 		}
+
+		$( window ).on( 'resize', this._requestResize.bind( this ) );
 
 		this.defer( (function () {
 			$tablist.aria( 'hidden', 'false' );
@@ -151,16 +151,13 @@
 		).addClass( 'viewed' ).focus();
 
 		this.itemSelected( $tab );
-
-		var pos = $tab.position();
-		var w = $tab.outerWidth();
-
-		this.$vi.css( { width : w + 'px', left : pos.left + 'px' } );
+		this.updateVI( $tab );
 
 		if ( $( '.viewed', this.$el ).length === this.$tabs.length && this.data.result === ali.STATUS.incomplete ) {
 			this.complete();
 		}
 	};
+
 
 	/**
 	 * Returns a panel controlled by the provided tab.
@@ -261,10 +258,13 @@
 		return this.$tabs.last();
 	};
 
-
+	/**
+	 * Keyboard event handler for when keyboard focus is in a panel.
+	 * @private
+	 */
 	ali.TabControl.prototype.panel_onKeyDown = function ( e ) {
 		if ( (e.ctrlKey || e.metaKey) && e.currentTarget ) {
-			var $tab, $newTab;
+			var $tab;
 			var $panel = $( e.currentTarget );
 			switch ( e.which ) {
 				case 38: // UP
@@ -294,16 +294,22 @@
 		}
 	};
 
+	/**
+	 * Tab click event
+	 * @private
+	 */
 	ali.TabControl.prototype.tab_onClick = function ( e ) {
 		var $target = $( e.target );
 		if ( $target.aria( 'selected' ) !== 'true' ) {
 			this.hideAll();
 			this.show( $target );
 		}
-
-		console.log( $target.aria( 'selected' ) );
 	};
 
+	/**
+	 * Keyboard event handler for when keyboard focus in on the tabs.
+	 * @private
+	 */
 	ali.TabControl.prototype.tab_onKeyDown = function ( e ) {
 		switch ( e.which ) {
 			case 13: // ENTER
@@ -335,6 +341,43 @@
 				this.show( this.getFirstTab() );
 				break;
 		}
+	};
+
+	/**
+	 * Window resize handler.
+	 * @param e
+	 */
+	ali.TabControl.prototype.onResize = function ( e ) {
+		this._requestResize();
+	};
+
+	/**
+	 * Requests a resize event if the current control is not currently performing a resize event.
+	 * Events are handled before the next paint and debounced using requestAnimationFrame
+	 * @private
+	 */
+	ali.TabControl.prototype._requestResize = function () {
+		if ( ! this._resizing ) {
+			this._resizing = true;
+			this.__activeTab = $( SELECTED_TAB, this.$el );
+			requestAnimationFrame( this.updateVI.bind( this ) );
+		}
+	};
+
+	/**
+	 * Resizes the visual indicator (vi) for the active tab.
+	 * @param $tab {number|jQuery}
+	 */
+	ali.TabControl.prototype.updateVI = function ( $tab ) {
+		// if the passed parameter is a number, this method is being called by
+		// a rAF, so set the $tab variable and reset the resizing flag.
+		if ( $.type( $tab ) === 'number' ) {
+			this._resizing = false;
+			$tab = this.__activeTab;
+		}
+		var pos = $tab.position();
+		var w = $tab.outerWidth();
+		this.$vi.css( { width : w + 'px', left : pos.left + 'px' } );
 	};
 
 	/*

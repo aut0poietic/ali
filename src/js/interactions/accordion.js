@@ -340,7 +340,6 @@
 	 * @param e
 	 */
 	ali.Accordion.prototype.onResize = function ( e ) {
-		this._width = $( document ).width();
 		this._requestResize();
 	};
 
