@@ -26,6 +26,7 @@
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
+    "grunt-html-convert": "0.0.2",
     "mathsass": "^0.9.5"
   },
   "dependencies": {

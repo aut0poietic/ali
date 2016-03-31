@@ -182,7 +182,6 @@
 		this._enforceFocus();
 		$ok.off( 'click.ali' ).on( 'click.ali', this._hideDialog.bind( this ) );
 		$window.focus();
-
 	};
 
 	ali.Interaction.prototype._enforceFocus = function () {

@@ -1,21 +1,57 @@
 module.exports = function ( grunt ) {
 
+
+	var aliConfig = grunt.file.readJSON( 'ali.config.json' );
+
+	var templates = [];
+
 	var jsFiles = [
 		'src/js/ali.js',
 		'src/js/core/aria.js',
-		'src/js/core/ali.js',
-		'src/js/core/interaction.js',
-		'src/js/interactions/accordion.js',
-		'src/js/interactions/tab-control.js',
-		'src/js/interactions/answer-set.js'
+		'src/js/vendor/mustache.min.js',
+		'src/html/templates.js',
+		'src/js/core/interaction.js'
 	];
+
+	if ( aliConfig.include.dialog ) {
+		jsFiles.push( 'src/js/core/dialog.js' );
+		templates.push( 'src/html/dialog.html' );
+	}
+
+	if ( aliConfig.include.accordion ) {
+		jsFiles.push( 'src/js/interactions/accordion.js' );
+	}
+
+	if ( aliConfig.include.tab ) {
+		jsFiles.push( 'src/js/interactions/tab-control.js' );
+	}
+
+	if ( aliConfig.include.answerSet ) {
+		jsFiles.push( 'src/js/interactions/answer-set.js' );
+	}
 
 	grunt.initConfig(
 		{
 			pkg : grunt.file.readJSON( 'package.json' ),
 
+
+			htmlConvert : {
+				options       : {
+					base   : 'src/html/',
+					module : 'htmlTemplates',
+					rename : function ( moduleName ) {
+						return moduleName.replace( '.html', '' );
+					}
+				},
+				htmlTemplates : {
+					src  : templates,
+					dest : 'src/html/templates.js'
+				}
+			},
+
+
 			jshint : {
-				options     : {
+				options      : {
 					curly     : true,
 					browser   : true,
 					forin     : true,
@@ -27,12 +63,12 @@ module.exports = function ( grunt ) {
 					smarttabs : true,
 					sub       : true,
 					globals   : {
-						console : true,
-						jQuery  : true
+						console  : true,
+						Mustache : true,
+						jQuery   : true
 					}
 				},
-				beforeconcat: jsFiles//,
-				//afterconcat: ['dist/ali.js']
+				beforeconcat : [ 'src/js/*.js', 'src/js/**/*.js', '!src/js/*.min.js', '!src/js/**/*.min.js' ]
 			},
 
 			concat : {
@@ -107,18 +143,19 @@ module.exports = function ( grunt ) {
 					options : {
 						spawn : false
 					}
+				},
+				html       : {
+					files   : [ 'src/html/*.html', 'src/html/**/*.html' ],
+					tasks   : [ 'htmlConvert', 'jshint', 'concat', 'uglify' ],
+					options : {
+						spawn : false
+					}
 				}
 			}
 
 		} );
 
-	grunt.loadNpmTasks( 'grunt-contrib-concat' );
-	grunt.loadNpmTasks( 'grunt-contrib-sass' );
-	grunt.loadNpmTasks( 'grunt-autoprefixer' );
-	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
-	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
-	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
-	grunt.loadNpmTasks( 'grunt-contrib-watch' );
+	require( 'load-grunt-tasks' )( grunt );
 
-	grunt.registerTask( 'default', [ 'sass', 'autoprefixer', 'cssmin', 'jshint', 'concat', 'uglify' ] );
+	grunt.registerTask( 'default', [ 'sass', 'autoprefixer', 'cssmin', 'htmlConvert', 'jshint', 'concat', 'uglify' ] );
 };

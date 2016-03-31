@@ -94,7 +94,7 @@
 			}
 			var $dialogContent = $( dialogQuery, this.$el );
 			if ( $dialogContent.length === 1 ) {
-				this.showDialog( $dialogContent, 'All Questions Answered' );
+				ali.Dialog.show( $dialogContent );
 			}
 			this.complete( result );
 		}
