@@ -3,14 +3,18 @@ module.exports = function ( grunt ) {
 
 	var aliConfig = grunt.file.readJSON( 'ali.config.json' );
 
-	var templates = [];
+	var templates = [
+		'src/html/feedback.html',
+		'src/html/feedbackContainer.html'
+	];
 
 	var jsFiles = [
 		'src/js/ali.js',
 		'src/js/core/aria.js',
 		'src/js/vendor/mustache.min.js',
 		'src/html/templates.js',
-		'src/js/core/interaction.js'
+		'src/js/core/feedback.js',
+		'src/js/core/interaction.js',
 	];
 
 	if ( aliConfig.include.dialog ) {

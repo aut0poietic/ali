@@ -758,8 +758,30 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
   display: none;
 }
 
+.feedback {
+  position: relative;
+  background: #f6f6f6;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+.feedback:focus {
+  outline: 1px dashed #FF9800;
+  outline-offset: -2px;
+}
+.feedback .feedback-inner {
+  padding: 1px 24px;
+  color: #444;
+}
+.feedback .feedback-inner h2, .feedback .feedback-inner h3, .feedback .feedback-inner h4, .feedback .feedback-inner h5, .feedback .feedback-inner h6 {
+  color: #000;
+}
+
 body.dialog-open {
   overflow: hidden;
+}
+
+.feedback-content,
+.dialog-content {
+  display: none !important;
 }
 
 .accordion {
@@ -989,7 +1011,4 @@ body.dialog-open {
     border-top: none;
     padding-right: 24px;
   }
-}
-.answer-set .dialog-content {
-  display: none !important;
 }

@@ -1,0 +1,15 @@
+.feedback {
+	@include focusRect();
+	position   : relative;
+	background : #f6f6f6;
+	box-shadow : 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+
+	.feedback-inner {
+		padding : 1px $base-line-height;
+		color   : #444;
+
+		h2, h3, h4, h5, h6 {
+			color : #000;
+		}
+	}
+}

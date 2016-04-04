@@ -41,6 +41,9 @@
 	 * Initialization.
 	 */
 	ali.AnswerSet.prototype.init = function () {
+
+		ali.Feedback.initInteraction( this.$el );
+
 		$( QUESTION, this.$el ).each( (function ( i, el ) {
 			$( el ).aria( {
 				              'live'   : "assertive",
@@ -79,23 +82,23 @@
 	/**
 	 *
 	 */
-	ali.AnswerSet.prototype.allQuestionsComplete = function( ){
+	ali.AnswerSet.prototype.allQuestionsComplete = function () {
 		var num_questions = $( QUESTION ).length;
 		var dialogQuery = '';
-		var result ;
+		var result;
 
 		if ( num_questions === $( QUESTION + '[aria-disabled="true"]' ).length ) {
 
 			if ( num_questions === $( QUESTION + ' .correct' ).length ) {
 				result = ali.STATUS.correct;
-				dialogQuery = '.dialog-content.correct';
+				dialogQuery = '.feedback-content.correct';
 			} else {
 				result = ali.STATUS.incorrect;
-				dialogQuery = '.dialog-content.incorrect';
+				dialogQuery = '.feedback-content.incorrect';
 			}
 			var $dialogContent = $( dialogQuery, this.$el );
 			if ( $dialogContent.length === 1 ) {
-				ali.Dialog.show( $dialogContent );
+				ali.Feedback.show( $dialogContent, this.$el );
 			}
 			this.complete( result );
 		}

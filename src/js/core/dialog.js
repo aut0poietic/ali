@@ -35,7 +35,6 @@
 			var cl = $el[ 0 ].classList;
 			for ( var i = 0; i < cl.length; i ++ ) {
 				if ( cl.item( i ).indexOf( 'dialog' ) < 0 ) {
-					console.log( cl.item( i ) );
 					this._instance.addClass( cl.item( i ) );
 				}
 			}

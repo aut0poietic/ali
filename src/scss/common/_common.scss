@@ -48,7 +48,13 @@ textarea {
 
 @import "button";
 @import "dialog";
+@import "feedback";
 
 body.dialog-open {
 	overflow : hidden;
+}
+
+.feedback-content,
+.dialog-content {
+	display : none !important;
 }

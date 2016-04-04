@@ -157,6 +157,12 @@ jQuery( function ( $ ) {
 ;
 var htmlTemplates = {};
 
+htmlTemplates["feedback"] = "<div class=\"feedback\" aria-labelledby=\"feedback-{{count}}\" tabindex=\"-1\">\n" +
+   "	<div class=\"feedback-inner\">{{{content}}}</div>\n" +
+   "</div>";
+
+htmlTemplates["feedbackContainer"] = "<div role=\"status\" aria-live=\"assertive\" aria-atomic=\"true\"></div>";
+
 htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\"0\" aria-label=\"{{label}}\" aria-describedby=\"dialog-window\">\n" +
    "	<div id=\"dialog-window\" class=\"dialog-window\" role=\"document\" >\n" +
    "		<div class=\"dialog-window-inner\">{{{content}}}</div>\n" +
@@ -166,6 +172,68 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
    "	</div>\n" +
    "</div>";
 
+;
+/*
+ * --------------------------------------------------------------------------
+ * Ali: feedback.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+(function ( $ ) {
+	"use strict";
+
+	/**
+	 * Template local
+	 */
+	var _t = window.htmlTemplates;
+
+
+	Mustache.parse( _t.feedback );
+	Mustache.parse( _t.feedbackContainer );
+
+	/**
+	 * Reusable Dialog object
+	 * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
+	 */
+	window.ali.Feedback = {
+		_count : 0,
+
+		initInteraction : function ( $control ) {
+			if ( $control.length > 0 ) {
+				$control.append( _t.feedbackContainer );
+			}
+		},
+
+		show : function ( $content, $el ) {
+			var $instance = $( Mustache.render( _t.feedback, { count : ++ this._count, content : $content.html() } ) );
+			var cl = $content[ 0 ].classList;
+			for ( var i = 0; i < cl.length; i ++ ) {
+				if ( cl.item( i ).indexOf( 'feedback' ) < 0 ) {
+					$instance.addClass( cl.item( i ) );
+				}
+			}
+			$( '[role="status"]', $el ).append( $instance );
+			this.scrollToAndFocus( $instance );
+		},
+
+		scrollToAndFocus : function ( $el ) {
+			$( 'html,body' ).animate(
+				{
+					scrollTop : $el.offset().top
+				},
+				{
+					duration : 1000,
+					easing   : '',
+					complete : function () {
+						$el.trigger( 'focus' );
+					}
+				}
+			);
+		}
+	};
+
+})( jQuery );
 ;
 /*
  * --------------------------------------------------------------------------
@@ -368,7 +436,6 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 			var cl = $el[ 0 ].classList;
 			for ( var i = 0; i < cl.length; i ++ ) {
 				if ( cl.item( i ).indexOf( 'dialog' ) < 0 ) {
-					console.log( cl.item( i ) );
 					this._instance.addClass( cl.item( i ) );
 				}
 			}
@@ -1275,6 +1342,9 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 	 * Initialization.
 	 */
 	ali.AnswerSet.prototype.init = function () {
+
+		ali.Feedback.initInteraction( this.$el );
+
 		$( QUESTION, this.$el ).each( (function ( i, el ) {
 			$( el ).aria( {
 				              'live'   : "assertive",
@@ -1313,23 +1383,23 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 	/**
 	 *
 	 */
-	ali.AnswerSet.prototype.allQuestionsComplete = function( ){
+	ali.AnswerSet.prototype.allQuestionsComplete = function () {
 		var num_questions = $( QUESTION ).length;
 		var dialogQuery = '';
-		var result ;
+		var result;
 
 		if ( num_questions === $( QUESTION + '[aria-disabled="true"]' ).length ) {
 
 			if ( num_questions === $( QUESTION + ' .correct' ).length ) {
 				result = ali.STATUS.correct;
-				dialogQuery = '.dialog-content.correct';
+				dialogQuery = '.feedback-content.correct';
 			} else {
 				result = ali.STATUS.incorrect;
-				dialogQuery = '.dialog-content.incorrect';
+				dialogQuery = '.feedback-content.incorrect';
 			}
 			var $dialogContent = $( dialogQuery, this.$el );
 			if ( $dialogContent.length === 1 ) {
-				ali.Dialog.show( $dialogContent );
+				ali.Feedback.show( $dialogContent, this.$el );
 			}
 			this.complete( result );
 		}
