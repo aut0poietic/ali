@@ -1,3 +1,9 @@
+/*
+ * --------------------------------------------------------------------------
+ * Ali: tab-control.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
 (function ( $ ) {
 	"use strict";
 

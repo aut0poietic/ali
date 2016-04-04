@@ -40,7 +40,7 @@ jQuery( function ( $ ) {
 ;
 /*
  * --------------------------------------------------------------------------
- * Ali: aria.es6
+ * Ali: aria.js
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  *
@@ -146,6 +146,7 @@ jQuery( function ( $ ) {
 	};
 })( jQuery );
 ;
+
 /*!
  * mustache.js - Logic-less {{mustache}} templates with JavaScript
  * http://github.com/janl/mustache.js
@@ -156,9 +157,9 @@ jQuery( function ( $ ) {
 ;
 var htmlTemplates = {};
 
-htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
-   "	<div class=\"dialog-window\" role=\"document\" tabindex=\"0\" aria-label=\"{{label}}\" aria-describedby=\"dialog-inner\">\n" +
-   "		<div id=\"dialog-inner\" class=\"dialog-window-inner\">{{{content}}}</div>\n" +
+htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\"0\" aria-label=\"{{label}}\" aria-describedby=\"dialog-window\">\n" +
+   "	<div id=\"dialog-window\" class=\"dialog-window\" role=\"document\" >\n" +
+   "		<div class=\"dialog-window-inner\">{{{content}}}</div>\n" +
    "		<div class=\"dialog-window-actions\">\n" +
    "			<button type=\"button\" class=\"dialog-window-actions-close\">OK</button>\n" +
    "		</div>\n" +
@@ -166,6 +167,12 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
    "</div>";
 
 ;
+/*
+ * --------------------------------------------------------------------------
+ * Ali: interaction.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
 (function ( $ ) {
 	"use strict";
 
@@ -322,71 +329,42 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 		this.$el.trigger( e, [ clonedData, $item ] );
 	};
 
-
-	ali.Interaction.prototype.showDialog = function ( $el, title ) {
-
-		this.$dialog = $( '<div class="dialog" role="alertdialog"></div>' );
-		var $window = $( '<div class="dialog-window"></div>' )
-			.aria( {
-				       'role'        : 'document',
-				       'tabindex'    : '0',
-				       'label'       : title,
-				       'describedby' : 'dialog-inner',
-
-			       } );
-		var $inner = $( '<div id="dialog-inner" class="dialog-window-inner"></div>' )
-			.append( $el );
-
-		var $buttons = $( '<div class="dialog-window-actions"></div>' );
-
-		var $ok = $( '<button type="button" class="dialog-window-actions-close">OK</button>' );
-
-		$buttons.append( $ok );
-		$window.append( $inner, $buttons );
-		this.$dialog.append( $window );
-
-		$( 'body' ).append( this.$dialog ).addClass( 'dialog-open' );
-
-		this._enforceFocus();
-		$ok.off( 'click.ali' ).on( 'click.ali', this._hideDialog.bind( this ) );
-		$window.focus();
-	};
-
-	ali.Interaction.prototype._enforceFocus = function () {
-		$( document )
-			.off( 'focusin.ali' )
-			.on( 'focusin.ali', (function ( e ) {
-				if ( ! this.$dialog.has( e.target ).length ) {
-					$( '.dialog-window', this.$dialog ).trigger( 'focus' );
-				}
-			}).bind( this ) );
-	};
-
-	ali.Interaction.prototype._hideDialog = function ( e ) {
-		e.preventDefault();
-		e.stopPropagation();
-		if ( $.type( this.$dialog ) !== 'undefined' ) {
-			this.$dialog.remove();
-		}
-		$( document ).off( 'focusin.bs.modal' );
-		$( 'body' ).removeClass( 'dialog-open' );
-	};
-
 })( jQuery );
 ;
+/*
+ * --------------------------------------------------------------------------
+ * Ali: dialog.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
 (function ( $ ) {
 	"use strict";
 
+	/**
+	 * Template local
+	 */
+	var _t = window.htmlTemplates;
+
+	/**
+	 * Reusable Dialog object
+	 * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
+	 */
 	window.ali.Dialog = {
 
 		_instance : undefined,
-		_template : window.htmlTemplates.dialog,
 
+		/**
+		 * Displays a dialog window, moving the content contained in `$el` into the primary content of the dialog.
+		 * This method will also copy any classes on `$el` over to the dialog itself.
+		 * @param $el content for the dialog.
+		 * @param title Accessible title of this dialog.
+		 */
 		show : function ( $el, title ) {
-			if ( 'undefined' === $.type( this._template ) ) {
-				Mustache.parse( this._template );
+			if ( 'undefined' === $.type( _t.dialog ) ) {
+				Mustache.parse( _t.dialog );
 			}
-			this._instance = $( Mustache.render( this._template, { label : title, content : $el.html() } ) );
+			this._instance = $( Mustache.render( _t.dialog, { label : title, content : $el.html() } ) );
 			var cl = $el[ 0 ].classList;
 			for ( var i = 0; i < cl.length; i ++ ) {
 				if ( cl.item( i ).indexOf( 'dialog' ) < 0 ) {
@@ -395,27 +373,37 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 				}
 			}
 			$( 'body' ).append( this._instance ).addClass( 'dialog-open' );
-			$( document ).off( 'focusin.ali' ).on( 'focusin.ali', this.handleFocus.bind( this ) );
+			$( document ).off( 'focusin.ali' ).on( 'focusin.ali', this._handleFocus.bind( this ) );
 			$( '.dialog-window-actions-close', this._instance ).off( 'click.ali' ).on( 'click.ali', this.hide.bind( this ) );
+			this._instance.trigger( 'focus' );
 		},
 
+		/**
+		 * Hides the current dialog. Primarily intended as a callback method for the close button.
+		 * @param e {Event}
+		 */
 		hide : function ( e ) {
 			if ( 'object' === $.type( e ) ) {
 				e.preventDefault();
 				e.stopPropagation();
 			}
 
-			$( '.dialog-window-actions-close', this._instance ).off( 'click.ali' );
 			if ( $.type( this._instance ) !== 'undefined' ) {
+				$( '.dialog-window-actions-close', this._instance ).off( 'click.ali' );
 				this._instance.remove();
+				this._instance = undefined;
 			}
 			$( document ).off( 'focusin.ali' );
 			$( 'body' ).removeClass( 'dialog-open' );
 		},
-
-		handleFocus : function ( e ) {
-			if ( ! this._instance.has( e.target ).length ) {
-				$( '.dialog-window', this.$dialog ).trigger( 'focus' );
+		/**
+		 * Callback method used to keep focus on the dialog while it's open.
+		 * @param e
+		 * @private
+		 */
+		_handleFocus : function ( e ) {
+			if ( document !== e.target && this._instance[ 0 ] !== e.target && ! this._instance.has( e.target ).length ) {
+				this._instance.trigger( 'focus' );
 			}
 		}
 
@@ -423,13 +411,19 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 
 })( jQuery );
 ;
+/*
+ * --------------------------------------------------------------------------
+ * Ali: accordion.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
 (function ( $ ) {
 	"use strict";
 
 	// Make the global object available and abort if this file is used without it.
 	var ali = window.ali;
-	if( $.type( ali ) !== 'object'){
-		return ;
+	if ( $.type( ali ) !== 'object' ) {
+		return;
 	}
 
 	var DESCRIPTION = 'Accordion interaction.';
@@ -802,7 +796,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 	 * @returns {int} height of element
 	 * @private
 	 */
-	ali.Accordion.prototype._getMeasuredHeight = function( $panel ) {
+	ali.Accordion.prototype._getMeasuredHeight = function ( $panel ) {
 		var $div = $( '<div id="ali-temp" aria-hidden="true" style="overflow:hidden;height:1px;width:100%;visibility: hidden"></div>' ).appendTo( this.$el );
 		var $tmp = $( '<dd class="accordion-panel"></dd>' ).html( $panel.html() ).appendTo( $div );
 		var h = $tmp.height();
@@ -830,6 +824,12 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 
 })( jQuery );
 ;
+/*
+ * --------------------------------------------------------------------------
+ * Ali: tab-control.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
 (function ( $ ) {
 	"use strict";
 
@@ -1232,6 +1232,12 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 
 })( jQuery );
 ;
+/*
+ * --------------------------------------------------------------------------
+ * Ali: answer-set.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
 (function ( $ ) {
 	"use strict";
 
@@ -1265,6 +1271,9 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 	ali.AnswerSet.prototype = Object.create( ali.Interaction.prototype );
 	ali.AnswerSet.prototype.constructor = ali.Accordion;
 
+	/**
+	 * Initialization.
+	 */
 	ali.AnswerSet.prototype.init = function () {
 		$( QUESTION, this.$el ).each( (function ( i, el ) {
 			$( el ).aria( {
@@ -1276,7 +1285,6 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 			       .on( 'submit.ali', this.question_onSubmit.bind( this ) );
 		}).bind( this ) );
 
-
 		$( QUESTION + ' ' + SELECT, this.$el )
 			.off( 'change.ali' )
 			.on( 'change.ali', (function ( e ) {
@@ -1286,39 +1294,32 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 	};
 
 	/**
-	 *
+	 * Event handler for form submit for each question.
 	 * @param e
 	 */
 	ali.AnswerSet.prototype.question_onSubmit = function ( e ) {
 		e.preventDefault();
 		e.stopPropagation();
 		var $target = $( e.target );
-		var correctIndex = parseInt( $target.attr( CORRECT_ATTR ), 10 );
-		var selectedIndex = parseInt( $( SELECT, $target ).prop( 'selectedIndex' ) );
-		var $flag, result;
+		var is_correct = parseInt( $( SELECT, $target ).prop( 'selectedIndex' ) ) === parseInt( $target.attr( CORRECT_ATTR ), 10 );
 
-		if ( selectedIndex === correctIndex ) {
-			$flag = this.makeFlag( $target.attr( CORRECT_RESPONSE ), 'correct' );
-			result = ali.STATUS.correct;
-		} else {
-			$flag = this.makeFlag( $target.attr( INCORRECT_RESPONSE ), 'incorrect' );
-			result = ali.STATUS.incorrect;
-		}
+		this.showFlag( $target, is_correct );
+		this.disableQuestion( $target );
+		this.itemComplete( is_correct ? ali.STATUS.correct : ali.STATUS.incorrect, $target );
 
-		$flag.aria( 'hidden', 'true' ).appendTo( $target );
-		$target.aria( 'disabled', 'true' );
+		this.allQuestionsComplete();
+	};
 
-		$( SELECT + ',' + SUBMIT, $target ).aria( 'disabled', 'true' );
-
-		this.itemComplete( result, $target );
-
-		setTimeout( (function () {
-			$flag.aria( 'hidden', 'false' );
-		}).bind( this ), 1 );
-
+	/**
+	 *
+	 */
+	ali.AnswerSet.prototype.allQuestionsComplete = function( ){
 		var num_questions = $( QUESTION ).length;
 		var dialogQuery = '';
+		var result ;
+
 		if ( num_questions === $( QUESTION + '[aria-disabled="true"]' ).length ) {
+
 			if ( num_questions === $( QUESTION + ' .correct' ).length ) {
 				result = ali.STATUS.correct;
 				dialogQuery = '.dialog-content.correct';
@@ -1332,6 +1333,33 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\">\n" +
 			}
 			this.complete( result );
 		}
+	};
+
+	/**
+	 *
+	 * @param $target
+	 */
+	ali.AnswerSet.prototype.disableQuestion = function ( $target ) {
+		$target.aria( 'disabled', 'true' );
+		$( SELECT + ',' + SUBMIT, $target ).aria( 'disabled', 'true' );
+	};
+
+	/**
+	 *
+	 * @param $target
+	 * @param is_correct
+	 */
+	ali.AnswerSet.prototype.showFlag = function ( $target, is_correct ) {
+		var $flag = this.makeFlag(
+			is_correct ? $target.attr( CORRECT_RESPONSE ) : $target.attr( INCORRECT_RESPONSE ),
+			is_correct ? 'correct' : 'incorrect' );
+
+		$flag.aria( 'hidden', 'true' )
+		     .appendTo( $target );
+
+		setTimeout( (function () {
+			$flag.aria( 'hidden', 'false' );
+		}).bind( this ), 1 );
 	};
 
 	/**

@@ -1,3 +1,9 @@
+/*
+ * --------------------------------------------------------------------------
+ * Ali: answer-set.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
 (function ( $ ) {
 	"use strict";
 
@@ -31,6 +37,9 @@
 	ali.AnswerSet.prototype = Object.create( ali.Interaction.prototype );
 	ali.AnswerSet.prototype.constructor = ali.Accordion;
 
+	/**
+	 * Initialization.
+	 */
 	ali.AnswerSet.prototype.init = function () {
 		$( QUESTION, this.$el ).each( (function ( i, el ) {
 			$( el ).aria( {
@@ -42,7 +51,6 @@
 			       .on( 'submit.ali', this.question_onSubmit.bind( this ) );
 		}).bind( this ) );
 
-
 		$( QUESTION + ' ' + SELECT, this.$el )
 			.off( 'change.ali' )
 			.on( 'change.ali', (function ( e ) {
@@ -52,39 +60,32 @@
 	};
 
 	/**
-	 *
+	 * Event handler for form submit for each question.
 	 * @param e
 	 */
 	ali.AnswerSet.prototype.question_onSubmit = function ( e ) {
 		e.preventDefault();
 		e.stopPropagation();
 		var $target = $( e.target );
-		var correctIndex = parseInt( $target.attr( CORRECT_ATTR ), 10 );
-		var selectedIndex = parseInt( $( SELECT, $target ).prop( 'selectedIndex' ) );
-		var $flag, result;
+		var is_correct = parseInt( $( SELECT, $target ).prop( 'selectedIndex' ) ) === parseInt( $target.attr( CORRECT_ATTR ), 10 );
 
-		if ( selectedIndex === correctIndex ) {
-			$flag = this.makeFlag( $target.attr( CORRECT_RESPONSE ), 'correct' );
-			result = ali.STATUS.correct;
-		} else {
-			$flag = this.makeFlag( $target.attr( INCORRECT_RESPONSE ), 'incorrect' );
-			result = ali.STATUS.incorrect;
-		}
+		this.showFlag( $target, is_correct );
+		this.disableQuestion( $target );
+		this.itemComplete( is_correct ? ali.STATUS.correct : ali.STATUS.incorrect, $target );
 
-		$flag.aria( 'hidden', 'true' ).appendTo( $target );
-		$target.aria( 'disabled', 'true' );
+		this.allQuestionsComplete();
+	};
 
-		$( SELECT + ',' + SUBMIT, $target ).aria( 'disabled', 'true' );
-
-		this.itemComplete( result, $target );
-
-		setTimeout( (function () {
-			$flag.aria( 'hidden', 'false' );
-		}).bind( this ), 1 );
-
+	/**
+	 *
+	 */
+	ali.AnswerSet.prototype.allQuestionsComplete = function( ){
 		var num_questions = $( QUESTION ).length;
 		var dialogQuery = '';
+		var result ;
+
 		if ( num_questions === $( QUESTION + '[aria-disabled="true"]' ).length ) {
+
 			if ( num_questions === $( QUESTION + ' .correct' ).length ) {
 				result = ali.STATUS.correct;
 				dialogQuery = '.dialog-content.correct';
@@ -98,6 +99,33 @@
 			}
 			this.complete( result );
 		}
+	};
+
+	/**
+	 *
+	 * @param $target
+	 */
+	ali.AnswerSet.prototype.disableQuestion = function ( $target ) {
+		$target.aria( 'disabled', 'true' );
+		$( SELECT + ',' + SUBMIT, $target ).aria( 'disabled', 'true' );
+	};
+
+	/**
+	 *
+	 * @param $target
+	 * @param is_correct
+	 */
+	ali.AnswerSet.prototype.showFlag = function ( $target, is_correct ) {
+		var $flag = this.makeFlag(
+			is_correct ? $target.attr( CORRECT_RESPONSE ) : $target.attr( INCORRECT_RESPONSE ),
+			is_correct ? 'correct' : 'incorrect' );
+
+		$flag.aria( 'hidden', 'true' )
+		     .appendTo( $target );
+
+		setTimeout( (function () {
+			$flag.aria( 'hidden', 'false' );
+		}).bind( this ), 1 );
 	};
 
 	/**

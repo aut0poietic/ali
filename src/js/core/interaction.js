@@ -1,3 +1,9 @@
+/*
+ * --------------------------------------------------------------------------
+ * Ali: interaction.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
 (function ( $ ) {
 	"use strict";
 
@@ -152,56 +158,6 @@
 		clonedData.latency = d.getTime() - this.__last;
 		this.__last = d.getTime();
 		this.$el.trigger( e, [ clonedData, $item ] );
-	};
-
-
-	ali.Interaction.prototype.showDialog = function ( $el, title ) {
-
-		this.$dialog = $( '<div class="dialog" role="alertdialog"></div>' );
-		var $window = $( '<div class="dialog-window"></div>' )
-			.aria( {
-				       'role'        : 'document',
-				       'tabindex'    : '0',
-				       'label'       : title,
-				       'describedby' : 'dialog-inner',
-
-			       } );
-		var $inner = $( '<div id="dialog-inner" class="dialog-window-inner"></div>' )
-			.append( $el );
-
-		var $buttons = $( '<div class="dialog-window-actions"></div>' );
-
-		var $ok = $( '<button type="button" class="dialog-window-actions-close">OK</button>' );
-
-		$buttons.append( $ok );
-		$window.append( $inner, $buttons );
-		this.$dialog.append( $window );
-
-		$( 'body' ).append( this.$dialog ).addClass( 'dialog-open' );
-
-		this._enforceFocus();
-		$ok.off( 'click.ali' ).on( 'click.ali', this._hideDialog.bind( this ) );
-		$window.focus();
-	};
-
-	ali.Interaction.prototype._enforceFocus = function () {
-		$( document )
-			.off( 'focusin.ali' )
-			.on( 'focusin.ali', (function ( e ) {
-				if ( ! this.$dialog.has( e.target ).length ) {
-					$( '.dialog-window', this.$dialog ).trigger( 'focus' );
-				}
-			}).bind( this ) );
-	};
-
-	ali.Interaction.prototype._hideDialog = function ( e ) {
-		e.preventDefault();
-		e.stopPropagation();
-		if ( $.type( this.$dialog ) !== 'undefined' ) {
-			this.$dialog.remove();
-		}
-		$( document ).off( 'focusin.bs.modal' );
-		$( 'body' ).removeClass( 'dialog-open' );
 	};
 
 })( jQuery );

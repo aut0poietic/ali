@@ -1,10 +1,16 @@
+/*
+ * --------------------------------------------------------------------------
+ * Ali: accordion.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
 (function ( $ ) {
 	"use strict";
 
 	// Make the global object available and abort if this file is used without it.
 	var ali = window.ali;
-	if( $.type( ali ) !== 'object'){
-		return ;
+	if ( $.type( ali ) !== 'object' ) {
+		return;
 	}
 
 	var DESCRIPTION = 'Accordion interaction.';
@@ -377,7 +383,7 @@
 	 * @returns {int} height of element
 	 * @private
 	 */
-	ali.Accordion.prototype._getMeasuredHeight = function( $panel ) {
+	ali.Accordion.prototype._getMeasuredHeight = function ( $panel ) {
 		var $div = $( '<div id="ali-temp" aria-hidden="true" style="overflow:hidden;height:1px;width:100%;visibility: hidden"></div>' ).appendTo( this.$el );
 		var $tmp = $( '<dd class="accordion-panel"></dd>' ).html( $panel.html() ).appendTo( $div );
 		var h = $tmp.height();

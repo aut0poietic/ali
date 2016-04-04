@@ -6,15 +6,14 @@
 	right            : 0;
 	z-index          : 10000;
 	background-color : rgba(0, 0, 0, 0.8);
-
 	display          : flex;
 	flex-direction   : row;
 	flex-wrap        : nowrap;
 	justify-content  : center;
 	align-items      : center;
+	outline          : none !important;
 
 	.dialog-window {
-		@include focusable();
 		display        : flex;
 		flex-direction : column;
 		flex-wrap      : nowrap;
@@ -24,6 +23,11 @@
 		margin         : $base-line-height $base-line-height * 2;
 		background     : #f6f6f6;
 		box-shadow     : 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+	}
+
+	&:focus .dialog-window {
+		outline        : 1px dashed $accent-color-bright;
+		outline-offset : 2px;
 	}
 
 	.dialog-window-inner {

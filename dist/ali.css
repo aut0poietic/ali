@@ -705,9 +705,9 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+  outline: none !important;
 }
 .dialog .dialog-window {
-  cursor: pointer;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -724,9 +724,9 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
   background: #f6f6f6;
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
-.dialog .dialog-window:focus {
+.dialog:focus .dialog-window {
   outline: 1px dashed #FF9800;
-  outline-offset: -2px;
+  outline-offset: 2px;
 }
 .dialog .dialog-window-inner {
   -webkit-flex: 1;
