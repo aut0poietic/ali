@@ -1389,7 +1389,6 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 		var result;
 
 		if ( num_questions === $( QUESTION + '[aria-disabled="true"]' ).length ) {
-
 			if ( num_questions === $( QUESTION + ' .correct' ).length ) {
 				result = ali.STATUS.correct;
 				dialogQuery = '.feedback-content.correct';
