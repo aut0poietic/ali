@@ -32,6 +32,15 @@
             ali.Feedback.initInteraction(this.$el);
         }
         this.$el.off('submit.ali').on('submit.ali', this.form_onSubmit.bind(this));
+        $('input', this.$el).off('change.ali').on('change.ali', this.input_onChange.bind(this));
+    };
+
+    /**
+     *
+     * @param e
+     */
+    ali.MultipleChoice.prototype.input_onChange = function (e) {
+        this.itemSelected($(e.target));
     };
 
     /**
@@ -60,7 +69,7 @@
         this.setResultData();
         this.complete(result);
 
-        $inputs.aria('disabled', "true");
+        $inputs.off('change.ali').aria('disabled', "true");
         $('button', this.$el).aria('disabled', "true");
         this.$el.off('submit.ali').aria('disabled', 'true');
     };
