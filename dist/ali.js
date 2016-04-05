@@ -180,60 +180,133 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * --------------------------------------------------------------------------
  */
 
-(function ( $ ) {
-	"use strict";
+(function ($) {
+    "use strict";
 
-	/**
-	 * Template local
-	 */
-	var _t = window.htmlTemplates;
+    /**
+     * Template local
+     */
+    var _t = window.htmlTemplates;
 
 
-	Mustache.parse( _t.feedback );
-	Mustache.parse( _t.feedbackContainer );
+    Mustache.parse(_t.feedback);
+    Mustache.parse(_t.feedbackContainer);
 
-	/**
-	 * Reusable Dialog object
-	 * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
-	 */
-	window.ali.Feedback = {
-		_count : 0,
+    var FEEDBACK_CONTENT = '.feedback-content';
 
-		initInteraction : function ( $control ) {
-			if ( $control.length > 0 ) {
-				$control.append( _t.feedbackContainer );
-			}
-		},
+    /**
+     * Reusable Dialog object
+     * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
+     */
+    window.ali.Feedback = {
+        _count : 0,
 
-		show : function ( $content, $el ) {
-			var $instance = $( Mustache.render( _t.feedback, { count : ++ this._count, content : $content.html() } ) );
-			var cl = $content[ 0 ].classList;
-			for ( var i = 0; i < cl.length; i ++ ) {
-				if ( cl.item( i ).indexOf( 'feedback' ) < 0 ) {
-					$instance.addClass( cl.item( i ) );
-				}
-			}
-			$( '[role="status"]', $el ).append( $instance );
-			this.scrollToAndFocus( $instance );
-		},
+        /**
+         * Initializes an interaction,  adding an element with the role "status" and
+         * aria-live so that it is read for assistive technology.
+         * @param $control
+         */
+        initInteraction : function ($control) {
+            if ($control.length > 0) {
+                $control.append(_t.feedbackContainer);
+            }
+        },
 
-		scrollToAndFocus : function ( $el ) {
-			$( 'html,body' ).animate(
-				{
-					scrollTop : $el.offset().top
-				},
-				{
-					duration : 1000,
-					easing   : '',
-					complete : function () {
-						$el.trigger( 'focus' );
-					}
-				}
-			);
-		}
-	};
+        /**
+         * Returns a jQuery set of any feedback content elements.
+         * @param $el {jQuery} An interaction
+         * @returns {jQuery} a set of jQuery feedback elements.
+         */
+        getFeedbackElements : function ($el) {
+            return $(FEEDBACK_CONTENT, $el);
+        },
 
-})( jQuery );
+        /**
+         * Returns true if the interaction contains an feedback element
+         * @param $el
+         * @returns {boolean}
+         */
+        hasFeedback : function ($el) {
+            return this.getFeedbackElements($el).length > 0;
+        },
+
+        /**
+         * Returns a feedback content element for this interaction with the given className, if available.
+         * @param $el an interaction
+         * @param className a className
+         * @returns {jQuery}
+         */
+        getFeedbackContent : function ($el, className) {
+            var $content = this.getFeedbackElements($el);
+            if (className === undefined || $content.length === 1) {
+                return $($content[0]);
+            } else {
+                for( var i = 0; i < $content.length; i++){
+                    var $fc = $( $content.get(i));
+                    if ($fc.is(className)) {
+                        return $fc;
+                    }
+                }
+            }
+        },
+
+        /**
+         * Finds and displays the appropriate feedback
+         * @param $el
+         * @param className
+         * @returns {boolean}
+         */
+        showFeedback : function ($el, className) {
+            if (this.hasFeedback($el)) {
+                var $content = this.getFeedbackContent($el, className);
+
+                if ($content.length > 0) {
+                    this.show($content, $el);
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        /**
+         * Displays the feedback
+         * @param $content
+         * @param $el
+         */
+        show : function ($content, $el) {
+            var $instance = $(Mustache.render(_t.feedback, { count : ++this._count, content : $content.html() }));
+            var cl = $content[0].classList;
+            for (var i = 0; i < cl.length; i++) {
+                if (cl.item(i).indexOf('feedback') < 0) {
+                    $instance.addClass(cl.item(i));
+                }
+            }
+            $('[role="status"]', $el).append($instance);
+            this.scrollToAndFocus($instance);
+        },
+
+        /**
+         * Animates scrolling the browser window to the feedback element and sets the
+         * focus on the element once in position.
+         * @param $el
+         */
+        scrollToAndFocus : function ($el) {
+            $('html,body').animate(
+                {
+                    scrollTop : $el.offset().top
+                },
+                {
+                    duration : 1000,
+                    easing : '',
+                    complete : function () {
+                        $el.trigger('focus');
+                    }
+                }
+            );
+        }
+    };
+
+})(jQuery);
 ;
 /*
  * --------------------------------------------------------------------------
@@ -405,78 +478,134 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
+(function ($) {
+    "use strict";
 
-(function ( $ ) {
-	"use strict";
+    var DIALOG_CONTENT = '.dialog-content';
 
-	/**
-	 * Template local
-	 */
-	var _t = window.htmlTemplates;
+    /**
+     * Template local
+     */
+    var _t = window.htmlTemplates;
 
-	/**
-	 * Reusable Dialog object
-	 * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
-	 */
-	window.ali.Dialog = {
+    /**
+     * Reusable Dialog object
+     * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
+     */
+    window.ali.Dialog = {
 
-		_instance : undefined,
+        _instance : undefined,
 
-		/**
-		 * Displays a dialog window, moving the content contained in `$el` into the primary content of the dialog.
-		 * This method will also copy any classes on `$el` over to the dialog itself.
-		 * @param $el content for the dialog.
-		 * @param title Accessible title of this dialog.
-		 */
-		show : function ( $el, title ) {
-			if ( 'undefined' === $.type( _t.dialog ) ) {
-				Mustache.parse( _t.dialog );
-			}
-			this._instance = $( Mustache.render( _t.dialog, { label : title, content : $el.html() } ) );
-			var cl = $el[ 0 ].classList;
-			for ( var i = 0; i < cl.length; i ++ ) {
-				if ( cl.item( i ).indexOf( 'dialog' ) < 0 ) {
-					this._instance.addClass( cl.item( i ) );
-				}
-			}
-			$( 'body' ).append( this._instance ).addClass( 'dialog-open' );
-			$( document ).off( 'focusin.ali' ).on( 'focusin.ali', this._handleFocus.bind( this ) );
-			$( '.dialog-window-actions-close', this._instance ).off( 'click.ali' ).on( 'click.ali', this.hide.bind( this ) );
-			this._instance.trigger( 'focus' );
-		},
+        /**
+         * Returns a jQuery set of dialog content elements.
+         * @param $el
+         * @returns {jQuery}
+         */
+        getDialogElements : function ($el) {
+            return $(DIALOG_CONTENT, $el);
+        },
 
-		/**
-		 * Hides the current dialog. Primarily intended as a callback method for the close button.
-		 * @param e {Event}
-		 */
-		hide : function ( e ) {
-			if ( 'object' === $.type( e ) ) {
-				e.preventDefault();
-				e.stopPropagation();
-			}
+        /**
+         * Returns true if the current interaction has dialog content.
+         * @param $el
+         * @returns {boolean}
+         */
+        hasDialog : function ($el) {
+            return this.getDialogElements($el).length > 0;
+        },
 
-			if ( $.type( this._instance ) !== 'undefined' ) {
-				$( '.dialog-window-actions-close', this._instance ).off( 'click.ali' );
-				this._instance.remove();
-				this._instance = undefined;
-			}
-			$( document ).off( 'focusin.ali' );
-			$( 'body' ).removeClass( 'dialog-open' );
-		},
-		/**
-		 * Callback method used to keep focus on the dialog while it's open.
-		 * @param e
-		 * @private
-		 */
-		_handleFocus : function ( e ) {
-			if ( document !== e.target && this._instance[ 0 ] !== e.target && ! this._instance.has( e.target ).length ) {
-				this._instance.trigger( 'focus' );
-			}
-		}
+        /**
+         * Returns the correct dialog content corresponding to the provided className.
+         * @param $el
+         * @param className
+         * @returns {*|HTMLElement}
+         */
+        getDialogContent : function ($el, className) {
+            var $dialogContent = this.getDialogElements($el);
+            if (className === undefined || $dialogContent.length === 1) {
+                return $($dialogContent[0]);
+            } else {
+                for( var i = 0; i < $dialogContent.length; i++){
+                    var $fc = $( $dialogContent.get(i));
+                    if ($fc.is(className)) {
+                        return $fc;
+                    }
+                }
+            }
+        },
 
-	};
+        /**
+         * Opens a dialog if dialog content exists.
+         * @param $el
+         * @param className
+         * @returns {boolean}
+         */
+        showDialog : function ($el, className) {
+            if (this.hasDialog($el)) {
+                var $dialogContent = this.getDialogContent($el, className);
+                if ($dialogContent.length > 0) {
+                    this.show($dialogContent);
+                    return true;
+                }
+            }
+            return false ;
+        },
 
-})( jQuery );
+        /**
+         * Displays a dialog window, moving the content contained in `$el` into the primary content of the dialog.
+         * This method will also copy any classes on `$el` over to the dialog itself.
+         * @param $el content for the dialog.
+         * @param title Accessible title of this dialog.
+         */
+        show : function ($el, title) {
+            if ('undefined' === $.type(_t.dialog)) {
+                Mustache.parse(_t.dialog);
+            }
+            this._instance = $(Mustache.render(_t.dialog, { label : title, content : $el.html() }));
+            var cl = $el[0].classList;
+            for (var i = 0; i < cl.length; i++) {
+                if (cl.item(i).indexOf('dialog') < 0) {
+                    this._instance.addClass(cl.item(i));
+                }
+            }
+            $('body').append(this._instance).addClass('dialog-open');
+            $(document).off('focusin.ali').on('focusin.ali', this._handleFocus.bind(this));
+            $('.dialog-window-actions-close', this._instance).off('click.ali').on('click.ali', this.hide.bind(this));
+            this._instance.trigger('focus');
+        },
+
+        /**
+         * Hides the current dialog. Primarily intended as a callback method for the close button.
+         * @param e {Event}
+         */
+        hide : function (e) {
+            if ('object' === $.type(e)) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            if ($.type(this._instance) !== 'undefined') {
+                $('.dialog-window-actions-close', this._instance).off('click.ali');
+                this._instance.remove();
+                this._instance = undefined;
+            }
+            $(document).off('focusin.ali');
+            $('body').removeClass('dialog-open');
+        },
+        /**
+         * Callback method used to keep focus on the dialog while it's open.
+         * @param e
+         * @private
+         */
+        _handleFocus : function (e) {
+            if (document !== e.target && this._instance[0] !== e.target && !this._instance.has(e.target).length) {
+                this._instance.trigger('focus');
+            }
+        }
+
+    };
+
+})(jQuery);
 ;
 /*
  * --------------------------------------------------------------------------
@@ -1305,158 +1434,151 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-(function ( $ ) {
-	"use strict";
+(function ($) {
+    "use strict";
 
-	// Make the global object available and abort if this file is used without it.
-	var ali = window.ali;
-	if ( $.type( ali ) !== 'object' ) {
-		return;
-	}
+    // Make the global object available and abort if this file is used without it.
+    var ali = window.ali;
+    if ($.type(ali) !== 'object') {
+        return;
+    }
 
-	var DESCRIPTION = 'Answer Set multi-part interaction.';
-	var TYPE = ali.TYPE.choice;
+    var DESCRIPTION = 'Answer Set multi-part interaction.';
+    var TYPE = ali.TYPE.choice;
 
-	var QUESTION = 'form';
-	var SELECT = 'select';
-	var SUBMIT = 'button';
-	var CORRECT_ATTR = 'data-ali-correct';
-	var CORRECT_RESPONSE = 'data-ali-correct-message';
-	var INCORRECT_RESPONSE = 'data-ali-incorrect-message';
+    var QUESTION = 'form';
+    var SELECT = 'select';
+    var SUBMIT = 'button';
+    var CORRECT_ATTR = 'data-ali-correct';
+    var CORRECT_RESPONSE = 'data-ali-correct-message';
+    var INCORRECT_RESPONSE = 'data-ali-incorrect-message';
 
-	/**
-	 * Answer Set Interaction
-	 * @param element DOMElement
-	 * @constructor
-	 */
-	ali.AnswerSet = function ( element ) {
-		ali.Interaction.call( this, element, TYPE, DESCRIPTION );
-		this.init();
-	};
+    /**
+     * Answer Set Interaction
+     * @param element DOMElement
+     * @constructor
+     */
+    ali.AnswerSet = function (element) {
+        ali.Interaction.call(this, element, TYPE, DESCRIPTION);
+        this.init();
+    };
 
-	// Inherits from ali.Interaction
-	ali.AnswerSet.prototype = Object.create( ali.Interaction.prototype );
-	ali.AnswerSet.prototype.constructor = ali.Accordion;
+    // Inherits from ali.Interaction
+    ali.AnswerSet.prototype = Object.create(ali.Interaction.prototype);
+    ali.AnswerSet.prototype.constructor = ali.Accordion;
 
-	/**
-	 * Initialization.
-	 */
-	ali.AnswerSet.prototype.init = function () {
+    /**
+     * Initialization.
+     */
+    ali.AnswerSet.prototype.init = function () {
 
-		ali.Feedback.initInteraction( this.$el );
+        ali.Feedback.initInteraction(this.$el);
 
-		$( QUESTION, this.$el ).each( (function ( i, el ) {
-			$( el ).aria( {
-				              'live'   : "assertive",
-				              'atomic' : "true"
-			              } )
-			       .attr( 'id', this.$el.attr( 'id' ) + '-' + i )
-			       .off( 'submit.ali' )
-			       .on( 'submit.ali', this.question_onSubmit.bind( this ) );
-		}).bind( this ) );
+        $(QUESTION, this.$el).each((function (i, el) {
+            $(el).aria({
+                           'live' : "assertive",
+                           'atomic' : "true"
+                       })
+                .attr('id', this.$el.attr('id') + '-' + i)
+                .off('submit.ali')
+                .on('submit.ali', this.question_onSubmit.bind(this));
+        }).bind(this));
 
-		$( QUESTION + ' ' + SELECT, this.$el )
-			.off( 'change.ali' )
-			.on( 'change.ali', (function ( e ) {
-				var $form = $( $( e.target ).parents( QUESTION )[ 0 ] );
-				this.itemSelected( $form );
-			}).bind( this ) );
-	};
+        $(QUESTION + ' ' + SELECT, this.$el)
+            .off('change.ali')
+            .on('change.ali', (function (e) {
+                var $form = $($(e.target).parents(QUESTION)[0]);
+                this.itemSelected($form);
+            }).bind(this));
+    };
 
-	/**
-	 * Event handler for form submit for each question.
-	 * @param e
-	 */
-	ali.AnswerSet.prototype.question_onSubmit = function ( e ) {
-		e.preventDefault();
-		e.stopPropagation();
-		var $target = $( e.target );
-		var is_correct = parseInt( $( SELECT, $target ).prop( 'selectedIndex' ) ) === parseInt( $target.attr( CORRECT_ATTR ), 10 );
+    /**
+     * Event handler for form submit for each question.
+     * @param e
+     */
+    ali.AnswerSet.prototype.question_onSubmit = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $target = $(e.target);
+        var is_correct = parseInt($(SELECT, $target).prop('selectedIndex')) === parseInt($target.attr(CORRECT_ATTR), 10);
 
-		this.showFlag( $target, is_correct );
-		this.disableQuestion( $target );
-		this.itemComplete( is_correct ? ali.STATUS.correct : ali.STATUS.incorrect, $target );
+        this.showFlag($target, is_correct);
+        this.disableQuestion($target);
+        this.itemComplete(is_correct ? ali.STATUS.correct : ali.STATUS.incorrect, $target);
 
-		this.allQuestionsComplete();
-	};
+        this.allQuestionsComplete();
+    };
 
-	/**
-	 *
-	 */
-	ali.AnswerSet.prototype.allQuestionsComplete = function () {
-		var num_questions = $( QUESTION ).length;
-		var dialogQuery = '';
-		var result;
+    /**
+     *
+     */
+    ali.AnswerSet.prototype.allQuestionsComplete = function () {
+        var num_questions = $(QUESTION).length;
+        var is_correct, result, className;
 
-		if ( num_questions === $( QUESTION + '[aria-disabled="true"]' ).length ) {
-			if ( num_questions === $( QUESTION + ' .correct' ).length ) {
-				result = ali.STATUS.correct;
-				dialogQuery = '.feedback-content.correct';
-			} else {
-				result = ali.STATUS.incorrect;
-				dialogQuery = '.feedback-content.incorrect';
-			}
-			var $dialogContent = $( dialogQuery, this.$el );
-			if ( $dialogContent.length === 1 ) {
-				ali.Feedback.show( $dialogContent, this.$el );
-			}
-			this.complete( result );
-		}
-	};
+        if (num_questions === $(QUESTION + '[aria-disabled="true"]').length) {
+            is_correct = num_questions === $(QUESTION + ' .correct').length;
+            result = is_correct ? ali.STATUS.correct : ali.STATUS.incorrect;
+            className = is_correct ? '.correct' : '.incorrect';
+            ali.Dialog.showDialog(this.$el, className);
+            ali.Feedback.showFeedback(this.$el, className);
+            this.complete(result);
+        }
+    };
 
-	/**
-	 *
-	 * @param $target
-	 */
-	ali.AnswerSet.prototype.disableQuestion = function ( $target ) {
-		$target.aria( 'disabled', 'true' );
-		$( SELECT + ',' + SUBMIT, $target ).aria( 'disabled', 'true' );
-	};
+    /**
+     *
+     * @param $target
+     */
+    ali.AnswerSet.prototype.disableQuestion = function ($target) {
+        $target.aria('disabled', 'true');
+        $(SELECT + ',' + SUBMIT, $target).aria('disabled', 'true');
+    };
 
-	/**
-	 *
-	 * @param $target
-	 * @param is_correct
-	 */
-	ali.AnswerSet.prototype.showFlag = function ( $target, is_correct ) {
-		var $flag = this.makeFlag(
-			is_correct ? $target.attr( CORRECT_RESPONSE ) : $target.attr( INCORRECT_RESPONSE ),
-			is_correct ? 'correct' : 'incorrect' );
+    /**
+     *
+     * @param $target
+     * @param is_correct
+     */
+    ali.AnswerSet.prototype.showFlag = function ($target, is_correct) {
+        var $flag = this.makeFlag(
+            is_correct ? $target.attr(CORRECT_RESPONSE) : $target.attr(INCORRECT_RESPONSE),
+            is_correct ? 'correct' : 'incorrect');
 
-		$flag.aria( 'hidden', 'true' )
-		     .appendTo( $target );
+        $flag.aria('hidden', 'true')
+            .appendTo($target);
 
-		setTimeout( (function () {
-			$flag.aria( 'hidden', 'false' );
-		}).bind( this ), 1 );
-	};
+        setTimeout((function () {
+            $flag.aria('hidden', 'false');
+        }).bind(this), 1);
+    };
 
-	/**
-	 *
-	 * @param msg
-	 * @param cls
-	 */
-	ali.AnswerSet.prototype.makeFlag = function ( msg, cls ) {
-		return $( '<div class="flag ' + cls + '"><span>' + msg + '</span></div>' );
-	};
+    /**
+     *
+     * @param msg
+     * @param cls
+     */
+    ali.AnswerSet.prototype.makeFlag = function (msg, cls) {
+        return $('<div class="flag ' + cls + '"><span>' + msg + '</span></div>');
+    };
 
-	/*
-	 * jQuery Plugin
-	 */
-	function Plugin() {
-		return this.each( function () {
-			new ali.AnswerSet( this );
-		} );
-	}
+    /*
+     * jQuery Plugin
+     */
+    function Plugin() {
+        return this.each(function () {
+            new ali.AnswerSet(this);
+        });
+    }
 
-	var old = $.fn.answerset;
-	$.fn.answerset = Plugin;
-	$.fn.answerset.Constructor = ali.AnswerSet;
+    var old = $.fn.answerset;
+    $.fn.answerset = Plugin;
+    $.fn.answerset.Constructor = ali.AnswerSet;
 
-	$.fn.answerset.noConflict = function () {
-		$.fn.answerset = old;
-		return this;
-	};
+    $.fn.answerset.noConflict = function () {
+        $.fn.answerset = old;
+        return this;
+    };
 
 
-})( jQuery );
+})(jQuery);
