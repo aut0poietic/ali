@@ -1,0 +1,12 @@
+.flag {
+  color            : #fff;
+  display          : inline-block;
+  background-color : rgba(#000, .8);
+  padding          : 12px 24px;
+  transition       : visibility .001s, opacity .3s .001s;
+
+  &[aria-hidden="true"] {
+	visibility : hidden;
+	opacity    : 0;
+  }
+}

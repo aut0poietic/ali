@@ -64,16 +64,23 @@
 
         result = answeredCorrect ? ali.STATUS.correct : ali.STATUS.incorrect;
         className = answeredCorrect ? '.correct' : '.incorrect';
-        ali.Dialog.showDialog(this.$el, className);
-        ali.Feedback.showFeedback(this.$el, className);
+        if (!ali.Dialog.showDialog(this.$el, className) && !ali.Feedback.showFeedback(this.$el, className)) {
+            this.showMessage(
+                $('.submit-row', this.$el),
+                answeredCorrect ? 'Correct' : 'Incorrect',
+                className.substr(1));
+        }
+
         this.setResultData();
         this.complete(result);
+        this.disableInteraction();
+    };
 
-        $inputs.off('change.ali').aria('disabled', "true");
+    ali.MultipleChoice.prototype.disableInteraction = function () {
+        $('input', this.$el).off('change.ali').aria('disabled', "true");
         $('button', this.$el).aria('disabled', "true");
         this.$el.off('submit.ali').aria('disabled', 'true');
     };
-
     /**
      * Sets the responses for complete events.
      */

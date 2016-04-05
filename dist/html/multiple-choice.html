@@ -1,0 +1,81 @@
+<!doctype html>
+<html class="no-js" lang="en-US">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Ali Development</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="../ali.css">
+	<style>
+		.container {
+			max-width : 960px;
+			margin    : 64px auto;
+		}
+
+		@media ( max-width : 959px ) {
+			.container {
+				margin : 64px 32px;
+			}
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<h1>Ali Multiple Choice</h1>
+
+	<form id="mc-1" class="multiple-choice" data-ali="multiple-choice">
+		<p>Confirmation Bias is an example of what type of bias?</p>
+		<div class="input-group">
+			<input type="checkbox" id="response_a" name="mc" value="a" data-correct="true">
+			<label for="response_a">Behavioral Bias</label>
+		</div>
+		<div class="input-group">
+			<input type="checkbox" id="response_b" name="mc" value="b" data-correct="false">
+			<label for="response_b">Social Bias</label>
+		</div>
+		<div class="input-group">
+			<input type="checkbox" id="response_c" name="mc" value="c" data-correct="false">
+			<label for="response_c">Memory Bias</label>
+		</div>
+		<div class="input-group">
+			<input type="checkbox" id="response_d" name="mc" value="d" data-correct="true">
+			<label for="response_d">Not a valid bias</label>
+		</div>
+		<div class="submit-row">
+			<button class="submit" aria-label="Submit">Submit</button>
+		</div>
+		<div class="dialog-content correct">
+			<h3>Answered All Correct</h3>
+			<p>You've answered all of these questions correct. You are clearly a suck-up.</p>
+		</div>
+		<div class="dialog-content incorrect">
+			<h3>Some Answers were incorrect</h3>
+			<p>That's more like it. There's no way you know all of this.</p>
+		</div>
+	</form>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+<script src="../ali.js"></script>
+<script>
+	jQuery(function ($) {
+		$(document)
+				.on('ali:complete', function (e, data) {
+					// e: Object, the original event object
+					// data: Object interaction event object
+					console.log(e, data);
+				})
+				.on('ali:itemSelected', function (e, data, $item) {
+					// e: Object, the original event object
+					// data: Object interaction event object
+					// $item : the source of the event
+					console.log(e, data, $item);
+				})
+		;
+	});
+</script>
+</body>
+</html>
+
