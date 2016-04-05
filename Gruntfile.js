@@ -14,7 +14,7 @@ module.exports = function ( grunt ) {
 		'src/js/vendor/mustache.min.js',
 		'src/html/templates.js',
 		'src/js/core/feedback.js',
-		'src/js/core/interaction.js',
+		'src/js/core/interaction.js'
 	];
 
 	if ( aliConfig.include.dialog ) {
@@ -34,10 +34,13 @@ module.exports = function ( grunt ) {
 		jsFiles.push( 'src/js/interactions/answer-set.js' );
 	}
 
+	if ( aliConfig.include.multipleChoice ) {
+		jsFiles.push( 'src/js/interactions/multiple-choice.js' );
+	}
+
 	grunt.initConfig(
 		{
 			pkg : grunt.file.readJSON( 'package.json' ),
-
 
 			htmlConvert : {
 				options       : {

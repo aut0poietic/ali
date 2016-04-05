@@ -35,5 +35,6 @@ jQuery( function ( $ ) {
 		$( '[data-ali="accordion"]' ).accordion();
 		$( '[data-ali="tab-control"]' ).tabcontrol();
 		$( '[data-ali="answer-set"]' ).answerset();
+		$( '[data-ali="multiple-choice"]' ).multiplechoice();
 	}
 } );

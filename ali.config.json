@@ -3,6 +3,7 @@
     "dialog": true,
     "accordion": true,
     "tab": true,
-    "answerSet": true
+    "answerSet": true,
+    "multipleChoice": true
   }
 }

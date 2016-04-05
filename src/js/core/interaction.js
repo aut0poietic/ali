@@ -76,6 +76,10 @@
 		return str;
 	};
 
+	ali.Interaction.prototype.truthy = function( string ){
+		return string === true || string === "true" || string === "t";
+	};
+
 	/**
 	 * Allows a method to be called later, just before the next UI paint.
 	 * @param callback
