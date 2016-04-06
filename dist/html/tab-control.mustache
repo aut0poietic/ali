@@ -1,0 +1,13 @@
+<div id="{{id}}" class="tab-control" data-ali="tab-control">
+	<ul class="tab-control-tablist">
+		{{#elements}}
+			<li>{{term}}</li>
+		{{/elements}}
+	</ul>
+	{{#elements}}
+		<div class="tab-control-panel">
+			<h2>{{term}}</h2>
+			{{{definition}}}
+		</div>
+	{{/elements}}
+</div>

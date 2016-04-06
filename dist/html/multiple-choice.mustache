@@ -1,0 +1,20 @@
+<form id="{{id}}" class="multiple-choice" data-ali="multiple-choice">
+	{{stem}}
+	{{#responses}}
+	<div class="input-group">
+		<input type="{{type}}" id="response_{{value}}" name="mc" value="{{value}}" data-correct="{{correct}}">
+		<label for="response_{{value}}">{{{text}}}</label>
+	</div>
+	{{/responses}}
+	<div class="submit-row">
+		<button class="submit">Submit</button>
+	</div>
+	<div class="feedback-content correct">
+		<h3>{{correctTitle}}</h3>
+		{{correctMessage}}
+	</div>
+	<div class="feedback-content incorrect">
+		<h3>{{incorrectTitle}}</h3>
+		{{incorrectMessage}}
+	</div>
+</form>

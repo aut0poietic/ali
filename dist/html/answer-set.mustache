@@ -1,0 +1,18 @@
+<div id="{{id}}" class="answer-set" data-ali="answer-set">
+	{{#questions}}
+		<form data-ali-correct="1" data-ali-correct-message="{{correct}}" data-ali-incorrect-message="{{incorrect}}">
+			<label for="q-1">{{stem}}</label>
+			<div class="answer-set-select">
+				<select id="q-1">
+					<option>Select...</option>
+					{{#options}}
+						<option>{{name}}</option>
+					{{/options}}
+				</select>
+			</div>
+			<div class="answer-set-submit">
+				<button type="submit">Submit</button>
+			</div>
+		</form>
+	{{/questions}}
+</div>
