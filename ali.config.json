@@ -1,9 +1,0 @@
-{
-  "include": {
-    "dialog": true,
-    "accordion": true,
-    "tab": true,
-    "answerSet": true,
-    "multipleChoice": true
-  }
-}

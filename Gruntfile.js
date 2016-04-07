@@ -1,11 +1,9 @@
 module.exports = function ( grunt ) {
 
-
-	var aliConfig = grunt.file.readJSON( 'ali.config.json' );
-
 	var templates = [
 		'src/html/feedback.html',
-		'src/html/feedbackContainer.html'
+		'src/html/feedbackContainer.html',
+		'src/html/dialog.html'
 	];
 
 	var jsFiles = [
@@ -14,29 +12,14 @@ module.exports = function ( grunt ) {
 		'src/js/vendor/mustache.min.js',
 		'src/html/templates.js',
 		'src/js/core/feedback.js',
-		'src/js/core/interaction.js'
+		'src/js/core/interaction.js',
+		'src/js/core/dialog.js',
+		'src/js/interactions/accordion.js',
+		'src/js/interactions/tab-control.js',
+		'src/js/interactions/answer-set.js',
+		'src/js/interactions/multiple-choice.js'
 	];
 
-	if ( aliConfig.include.dialog ) {
-		jsFiles.push( 'src/js/core/dialog.js' );
-		templates.push( 'src/html/dialog.html' );
-	}
-
-	if ( aliConfig.include.accordion ) {
-		jsFiles.push( 'src/js/interactions/accordion.js' );
-	}
-
-	if ( aliConfig.include.tab ) {
-		jsFiles.push( 'src/js/interactions/tab-control.js' );
-	}
-
-	if ( aliConfig.include.answerSet ) {
-		jsFiles.push( 'src/js/interactions/answer-set.js' );
-	}
-
-	if ( aliConfig.include.multipleChoice ) {
-		jsFiles.push( 'src/js/interactions/multiple-choice.js' );
-	}
 
 	grunt.initConfig(
 		{

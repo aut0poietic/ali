@@ -5,10 +5,7 @@
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-@import "../../node_modules/mathsass/dist/math";
 @import "variables";
-@import "normalize";
-@include normalize();
 @import "common/common";
 
 @import "interactions/accordion";

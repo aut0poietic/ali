@@ -32,37 +32,35 @@
 		}
 
 		li {
-			@include addContrastingColors(#fcfcfc);
 			@include focusable;
 
-			position    : relative;
-			flex-grow   : 1;
-			padding     : 16px 4px;
-			text-align  : center;
-			font-weight : 700;
-			transition  : all .2s ease-in;
+			position         : relative;
+			flex-grow        : 1;
+			padding          : 16px 4px;
+			text-align       : center;
+			font-weight      : 700;
+			background-color : #fcfcfc;
+			transition       : all .2s ease-in;
 
 			&[aria-selected="true"] {
-				$amount : $base-line-height;
-				box-shadow : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.1);
+
 			}
+
 			&:focus,
 			&:hover,
 			&[aria-expanded="true"] {
-				$amount : $base-line-height * 2;
-				box-shadow : inset 0 $amount $amount ($amount * -1) rgba($key-color, 0.1);
+
 			}
 		}
 	}
 
 	.tab-control-panel {
-		@include addContrastingColors(#fcfcfc);
 		@include focusRect();
-
-		position      : relative;
-		padding       : 0 $base-line-height;
-		border-bottom : 2px solid rgba($key-color, .3);
-		margin        : 0;
+		position         : relative;
+		padding          : 0 $base-line-height;
+		border-bottom    : 2px solid rgba($key-color, .3);
+		margin           : 0;
+		background-color : #fcfcfc;
 
 		&[aria-hidden="true"] {
 			display : none;

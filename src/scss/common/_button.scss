@@ -16,7 +16,6 @@ button,
 	background-image : none;
 	border           : 1px solid $key-color;
 	white-space      : nowrap;
-	transition       : color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out;
 
 	&:hover,
 	&:focus {
@@ -26,59 +25,18 @@ button,
 		text-decoration  : none;
 	}
 
-	&.focus {
-		background-color : darken($key-color, 10%);
-		border-color     : darken($key-color, 25%);
-		box-shadow       : inset 0 3px 5px rgba(0, 0, 0, .125);
-	}
-
-	&.secondary {
-		background-color : $accent-color-dark;
-		border           : 1px solid $accent-color-dark;
-
-		&:hover,
-		&:focus {
-			background-color : darken($accent-color-dark, 10%);
-			border-color     : darken($accent-color-dark, 12%);
-		}
-
-		&.focus {
-			background-color : darken($accent-color-dark, 10%);
-			border-color     : darken($accent-color-dark, 25%);
-		}
-	}
-
-	&.cancel,
-	&.danger {
-		background-color : $color-danger;
-		border           : 1px solid $color-danger;
-
-		&:hover,
-		&:focus {
-			background-color : darken($color-danger, 10%);
-			border-color     : darken($color-danger, 12%);
-		}
-
-		&.focus {
-			background-color : darken($color-danger, 10%);
-			border-color     : darken($color-danger, 25%);
-		}
-	}
-
 	&[aria-disabled="true"],
 	&[disabled] {
 		cursor         : not-allowed;
-		opacity        : .65;
 		box-shadow     : none;
 		pointer-events : none;
 
 		&,
 		&:hover,
 		&:focus {
-			color            : #000;
-			background-color : darken(#ddd, 10%);
-			border-color     : darken(#ddd, 12%);
+			color            : #333;
+			background-color : #ccc;
+			border-color     : #ccc;
 		}
 	}
-
 }

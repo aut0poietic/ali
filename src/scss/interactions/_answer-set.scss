@@ -7,7 +7,7 @@
 		position   : relative;
 		margin     : $base-line-height * 2 0 $base-line-height;
 		text-align : center;
-		box-shadow : 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+		border: 1px solid $border-color;
 
 		label {
 			display     : block;
@@ -15,6 +15,7 @@
 			padding     : $base-line-height / 2 $base-line-height / 2 0;
 			font-weight : 700;
 		}
+
 		.answer-set-submit {
 			padding          : $base-line-height / 2;
 			border-top       : 1px solid rgba($key-color, .5);
@@ -45,11 +46,14 @@
 			}
 
 			&.correct {
-				@include addContrastingColors(#005700);
+				color            : #fff;
+				background-color : $success-color;
 			}
 
 			&.incorrect {
-				@include addContrastingColors($color-danger);
+				color            : #fff;
+				background-color : $danger-color;
+
 			}
 		}
 
