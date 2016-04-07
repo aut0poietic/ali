@@ -87,10 +87,10 @@ module.exports = function ( grunt ) {
 			sass : {
 				main : {
 					options : {
-						style : 'expanded'
+						style    : 'expanded'
 					},
 					files   : {
-						'dist/ali.css' : 'src/scss/ali.scss'
+						'dist/ali.css' : 'src/scss/ali/main.scss'
 					}
 				}
 			},
