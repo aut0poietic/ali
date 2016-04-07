@@ -12,58 +12,6 @@
   box-sizing: border-box;
 }
 
-select,
-textarea,
-input[type="text"] {
-  display: block;
-  width: 100%;
-  height: 36px;
-  padding: 6px 12px;
-  line-height: 24px;
-  background-image: none;
-  border: 1px solid #d1d1d1;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
-  transition: box-shadow .2s ease-in, background-color .2s ease-in, color .2s ease-in;
-}
-select:focus,
-textarea:focus,
-input[type="text"]:focus {
-  outline: 1px dashed #FF9800;
-  outline-offset: -2px;
-}
-select::-ms-expand,
-textarea::-ms-expand,
-input[type="text"]::-ms-expand {
-  border: 0;
-  background-color: transparent;
-}
-select:focus,
-textarea:focus,
-input[type="text"]:focus {
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.24);
-}
-select[disabled], select[readonly], fieldset[disabled] select,
-textarea[disabled],
-textarea[readonly], fieldset[disabled]
-textarea,
-input[type="text"][disabled],
-input[type="text"][readonly], fieldset[disabled]
-input[type="text"] {
-  background-color: #d1d1d1;
-  opacity: 1;
-}
-select[disabled], fieldset[disabled] select,
-textarea[disabled], fieldset[disabled]
-textarea,
-input[type="text"][disabled], fieldset[disabled]
-input[type="text"] {
-  cursor: not-allowed;
-}
-
-textarea {
-  height: auto;
-}
-
 button,
 .btn {
   cursor: pointer;

@@ -6,9 +6,6 @@
  * --------------------------------------------------------------------------
  */
 @import "variables";
+@import "mixins";
 @import "common/common";
-
-@import "interactions/accordion";
-@import "interactions/tab-control";
-@import "interactions/answer-set";
-@import "interactions/multiple-choice";
+@import "interactions/interactions";

@@ -6,14 +6,14 @@
   }
 }
 
-@mixin focusStyles{
+@mixin tab-focus() {
 	outline        : 1px dashed $accent-color;
 	outline-offset : -2px;
 }
 
 @mixin focusRect {
   &:focus {
-	@include focusStyles() ;
+	@include tab-focus() ;
   }
 }
 
