@@ -22,7 +22,7 @@
 
     // Inherits from ali.Interaction
     ali.MultipleChoice.prototype = Object.create(ali.Interaction.prototype);
-    ali.MultipleChoice.prototype.constructor = ali.Accordion;
+    ali.MultipleChoice.prototype.constructor = ali.MultipleChoice;
 
     /**
      * Initialization.

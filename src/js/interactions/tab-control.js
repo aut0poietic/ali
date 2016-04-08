@@ -35,7 +35,7 @@
 
 	// Inherits from ali.Interaction
 	ali.TabControl.prototype = Object.create( ali.Interaction.prototype );
-	ali.TabControl.prototype.constructor = ali.Accordion;
+	ali.TabControl.prototype.constructor = ali.TabControl;
 
 	/**
 	 * Saved jQuery reference to the tabs in this interaction.

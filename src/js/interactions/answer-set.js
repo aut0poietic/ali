@@ -35,7 +35,7 @@
 
     // Inherits from ali.Interaction
     ali.AnswerSet.prototype = Object.create(ali.Interaction.prototype);
-    ali.AnswerSet.prototype.constructor = ali.Accordion;
+    ali.AnswerSet.prototype.constructor = ali.AnswerSet;
 
     /**
      * Initialization.
