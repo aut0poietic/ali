@@ -88,24 +88,4 @@
 	  }
 	}
   }
-
-  .submit-row {
-	margin    : $base-line-height 0;
-	text-align : right;
-
-	button {
-	  visibility : visible;
-	  transition : opacity .4s, visibility .001s .4s;
-
-	  &[aria-hidden="true"] {
-		opacity    : 0;
-		visibility : hidden;
-	  }
-	}
-  }
-  .flag {
-	position : absolute;
-	right    : 0;
-	bottom   : 0;
-  }
 }

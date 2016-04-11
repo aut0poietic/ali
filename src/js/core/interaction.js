@@ -13,6 +13,9 @@
         return;
     }
 
+    var NOTICE_DATA = "data-ali-notice-" ;
+
+
     /**
      *  The parent class for all interactions.
      * @param element : DOMElement
@@ -104,7 +107,7 @@
 
     /**
      * Allows interactions to set their correct responses for this interaction.
-     * @param responses : array An array of responses specific to the interaction
+     * @param responses : {array} An array of responses specific to the interaction
      */
     ali.Interaction.prototype.setCorrectResponses = function (responses) {
         if ('array' === $.type(responses)) {
@@ -165,15 +168,18 @@
         this.$el.trigger(e, [clonedData, $item]);
     };
 
-    ali.Interaction.prototype.showMessage = function ($container, message, cls) {
-        $('*', $container).aria('hidden', 'true');
-        cls = 'flag ' + cls;
-        $container.aria({ 'live' : 'assertive' });
-        var $flag = $('<div>').aria('hidden', 'true').addClass(cls).html(message);
-        $container.append($flag);
-        setTimeout(function () {
-            $flag.aria('hidden', 'false');
-        }, 100);
+    ali.Interaction.prototype.showNotice = function (message, cls) {
+        var noticeAttr = NOTICE_DATA + cls;
+        var noticeText = this.$el.attr(noticeAttr);
+        if (undefined !== noticeText && '' !== noticeText.trim()) {
+            var $container = $('<div>')
+                .addClass('notice-container')
+                .aria({ 'live' : 'assertive' })
+                .appendTo(this.$el);
+            cls = 'notice ' + cls;
+            var $notice = $('<div>').aria('hidden', 'true').addClass(cls).html(message);
+            $container.append($notice);
+            setTimeout(function () { $notice.aria('hidden', 'false'); }, 100);
+        }
     };
-
 })(jQuery);

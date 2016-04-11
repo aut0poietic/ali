@@ -1,0 +1,29 @@
+.notice-container {
+  position : absolute;
+  bottom   : 0;
+  right    : 0;
+  width    : 100%;
+  z-index  : 100;
+
+  .notice {
+	color            : #fff;
+	display          : inline-block;
+	background-color : rgba(#000, .8);
+	padding          : 12px 24px;
+	transition       : visibility .001s, opacity .3s .001s, transform .3s .001s;
+
+	&.correct {
+	  background-color : rgba($success-color, .8);
+	}
+
+	&.incorrect {
+	  background-color : rgba($danger-color, .8);
+	}
+
+	&[aria-hidden="true"] {
+	  visibility : hidden;
+	  opacity    : 0;
+	  transform  : translate(100%);
+	}
+  }
+}

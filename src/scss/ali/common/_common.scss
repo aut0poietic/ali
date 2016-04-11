@@ -5,7 +5,7 @@
 @import "button";
 @import "dialog";
 @import "feedback";
-@import "flags";
+@import "notices";
 
 body.dialog-open {
 	overflow : hidden;
@@ -14,4 +14,9 @@ body.dialog-open {
 .feedback-content,
 .dialog-content {
 	display : none !important;
+}
+
+.submit-row {
+  margin    : $base-line-height 0;
+  text-align : right;
 }

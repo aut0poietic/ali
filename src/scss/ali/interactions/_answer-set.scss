@@ -1,93 +1,107 @@
 // Common styles
 .answer-set {
-	position : relative;
-	padding  : 1px;
+  position : relative;
+  padding  : 1px;
 
-	form {
-		position   : relative;
-		margin     : $base-line-height * 2 0 $base-line-height;
-		text-align : center;
-		border: 1px solid $border-color;
+  form {
+	position   : relative;
+	margin     : $base-line-height * 2 0 $base-line-height;
+	text-align : center;
+	border     : 1px solid $border-color;
 
-		label {
-			display     : block;
-			line-height : $base-line-height;
-			padding     : $base-line-height / 2 $base-line-height / 2 0;
-			font-weight : 700;
-		}
-
-		.answer-set-submit {
-			padding          : $base-line-height / 2;
-			border-top       : 1px solid rgba($key-color, .5);
-			background-color : #f6f6f6;
-		}
-
-		.answer-set-select {
-			padding : $base-line-height / 2;
-		}
-
-		.flag {
-			position         : absolute;
-			top              : $base-line-height * -1.25;
-			right            : $base-line-height;
-			height           : $base-line-height * -1.25;
-			line-height      : $base-line-height;
-			background-color : #ccc;
-			box-shadow       : inset 0 -1px 3px -3px rgba(0, 0, 0, 0.12), inset 0 -1px 2px -2px rgba(0, 0, 0, 0.24);
-			transition       : opacity .4s ease-in;
-
-			&[aria-hidden="true"] {
-				opacity : 0;
-			}
-
-			span {
-				display : block;
-				padding : ($base-line-height / 8) $base-line-height;
-			}
-
-			&.correct {
-				color            : #fff;
-				background-color : $success-color;
-			}
-
-			&.incorrect {
-				color            : #fff;
-				background-color : $danger-color;
-
-			}
-		}
-
-		@media(min-width : 768px) {
-			display          : flex;
-			flex-direction   : row;
-			flex-wrap        : nowrap;
-			justify-content  : space-between;
-			align-items      : stretch;
-			text-align       : left;
-			background-color : #f6f6f6;
-
-			label {
-				flex    : 1;
-				display : inline-block;
-				padding : $base-line-height;
-			}
-
-			.answer-set-select,
-			.answer-set-submit {
-				position       : relative;
-				display        : inline-block;
-				vertical-align : middle;
-
-				button, select {
-					margin-top : $base-line-height / 4;
-				}
-			}
-			.answer-set-submit {
-				background-color : transparent;
-				border-top       : none;
-				padding-right    : $base-line-height;
-			}
-		}
+	label {
+	  display     : block;
+	  line-height : $base-line-height;
+	  padding     : $base-line-height / 2 $base-line-height / 2 0;
+	  font-weight : 700;
 	}
+
+	.answer-set-submit {
+	  padding          : $base-line-height / 2;
+	  border-top       : 1px solid rgba($key-color, .5);
+	  background-color : #f6f6f6;
+	}
+
+	.answer-set-select {
+	  padding : $base-line-height / 2;
+	}
+	.flag {
+	  position   : relative;
+	  top        : auto;
+	  right      : auto;
+	  border-top : 1px solid $border-color;
+	  transition : opacity .4s .001s ease-in, height .4s .001s ease-in, visibility .001s;
+
+	  &[aria-hidden="true"] {
+		height       : 1px;
+		opacity      : 0;
+		visibility   : hidden;
+		border-color : transparent;
+	  }
+	  span {
+		display : block;
+		padding : ($base-line-height / 8) $base-line-height;
+	  }
+
+	  &.correct {
+		color            : #fff;
+		background-color : $success-color;
+	  }
+
+	  &.incorrect {
+		color            : #fff;
+		background-color : $danger-color;
+	  }
+	}
+
+	@media(min-width : 768px) {
+	  display          : flex;
+	  flex-direction   : row;
+	  flex-wrap        : nowrap;
+	  justify-content  : space-between;
+	  align-items      : stretch;
+	  text-align       : left;
+	  background-color : #f6f6f6;
+
+	  label {
+		flex    : 1;
+		display : inline-block;
+		padding : $base-line-height;
+	  }
+
+	  .answer-set-select,
+	  .answer-set-submit {
+		position       : relative;
+		display        : inline-block;
+		vertical-align : middle;
+
+		button, select {
+		  margin-top : $base-line-height / 4;
+		}
+	  }
+	  .answer-set-submit {
+		background-color : transparent;
+		border-top       : none;
+		padding-right    : $base-line-height;
+	  }
+
+	  .flag {
+		position         : absolute;
+		top              : $base-line-height * -1.25;
+		right            : $base-line-height;
+		height           : $base-line-height * -1.25;
+		line-height      : $base-line-height;
+		background-color : #ccc;
+		box-shadow       : inset 0 -1px 3px -3px rgba(0, 0, 0, 0.12), inset 0 -1px 2px -2px rgba(0, 0, 0, 0.24);
+		transition       : opacity .4s .001s ease-in, visibility .001s;
+
+		&[aria-hidden="true"] {
+		  opacity    : 0;
+		  visibility : hidden;
+
+		}
+	  }
+	}
+  }
 }
 

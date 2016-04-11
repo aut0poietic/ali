@@ -36,6 +36,7 @@ jQuery( function ( $ ) {
 		$( '[data-ali="tab-control"]' ).tabcontrol();
 		$( '[data-ali="answer-set"]' ).answerset();
 		$( '[data-ali="multiple-choice"]' ).multiplechoice();
+		$( '[data-ali="ordered-items"]' ).ordereditems(); 	
 	}
 } );
 ;
@@ -324,6 +325,9 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
         return;
     }
 
+    var NOTICE_DATA = "data-ali-notice-" ;
+
+
     /**
      *  The parent class for all interactions.
      * @param element : DOMElement
@@ -415,7 +419,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 
     /**
      * Allows interactions to set their correct responses for this interaction.
-     * @param responses : array An array of responses specific to the interaction
+     * @param responses : {array} An array of responses specific to the interaction
      */
     ali.Interaction.prototype.setCorrectResponses = function (responses) {
         if ('array' === $.type(responses)) {
@@ -476,17 +480,20 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
         this.$el.trigger(e, [clonedData, $item]);
     };
 
-    ali.Interaction.prototype.showMessage = function ($container, message, cls) {
-        $('*', $container).aria('hidden', 'true');
-        cls = 'flag ' + cls;
-        $container.aria({ 'live' : 'assertive' });
-        var $flag = $('<div>').aria('hidden', 'true').addClass(cls).html(message);
-        $container.append($flag);
-        setTimeout(function () {
-            $flag.aria('hidden', 'false');
-        }, 100);
+    ali.Interaction.prototype.showNotice = function (message, cls) {
+        var noticeAttr = NOTICE_DATA + cls;
+        var noticeText = this.$el.attr(noticeAttr);
+        if (undefined !== noticeText && '' !== noticeText.trim()) {
+            var $container = $('<div>')
+                .addClass('notice-container')
+                .aria({ 'live' : 'assertive' })
+                .appendTo(this.$el);
+            cls = 'notice ' + cls;
+            var $notice = $('<div>').aria('hidden', 'true').addClass(cls).html(message);
+            $container.append($notice);
+            setTimeout(function () { $notice.aria('hidden', 'false'); }, 100);
+        }
     };
-
 })(jQuery);
 ;
 /*
@@ -1668,8 +1675,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
         result = answeredCorrect ? ali.STATUS.correct : ali.STATUS.incorrect;
         className = answeredCorrect ? '.correct' : '.incorrect';
         if (!ali.Dialog.showDialog(this.$el, className) && !ali.Feedback.showFeedback(this.$el, className)) {
-            this.showMessage(
-                $('.submit-row', this.$el),
+            this.showNotice(
                 answeredCorrect ? 'Correct' : 'Incorrect',
                 className.substr(1));
         }
@@ -1762,15 +1768,108 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
     ali.OrderedItems.prototype = Object.create(ali.Interaction.prototype);
     ali.OrderedItems.prototype.constructor = ali.OrderedItems;
 
-    ali.OrderedItems.prototype.$items = [];
+    ali.OrderedItems.prototype.$currentItem = undefined;
+    ali.OrderedItems.prototype.$items = undefined;
+    ali.OrderedItems.prototype.$selects = undefined;
+    ali.OrderedItems.prototype._resizing = false;
+
+
     /**
      * Initializes the Interaction. Called from constructor.
      */
     ali.OrderedItems.prototype.init = function () {
-
+        this.$items = $('li', this.el);
+        this.$selects = $('select', this.el);
+        this.$el.off('submit.ali').on('submit.ali', this.form_onSubmit.bind(this));
+        $(window).on('resize', this.requestHeightUpdate.bind(this));
+        this.updateHeight();
+        this.updateClasses();
     };
 
-    
+    ali.OrderedItems.prototype.requestHeightUpdate = function () {
+        if (!this._resizing) {
+            this._resizing = true;
+            window.requestAnimationFrame(this.updateHeight.bind(this));
+        }
+    };
+
+    ali.OrderedItems.prototype.updateHeight = function () {
+        var h = 0;
+        this.$items.each(function (i, el) {
+            h = Math.max(h, $('label', el).outerHeight());
+        });
+        this.$items.height(h);
+        $('.list-elements', this.$el).height((h * 1.2 * this.$items.length) + 24);
+        this._resizing = false;
+    };
+
+    ali.OrderedItems.prototype.addSelectEvents = function () {
+        this.$selects
+            .off('change.ali').on('change.ali', this.select_onChange.bind(this))
+            .off('focus.ali').on('focus.ali', this.select_onFocus.bind(this));
+    };
+
+    ali.OrderedItems.prototype.removeSelectEvents = function () {
+        this.$selects.off('change.ali').off('focus.ali');
+    };
+
+    ali.OrderedItems.prototype.form_onSubmit = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    ali.OrderedItems.prototype.select_onChange = function (e) {
+        this.removeSelectEvents();
+        this.$currentItem = $(e.target);
+        window.requestAnimationFrame(this.reorderValues.bind(this));
+    };
+
+    ali.OrderedItems.prototype.select_onFocus = function (e) {
+        $(e.target).attr('data-prev-value', e.target.selectedIndex);
+    };
+
+
+    ali.OrderedItems.prototype.reorderValues = function (e) {
+        var newValue = this.$currentItem[0].selectedIndex;
+        var previousValue = this.previousValue(this.$currentItem);
+
+        // Remove this item from the order
+        this.$selects.each((function (i, el) {
+            var $el = $(el);
+            if (!$el.is(this.$currentItem)) {
+                var localVal = $el[0].selectedIndex;
+                if (localVal >= previousValue) {
+                    $el[0].selectedIndex = localVal - 1;
+                }
+            }
+        }).bind(this));
+
+        // Insert the changed element at it's new location,
+        // moving the others up.
+        this.$selects.each((function (i, el) {
+            var $el = $(el);
+            if (!$el.is(this.$currentItem)) {
+                var localVal = $el[0].selectedIndex;
+                if (localVal >= newValue) {
+                    $el[0].selectedIndex = localVal + 1;
+                }
+            }
+        }).bind(this));
+        window.requestAnimationFrame(this.updateClasses.bind(this));
+    };
+
+    ali.OrderedItems.prototype.updateClasses = function () {
+        this.$items.each(function (i, el) {
+            var $el = $(el);
+            var $select = $('select', $el);
+            $el.attr('class', '').addClass('item-' + $select.val());
+        });
+        this.addSelectEvents();
+    };
+
+    ali.OrderedItems.prototype.previousValue = function ($el) {
+        return parseInt($el.attr('data-prev-value'), 10);
+    };
 
     /*
      * jQuery Plugin
@@ -1789,4 +1888,5 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
         $.fn.ordereditems = old;
         return this;
     };
-})(jQuery);
+})
+(jQuery);

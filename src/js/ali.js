@@ -36,5 +36,6 @@ jQuery( function ( $ ) {
 		$( '[data-ali="tab-control"]' ).tabcontrol();
 		$( '[data-ali="answer-set"]' ).answerset();
 		$( '[data-ali="multiple-choice"]' ).multiplechoice();
+		$( '[data-ali="ordered-items"]' ).ordereditems(); 	
 	}
 } );

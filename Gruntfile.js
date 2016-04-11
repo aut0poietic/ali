@@ -17,7 +17,8 @@ module.exports = function ( grunt ) {
 		'src/js/interactions/accordion.js',
 		'src/js/interactions/tab-control.js',
 		'src/js/interactions/answer-set.js',
-		'src/js/interactions/multiple-choice.js'
+		'src/js/interactions/multiple-choice.js',
+		'src/js/interactions/ordered-items.js'
 	];
 
 

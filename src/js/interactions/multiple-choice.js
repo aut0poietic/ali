@@ -65,8 +65,7 @@
         result = answeredCorrect ? ali.STATUS.correct : ali.STATUS.incorrect;
         className = answeredCorrect ? '.correct' : '.incorrect';
         if (!ali.Dialog.showDialog(this.$el, className) && !ali.Feedback.showFeedback(this.$el, className)) {
-            this.showMessage(
-                $('.submit-row', this.$el),
+            this.showNotice(
                 answeredCorrect ? 'Correct' : 'Incorrect',
                 className.substr(1));
         }

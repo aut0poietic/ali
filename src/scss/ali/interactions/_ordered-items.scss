@@ -1,0 +1,62 @@
+.ordered-items {
+  .list-elements {
+	position : relative;
+	margin   : 0;
+	padding  : 0;
+
+	li {
+	  position         : absolute;
+	  top              : 0;
+	  left             : 0;
+	  width            : 100%;
+	  overflow         : hidden;
+	  margin           : $base-line-height 0;
+	  border           : 1px solid $border-color;
+	  display          : flex;
+	  flex-direction   : row;
+	  flex-wrap        : nowrap;
+	  justify-content  : space-between;
+	  align-items      : center;
+	  text-align       : left;
+	  background-color : #f6f6f6;
+	  transition       : all .4s ease-in-out;
+
+	  @for $i from 0 through 9 {
+		&.item-#{$i + 1} {
+		  transform : translate(0, 120% * $i);
+		}
+	  }
+
+	  label,
+	  i,
+	  .item-select {
+		display     : block;
+		line-height : $base-line-height;
+		padding     : $base-line-height / 2;
+		font-style  : normal;
+	  }
+
+	  i {
+		font-weight      : 700;
+		background-color : rgba(#000, .1);
+		@media(max-width : 420px) {
+		  display : none;
+		}
+	  }
+
+	  label {
+		flex       : 1;
+		align-self : center;
+	  }
+
+	  .item-select {
+		display        : flex;
+		align-items    : center;
+		align-content  : center;
+		padding-top    : 0;
+		padding-bottom : 0;
+	  }
+	}
+  }
+
+}
