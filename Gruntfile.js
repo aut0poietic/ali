@@ -8,6 +8,7 @@ module.exports = function ( grunt ) {
 
 	var jsFiles = [
 		'src/js/ali.js',
+		'src/js/core/transition.js',
 		'src/js/core/aria.js',
 		'src/js/vendor/mustache.min.js',
 		'src/html/templates.js',

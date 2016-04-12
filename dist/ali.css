@@ -524,7 +524,7 @@ body.dialog-open {
   left: 0;
   width: 100%;
   overflow: hidden;
-  margin: 24px 0;
+  margin: 0 0 24px;
   border: 1px solid #777;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -543,57 +543,63 @@ body.dialog-open {
           align-items: center;
   text-align: left;
   background-color: #f6f6f6;
-  transition: all .4s ease-in-out;
+  box-shadow: 0 0 transparent;
+  transition: -webkit-transform .4s ease-in-out, box-shadow .4s ease-out;
+  transition: transform .4s ease-in-out, box-shadow .4s ease-out;
 }
 .ordered-items .list-elements li.item-1 {
-  -webkit-transform: translate(0, 0%);
-      -ms-transform: translate(0, 0%);
-          transform: translate(0, 0%);
+  -webkit-transform: translate(0, calc(0% + 0px));
+      -ms-transform: translate(0, calc(0% + 0px));
+          transform: translate(0, calc(0% + 0px));
 }
 .ordered-items .list-elements li.item-2 {
-  -webkit-transform: translate(0, 120%);
-      -ms-transform: translate(0, 120%);
-          transform: translate(0, 120%);
+  -webkit-transform: translate(0, calc(100% + 24px));
+      -ms-transform: translate(0, calc(100% + 24px));
+          transform: translate(0, calc(100% + 24px));
 }
 .ordered-items .list-elements li.item-3 {
-  -webkit-transform: translate(0, 240%);
-      -ms-transform: translate(0, 240%);
-          transform: translate(0, 240%);
+  -webkit-transform: translate(0, calc(200% + 48px));
+      -ms-transform: translate(0, calc(200% + 48px));
+          transform: translate(0, calc(200% + 48px));
 }
 .ordered-items .list-elements li.item-4 {
-  -webkit-transform: translate(0, 360%);
-      -ms-transform: translate(0, 360%);
-          transform: translate(0, 360%);
+  -webkit-transform: translate(0, calc(300% + 72px));
+      -ms-transform: translate(0, calc(300% + 72px));
+          transform: translate(0, calc(300% + 72px));
 }
 .ordered-items .list-elements li.item-5 {
-  -webkit-transform: translate(0, 480%);
-      -ms-transform: translate(0, 480%);
-          transform: translate(0, 480%);
+  -webkit-transform: translate(0, calc(400% + 96px));
+      -ms-transform: translate(0, calc(400% + 96px));
+          transform: translate(0, calc(400% + 96px));
 }
 .ordered-items .list-elements li.item-6 {
-  -webkit-transform: translate(0, 600%);
-      -ms-transform: translate(0, 600%);
-          transform: translate(0, 600%);
+  -webkit-transform: translate(0, calc(500% + 120px));
+      -ms-transform: translate(0, calc(500% + 120px));
+          transform: translate(0, calc(500% + 120px));
 }
 .ordered-items .list-elements li.item-7 {
-  -webkit-transform: translate(0, 720%);
-      -ms-transform: translate(0, 720%);
-          transform: translate(0, 720%);
+  -webkit-transform: translate(0, calc(600% + 144px));
+      -ms-transform: translate(0, calc(600% + 144px));
+          transform: translate(0, calc(600% + 144px));
 }
 .ordered-items .list-elements li.item-8 {
-  -webkit-transform: translate(0, 840%);
-      -ms-transform: translate(0, 840%);
-          transform: translate(0, 840%);
+  -webkit-transform: translate(0, calc(700% + 168px));
+      -ms-transform: translate(0, calc(700% + 168px));
+          transform: translate(0, calc(700% + 168px));
 }
 .ordered-items .list-elements li.item-9 {
-  -webkit-transform: translate(0, 960%);
-      -ms-transform: translate(0, 960%);
-          transform: translate(0, 960%);
+  -webkit-transform: translate(0, calc(800% + 192px));
+      -ms-transform: translate(0, calc(800% + 192px));
+          transform: translate(0, calc(800% + 192px));
 }
 .ordered-items .list-elements li.item-10 {
-  -webkit-transform: translate(0, 1080%);
-      -ms-transform: translate(0, 1080%);
-          transform: translate(0, 1080%);
+  -webkit-transform: translate(0, calc(900% + 216px));
+      -ms-transform: translate(0, calc(900% + 216px));
+          transform: translate(0, calc(900% + 216px));
+}
+.ordered-items .list-elements li.moving {
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  z-index: 1;
 }
 .ordered-items .list-elements li label,
 .ordered-items .list-elements li i,

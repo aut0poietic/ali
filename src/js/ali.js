@@ -6,36 +6,37 @@
  * --------------------------------------------------------------------------
  */
 window.ali = {
-	EVENT : {
-		ready    : 'ali:ready',
-		complete : 'ali:complete'
-	},
+    EVENT : {
+        ready : 'ali:ready',
+        complete : 'ali:complete'
+    },
 
-	STATUS : {
-		complete      : 'complete',
-		correct       : 'correct',
-		incorrect     : 'incorrect',
-		unanticipated : 'unanticipated',
-		incomplete    : 'incomplete'
-	},
+    STATUS : {
+        complete : 'complete',
+        correct : 'correct',
+        incorrect : 'incorrect',
+        unanticipated : 'unanticipated',
+        incomplete : 'incomplete'
+    },
 
-	TYPE : {
-		choice      : 'choice',
-		performance : 'performance',
-		sequencing  : 'sequencing',
-		numeric     : 'numeric',
-		other       : 'other'
-	},
-	Interaction : null
+    TYPE : {
+        choice : 'choice',
+        performance : 'performance',
+        sequencing : 'sequencing',
+        numeric : 'numeric',
+        other : 'other'
+    },
+    Interaction : null,
+    transitionEnd : 'bsTransitionEnd aliTransitionEnd'
 };
 
-jQuery( function ( $ ) {
-	"use strict";
-	if ( window.aliAutolInit !== false ) {
-		$( '[data-ali="accordion"]' ).accordion();
-		$( '[data-ali="tab-control"]' ).tabcontrol();
-		$( '[data-ali="answer-set"]' ).answerset();
-		$( '[data-ali="multiple-choice"]' ).multiplechoice();
-		$( '[data-ali="ordered-items"]' ).ordereditems(); 	
-	}
-} );
+jQuery(function ($) {
+    "use strict";
+    if (window.aliAutolInit !== false) {
+        $('[data-ali="accordion"]').accordion();
+        $('[data-ali="tab-control"]').tabcontrol();
+        $('[data-ali="answer-set"]').answerset();
+        $('[data-ali="multiple-choice"]').multiplechoice();
+        $('[data-ali="ordered-items"]').ordereditems();
+    }
+});

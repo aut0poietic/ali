@@ -14,7 +14,7 @@
      */
     var _t = window.htmlTemplates;
 
-    /**
+    /** 
      * Reusable Dialog object
      * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
      */

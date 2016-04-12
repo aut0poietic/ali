@@ -10,7 +10,7 @@
 	  left             : 0;
 	  width            : 100%;
 	  overflow         : hidden;
-	  margin           : $base-line-height 0;
+	  margin           : 0 0 $base-line-height;
 	  border           : 1px solid $border-color;
 	  display          : flex;
 	  flex-direction   : row;
@@ -19,12 +19,19 @@
 	  align-items      : center;
 	  text-align       : left;
 	  background-color : #f6f6f6;
-	  transition       : all .4s ease-in-out;
+	  box-shadow       : 0 0 transparent;
+	  transition       : transform .4s ease-in-out, box-shadow .4s ease-out;
 
 	  @for $i from 0 through 9 {
 		&.item-#{$i + 1} {
-		  transform : translate(0, 120% * $i);
+		  transform : translate(0, calc(#{100% * $i} + #{$base-line-height * $i}) );
 		}
+	  }
+
+	  &.moving {
+
+		box-shadow : 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+		z-index    : 1;
 	  }
 
 	  label,
@@ -58,5 +65,4 @@
 	  }
 	}
   }
-
 }

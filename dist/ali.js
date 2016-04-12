@@ -6,39 +6,110 @@
  * --------------------------------------------------------------------------
  */
 window.ali = {
-	EVENT : {
-		ready    : 'ali:ready',
-		complete : 'ali:complete'
-	},
+    EVENT : {
+        ready : 'ali:ready',
+        complete : 'ali:complete'
+    },
 
-	STATUS : {
-		complete      : 'complete',
-		correct       : 'correct',
-		incorrect     : 'incorrect',
-		unanticipated : 'unanticipated',
-		incomplete    : 'incomplete'
-	},
+    STATUS : {
+        complete : 'complete',
+        correct : 'correct',
+        incorrect : 'incorrect',
+        unanticipated : 'unanticipated',
+        incomplete : 'incomplete'
+    },
 
-	TYPE : {
-		choice      : 'choice',
-		performance : 'performance',
-		sequencing  : 'sequencing',
-		numeric     : 'numeric',
-		other       : 'other'
-	},
-	Interaction : null
+    TYPE : {
+        choice : 'choice',
+        performance : 'performance',
+        sequencing : 'sequencing',
+        numeric : 'numeric',
+        other : 'other'
+    },
+    Interaction : null,
+    transitionEnd : 'bsTransitionEnd aliTransitionEnd'
 };
 
-jQuery( function ( $ ) {
-	"use strict";
-	if ( window.aliAutolInit !== false ) {
-		$( '[data-ali="accordion"]' ).accordion();
-		$( '[data-ali="tab-control"]' ).tabcontrol();
-		$( '[data-ali="answer-set"]' ).answerset();
-		$( '[data-ali="multiple-choice"]' ).multiplechoice();
-		$( '[data-ali="ordered-items"]' ).ordereditems(); 	
-	}
-} );
+jQuery(function ($) {
+    "use strict";
+    if (window.aliAutolInit !== false) {
+        $('[data-ali="accordion"]').accordion();
+        $('[data-ali="tab-control"]').tabcontrol();
+        $('[data-ali="answer-set"]').answerset();
+        $('[data-ali="multiple-choice"]').multiplechoice();
+        $('[data-ali="ordered-items"]').ordereditems();
+    }
+});
+;
+/*
+ * --------------------------------------------------------------------------
+ * Ali: transition.js
+ * --------------------------------------------------------------------------
+ * Adapted from: https://github.com/twbs/bootstrap/
+ * Copyright 2011-2016 Twitter, Inc.
+ * License: https://github.com/twbs/bootstrap/blob/master/LICENSE
+ */
+
+(function ($) {
+    'use strict';
+
+    // Check to see if Bootstrap has been installed --
+    // no need to add this twice.
+    if ($.type($.support.transition) !== 'undefined') {
+        return;
+    }
+
+    // The remainder is pulled straight from twbs
+    function transitionEnd() {
+        var el = document.createElement('someelement');
+
+        var transEndEventNames = {
+            WebkitTransition : 'webkitTransitionEnd',
+            MozTransition : 'transitionend',
+            OTransition : 'oTransitionEnd otransitionend',
+            transition : 'transitionend'
+        };
+
+        for (var name in transEndEventNames) {
+            if (el.style[name] !== undefined) {
+                return { end : transEndEventNames[name] };
+            }
+        }
+        return false;
+    }
+
+    // http://blog.alexmaccaw.com/css-transitions
+    $.fn.emulateTransitionEnd = function (duration) {
+        var called = false;
+        var $el = this;
+        $(this).one('aliTransitionEnd', function () { called = true; });
+        var callback = function () {
+            if (!called) {
+                $($el).trigger($.support.transition.end);
+            }
+        };
+        setTimeout(callback, duration);
+        return this;
+    };
+
+    $(function () {
+        $.support.transition = transitionEnd();
+
+        if (!$.support.transition) {
+            return;
+        }
+
+        $.event.special.aliTransitionEnd = {
+            bindType : $.support.transition.end,
+            delegateType : $.support.transition.end,
+            handle : function (e) {
+                if ($(e.target).is(this)) {
+                    return e.handleObj.handler.apply(this, arguments);
+                }
+            }
+        };
+    });
+})(jQuery);
 ;
 /*
  * --------------------------------------------------------------------------
@@ -512,7 +583,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
      */
     var _t = window.htmlTemplates;
 
-    /**
+    /** 
      * Reusable Dialog object
      * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
      */
@@ -1738,7 +1809,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 ;
 /*
  * --------------------------------------------------------------------------
- * Ali: tab-control.js
+ * Ali: ordered-items.js
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -1754,8 +1825,10 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
     var DESCRIPTION = 'Sequenced elements interaction.';
     var TYPE = ali.TYPE.sequencing;
 
+    var TRANSITION_DURATION = 400;
+
     /**
-     * Tab Control Interaction
+     * Ordered Items interaction class
      * @param element DOMElement
      * @constructor
      */
@@ -1768,68 +1841,184 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
     ali.OrderedItems.prototype = Object.create(ali.Interaction.prototype);
     ali.OrderedItems.prototype.constructor = ali.OrderedItems;
 
-    ali.OrderedItems.prototype.$currentItem = undefined;
+
+    /**
+     * Collection of items ( usually 'li' elements ).
+     * @type {undefined}
+     */
     ali.OrderedItems.prototype.$items = undefined;
+
+    /**
+     * Collection of items ( usually 'select' elements ).
+     * @type {undefined}
+     */
     ali.OrderedItems.prototype.$selects = undefined;
+
+    /**
+     * Flag used in rAF to debounce
+     * @type {boolean}
+     * @private
+     */
     ali.OrderedItems.prototype._resizing = false;
 
+    /**
+     * Container for the currently moving item
+     * Required as some rAF uses lose their locals
+     * @type {jQuery}
+     */
+    ali.OrderedItems.prototype.$currentItem = undefined;
 
     /**
      * Initializes the Interaction. Called from constructor.
      */
     ali.OrderedItems.prototype.init = function () {
         this.$items = $('li', this.el);
+        this.createElements();
+
         this.$selects = $('select', this.el);
         this.$el.off('submit.ali').on('submit.ali', this.form_onSubmit.bind(this));
-        $(window).on('resize', this.requestHeightUpdate.bind(this));
+        $(window).on('resize', this.window_onResize.bind(this));
         this.updateHeight();
         this.updateClasses();
     };
 
-    ali.OrderedItems.prototype.requestHeightUpdate = function () {
+    /**
+     * Adds the select dropdown and icon base HTML for each list item.
+     */
+    ali.OrderedItems.prototype.createElements = function () {
+        var num = this.$items.length;
+        // only create the select drop-down once
+        var $sel = $('<select></select>');
+        for (var i = 1; i <= num; i++) {
+            $sel.append('<option>' + i + '</option>');
+        }
+
+        this.$items.each(function (index, el) {
+            var $el = $(el);
+            var id = "el-" + index;
+            // clone the drop-down and attach the generated ID and index
+            var $selInstance = $sel.clone();
+            $selInstance.attr('id', id);
+            $selInstance[0].selectedIndex = index;
+            // Add the select and icon to the current element
+            var $sl = $('<span class="item-select"></span>').append($selInstance);
+            $el.append($sl).prepend('<i>' + (index + 1) + '</i>');
+            // link user created label to the created select drop-down
+            $('label', $el).attr('for', id);
+        });
+    };
+
+    /**
+     * Event Handler for the resize event. Handler de-bounces the events
+     * using rAF and a _resizing flag.
+     * @see updateHeight
+     */
+    ali.OrderedItems.prototype.window_onResize = function () {
         if (!this._resizing) {
             this._resizing = true;
             window.requestAnimationFrame(this.updateHeight.bind(this));
         }
     };
 
+    /**
+     *  Equalizes the height of all items and updates the height of the list element itself
+     *  Only called by rAF and on init
+     */
     ali.OrderedItems.prototype.updateHeight = function () {
+        // Equalize the elements height based on the height of the label with padding
         var h = 0;
         this.$items.each(function (i, el) {
             h = Math.max(h, $('label', el).outerHeight());
         });
         this.$items.height(h);
-        $('.list-elements', this.$el).height((h * 1.2 * this.$items.length) + 24);
+
+        // Using the first item to find the outerHeight "withMargin"
+        // now that they've been equalized
+        var oH = $(this.$items[0]).outerHeight(true);
+        $('.list-elements', this.$el).height(( oH * this.$items.length));
+        // reset the flag
         this._resizing = false;
     };
 
+    /**
+     * Adds the focus and change events to the select drop-downs
+     */
     ali.OrderedItems.prototype.addSelectEvents = function () {
         this.$selects
             .off('change.ali').on('change.ali', this.select_onChange.bind(this))
             .off('focus.ali').on('focus.ali', this.select_onFocus.bind(this));
     };
 
+    /**
+     * Removes the focus and change events from the select drop-downs so we can
+     * manipulate them without generating too events
+     */
     ali.OrderedItems.prototype.removeSelectEvents = function () {
         this.$selects.off('change.ali').off('focus.ali');
     };
 
-    ali.OrderedItems.prototype.form_onSubmit = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-    };
-
-    ali.OrderedItems.prototype.select_onChange = function (e) {
-        this.removeSelectEvents();
-        this.$currentItem = $(e.target);
-        window.requestAnimationFrame(this.reorderValues.bind(this));
-    };
-
+    /**
+     * Very simple event handler that assigns a data value to the
+     * element containing the current value.
+     * @param e {Event}
+     */
     ali.OrderedItems.prototype.select_onFocus = function (e) {
         $(e.target).attr('data-prev-value', e.target.selectedIndex);
     };
 
+    /**
+     * Event handler for the change event
+     * @param e
+     */
+    ali.OrderedItems.prototype.select_onChange = function (e) {
+        // remove the events on the drop-downs so we don't create
+        // pointless events while manipulating the selects
+        this.removeSelectEvents();
+        this.$currentItem = $(e.target);
+        // add the 'moving' class to the current item
+        // in the base style this adds the shadow and a z-index
+        $(this.$currentItem.parents('li'))
+            .addClass('moving')
+            // also add the transitionEnd event
+            .one(ali.transitionEnd, function (e) {
+                $(e.target).removeClass('moving');
+            })
+            .emulateTransitionEnd(TRANSITION_DURATION);
+        // reordering is a little time-consuming so I'm deferring it
+        // until before the next paint
+        window.requestAnimationFrame(this.reorderValues.bind(this));
+    };
 
-    ali.OrderedItems.prototype.reorderValues = function (e) {
+    /**
+     *
+     * @param e
+     */
+    ali.OrderedItems.prototype.form_onSubmit = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var correct = true;
+
+        this.$items.each(function () {
+            var $el = $(this);
+            var $sel = $('select', $el);
+            var cIndex = parseInt($el.attr('data-correct'), 10);
+            var sIndex = parseInt($sel[0].selectedIndex + 1);
+            if (cIndex !== sIndex) {
+                correct = false;
+            }
+        });
+
+
+    };
+
+    /**
+     * Re-orders the elements based off of the current select element.
+     *
+     * There has to be a less complex way of handling this, But I'm tired
+     * and have not had enough caffeine.
+     */
+    ali.OrderedItems.prototype.reorderValues = function () {
         var newValue = this.$currentItem[0].selectedIndex;
         var previousValue = this.previousValue(this.$currentItem);
 
@@ -1855,16 +2044,32 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
                 }
             }
         }).bind(this));
+        // Altering the UI should wait until the next paint
         window.requestAnimationFrame(this.updateClasses.bind(this));
     };
 
+    /**
+     * Adds classes to the list elements, causing the elements to animate into
+     * their new position.
+     */
     ali.OrderedItems.prototype.updateClasses = function () {
         this.$items.each(function (i, el) {
             var $el = $(el);
             var $select = $('select', $el);
-            $el.attr('class', '').addClass('item-' + $select.val());
+            $el.removeClass(function (index, css) {
+                return (css.match(/(^|\s)item-\S+/g) || []).join(' ');
+            }).addClass('item-' + $select.val());
+            $('i', $el).text($select.val());
         });
+
+        // add the events back
         this.addSelectEvents();
+
+        if (this.$currentItem && this.$currentItem.length > 0) {
+            // trigger the focus event on the current item so that the
+            // current value is populated
+            this.$currentItem.trigger('focus');
+        }
     };
 
     ali.OrderedItems.prototype.previousValue = function ($el) {
