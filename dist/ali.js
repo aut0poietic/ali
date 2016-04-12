@@ -387,210 +387,212 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-(function ( $ ) {
-	"use strict";
+(function ($) {
+    "use strict";
 
-	// Make the global object available and abort if this file is used without it.
-	var ali = window.ali;
-	if ( $.type( ali ) !== 'object' ) {
-		return;
-	}
+    // Make the global object available and abort if this file is used without it.
+    var ali = window.ali;
+    if ($.type(ali) !== 'object') {
+        return;
+    }
 
-	var NOTICE_DATA = "data-ali-notice-";
+    var NOTICE_DATA = "data-ali-notice-";
 
 
-	/**
-	 *  The parent class for all interactions.
-	 * @param element : DOMElement
-	 * @param type : string
-	 * @param description : string
-	 * @constructor
-	 */
-	ali.Interaction = function ( element, type, description ) {
-		this.$el = $( element );
-		if ( 'string' === $.type( type ) ) {
-			this.data.type = type;
-		}
-		if ( 'string' === $.type( description ) ) {
-			this.data.description = description;
-		}
-		if ( ali.Feedback.hasFeedback( this.$el ) ) {
-			ali.Feedback.initInteraction( this.$el );
-		}
-	};
+    /**
+     *  The parent class for all interactions.
+     * @param element : DOMElement
+     * @param type : string
+     * @param description : string
+     * @constructor
+     */
+    ali.Interaction = function (element, type, description) {
+        this.$el = $(element);
+        if ('string' === $.type(type)) {
+            this.data.type = type;
+        }
+        if ('string' === $.type(description)) {
+            this.data.description = description;
+        }
+        if (ali.Feedback.hasFeedback(this.$el)) {
+            ali.Feedback.initInteraction(this.$el);
+        }
+    };
 
-	/**
-	 * Event data sent with each event.
-	 * @type {{id: string, start: number, type: string, correct_responses: Array, learner_response: Array, result:
+    /**
+     * Event data sent with each event.
+     * @type {{id: string, start: number, type: string, correct_responses: Array, learner_response: Array, result:
      *     string, latency: number, description: string}}
-	 */
-	ali.Interaction.prototype.data = {
-		'id'                : '',
-		'start'             : 0,
-		'type'              : ali.TYPE.other,
-		'correct_responses' : [],
-		'learner_response'  : [],
-		'result'            : ali.STATUS.incomplete,
-		'latency'           : 0,
-		'description'       : 'Ali Interaction'
-	};
+     */
+    ali.Interaction.prototype.data = {
+        'id' : '',
+        'start' : 0,
+        'type' : ali.TYPE.other,
+        'correct_responses' : [],
+        'learner_response' : [],
+        'result' : ali.STATUS.incomplete,
+        'latency' : 0,
+        'description' : 'Ali Interaction'
+    };
 
-	/**
-	 * The timestamp of the completion of the last item. Used only for multi-part interactions.
-	 * @type {number}
-	 * @private
-	 */
-	ali.Interaction.prototype.__last = 0;
+    /**
+     * The timestamp of the completion of the last item. Used only for multi-part interactions.
+     * @type {number}
+     * @private
+     */
+    ali.Interaction.prototype.__last = 0;
 
-	/**
-	 * Reference to dialog instance. Should only ever hold one element.
-	 * @type {jQuery|undefined}
-	 */
-	ali.Interaction.prototype.$dialog = undefined;
+    /**
+     * Reference to dialog instance. Should only ever hold one element.
+     * @type {jQuery|undefined}
+     */
+    ali.Interaction.prototype.$dialog = undefined;
 
-	/**
-	 * Utility function that creates an ID using the the ID of the passed element or the text of the passed element.
-	 * @param $el Element used to define the ID.
-	 * @returns {string} Target ID for use with `aria-controls`
-	 */
-	ali.Interaction.prototype.makeTargetID = function ( $el ) {
-		var str = $el.attr( 'id' );
-		if ( str === undefined ) {
-			str = $el.text().replace( /[\W_]+/g, "" ).toLowerCase();
-			if ( str.length > 10 ) {
-				str = str.substring( 0, 10 );
-			}
-		} else {
-			str += '-target';
-		}
-		return str;
-	};
+    /**
+     * Utility function that creates an ID using the the ID of the passed element or the text of the passed element.
+     * @param $el Element used to define the ID.
+     * @returns {string} Target ID for use with `aria-controls`
+     */
+    ali.Interaction.prototype.makeTargetID = function ($el) {
+        var str = $el.attr('id');
+        if (str === undefined) {
+            str = $el.text().replace(/[\W_]+/g, "").toLowerCase();
+            if (str.length > 10) {
+                str = str.substring(0, 10);
+            }
+        } else {
+            str += '-target';
+        }
+        return str;
+    };
 
-	/**
-	 * Because javascript and the LMS I work with on occasion don't agree on what true means
-	 * Used sparingly...
-	 * @param string {string|boolean}
-	 * @returns {boolean}
-	 */
-	ali.Interaction.prototype.truthy = function ( string ) {
-		return string === true || string === "true" || string === "t";
-	};
+    /**
+     * Because javascript and the LMS I work with on occasion don't agree on what true means
+     * Used sparingly...
+     * @param string {string|boolean}
+     * @returns {boolean}
+     */
+    ali.Interaction.prototype.truthy = function (string) {
+        return string === true || string === "true" || string === "t";
+    };
 
-	/**
-	 * Allows a method to be called later, just before the next UI paint.
-	 * @param callback
-	 */
-	ali.Interaction.prototype.defer = function ( callback ) {
-		var func = function () {
-			callback.apply( this );
-		};
-		requestAnimationFrame( func.bind( this ) );
-	};
+    /**
+     * Allows a method to be called later, just before the next UI paint.
+     * @param callback
+     */
+    ali.Interaction.prototype.defer = function (callback) {
+        var func = function () {
+            callback.apply(this);
+        };
+        requestAnimationFrame(func.bind(this));
+    };
 
-	/**
-	 * Allows interactions to set their learner responses for this interaction.
-	 * @param responses : array An array of responses specific to the interaction
-	 */
-	ali.Interaction.prototype.setLearnerResponses = function ( responses ) {
-		if ( 'array' === $.type( responses ) ) {
-			this.data.learner_response = responses;
-		}
-	};
+    /**
+     * Allows interactions to set their learner responses for this interaction.
+     * @param responses : array An array of responses specific to the interaction
+     */
+    ali.Interaction.prototype.setLearnerResponses = function (responses) {
+        if ('array' === $.type(responses)) {
+            this.data.learner_response = responses;
+        }
+    };
 
-	/**
-	 * Allows interactions to set their correct responses for this interaction.
-	 * @param responses : {array} An array of responses specific to the interaction
-	 */
-	ali.Interaction.prototype.setCorrectResponses = function ( responses ) {
-		if ( 'array' === $.type( responses ) ) {
-			this.data.correct_responses = responses;
-		}
-	};
+    /**
+     * Allows interactions to set their correct responses for this interaction.
+     * @param responses : {array} An array of responses specific to the interaction
+     */
+    ali.Interaction.prototype.setCorrectResponses = function (responses) {
+        if ('array' === $.type(responses)) {
+            this.data.correct_responses = responses;
+        }
+    };
 
-	/**
-	 * Complete event. Fired when all unique user actions have been performed for this interaction.
-	 * This could be once all items have been viewed, or when the question or questions have been judged.
-	 * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
-	 * correct or incorrect, if appropriate.
-	 */
-	ali.Interaction.prototype.complete = function ( status ) {
-		var e, d = new Date();
-		if ( 'undefined' === $.type( status ) || '' === status.trim() ) {
-			status = 'complete';
-		}
-		this.data.id = this.$el.attr( 'id' );
-		this.data.result = status;
-		this.data.latency = d.getTime() - this.data.start;
+    /**
+     * Complete event. Fired when all unique user actions have been performed for this interaction.
+     * This could be once all items have been viewed, or when the question or questions have been judged.
+     * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
+     * correct or incorrect, if appropriate.
+     */
+    ali.Interaction.prototype.complete = function (status) {
+        var e, d = new Date();
+        if ('undefined' === $.type(status) || '' === status.trim()) {
+            status = 'complete';
+        }
+        this.data.id = this.$el.attr('id');
+        this.data.result = status;
+        this.data.latency = d.getTime() - this.data.start;
+        this.doFeedback(status);
+        e = new jQuery.Event('ali:complete');
+        this.$el.trigger(e, [this.data]);
+    };
 
+    /**
+     *
+     * @param status
+     */
+    ali.Interaction.prototype.doFeedback = function (status) {
+        if (!ali.Dialog.showDialog(this.$el, status) && !ali.Feedback.showFeedback(this.$el, status)) {
+            this.showNotice(status);
+        }
+    };
 
-		if ( ! ali.Dialog.showDialog( this.$el, status ) && ! ali.Feedback.showFeedback( this.$el, status ) ) {
-			this.showNotice( status );
-		}
+    /**
+     * Event trigger method to indicate that an item has been selected.
+     * @param $item : jQuery object for the element selected.
+     */
+    ali.Interaction.prototype.itemSelected = function ($item) {
+        var clonedData = Object.assign({}, this.data);
+        clonedData.id = $item.attr('id');
+        var e = new jQuery.Event('ali:itemSelected');
+        this.$el.trigger(e, [clonedData, $item]);
+    };
 
-		e = new jQuery.Event( 'ali:complete' );
-		this.$el.trigger( e, [ this.data ] );
+    /**
+     * Event trigger method to indicate that an item has been completed.
+     * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
+     * correct or incorrect, if appropriate.
+     * @param $item : jQuery object for the element selected.
+     */
+    ali.Interaction.prototype.itemComplete = function (status, $item) {
+        if ('undefined' === $.type(status) || '' === status.trim()) {
+            status = ali.STATUS.complete;
+        }
+        if ('undefined' === $.type($item) || 0 === $item.length) {
+            $item = this.$el;
+        }
 
+        var clonedData = Object.assign({}, this.data);
+        clonedData.id = $item.attr('id');
+        var d = new Date();
+        var e = new jQuery.Event('ali:itemComplete');
+        clonedData.result = status;
+        clonedData.latency = d.getTime() - this.__last;
+        this.__last = d.getTime();
+        this.$el.trigger(e, [clonedData, $item]);
+    };
 
-	};
-
-	/**
-	 * Event trigger method to indicate that an item has been selected.
-	 * @param $item : jQuery object for the element selected.
-	 */
-	ali.Interaction.prototype.itemSelected = function ( $item ) {
-		var clonedData = Object.assign( {}, this.data );
-		clonedData.id = $item.attr( 'id' );
-		var e = new jQuery.Event( 'ali:itemSelected' );
-		this.$el.trigger( e, [ clonedData, $item ] );
-	};
-
-	/**
-	 * Event trigger method to indicate that an item has been completed.
-	 * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
-	 * correct or incorrect, if appropriate.
-	 * @param $item : jQuery object for the element selected.
-	 */
-	ali.Interaction.prototype.itemComplete = function ( status, $item ) {
-		if ( 'undefined' === $.type( status ) || '' === status.trim() ) {
-			status = ali.STATUS.complete;
-		}
-		if ( 'undefined' === $.type( $item ) || 0 === $item.length ) {
-			$item = this.$el;
-		}
-
-		var clonedData = Object.assign( {}, this.data );
-		clonedData.id = $item.attr( 'id' );
-		var d = new Date();
-		var e = new jQuery.Event( 'ali:itemComplete' );
-		clonedData.result = status;
-		clonedData.latency = d.getTime() - this.__last;
-		this.__last = d.getTime();
-		this.$el.trigger( e, [ clonedData, $item ] );
-	};
-
-	/**
-	 *
-	 * @param message
-	 * @param cls
-	 */
-	ali.Interaction.prototype.showNotice = function ( status ) {
-		var noticeAttr = NOTICE_DATA + status;
-		var noticeText = this.$el.attr( noticeAttr );
-
-		if ( undefined !== noticeText && '' !== noticeText.trim() ) {
-			var $container = $( '<div>' )
-				.addClass( 'notice-container' )
-				.aria( { 'live' : 'assertive' } )
-				.appendTo( this.$el );
-			var cls = 'notice ' + status;
-			var $notice = $( '<div>' ).aria( 'hidden', 'true' ).addClass( cls ).html( noticeText );
-			$container.append( $notice );
-			setTimeout( function () {
-				$notice.aria( 'hidden', 'false' );
-			}, 100 );
-		}
-	};
-})( jQuery );
+    /**
+     *
+     * @param message
+     * @param cls
+     */
+    ali.Interaction.prototype.showNotice = function (status) {
+        var noticeAttr = NOTICE_DATA + status;
+        var noticeText = this.$el.attr(noticeAttr);
+        if (undefined !== noticeText && '' !== noticeText.trim()) {
+            var $container = $('<div>')
+                .addClass('notice-container')
+                .aria({ 'live' : 'assertive' })
+                .appendTo(this.$el);
+            var cls = 'notice ' + status;
+            var $notice = $('<div>').aria('hidden', 'true').addClass(cls).html(noticeText);
+            $container.append($notice);
+            setTimeout(function () {
+                $notice.aria('hidden', 'false');
+            }, 100);
+        }
+    };
+})(jQuery);
 ;
 /*
  * --------------------------------------------------------------------------
@@ -733,412 +735,420 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-(function ( $ ) {
-	"use strict";
+(function ($) {
+    "use strict";
 
-	// Make the global object available and abort if this file is used without it.
-	var ali = window.ali;
-	if ( $.type( ali ) !== 'object' ) {
-		return;
-	}
+    // Make the global object available and abort if this file is used without it.
+    var ali = window.ali;
+    if ($.type(ali) !== 'object') {
+        return;
+    }
 
-	var DESCRIPTION = 'Accordion interaction.';
-	var TYPE = ali.TYPE.other;
+    var DESCRIPTION = 'Accordion interaction.';
+    var TYPE = ali.TYPE.other;
 
-	/*
-	 * Saved queries
-	 */
-	var TAB = '.accordion-tab';
-	var OPEN_TAB = '.accordion-tab[aria-expanded="true"]';
-	var PANEL = '.accordion-panel';
+    /*
+     * Saved queries
+     */
+    var TAB = '.accordion-tab';
+    var OPEN_TAB = '.accordion-tab[aria-expanded="true"]';
+    var PANEL = '.accordion-panel';
 
-	/**
-	 * Accordion Interaction
-	 * @param element DOMElement
-	 * @constructor
-	 */
-	ali.Accordion = function ( element ) {
-		ali.Interaction.call( this, element, TYPE, DESCRIPTION );
-		this.init();
-	};
+    /**
+     * Accordion Interaction
+     * @param element DOMElement
+     * @constructor
+     */
+    ali.Accordion = function (element) {
+        ali.Interaction.call(this, element, TYPE, DESCRIPTION);
+        this.init();
+    };
 
-	// Inherits from ali.Interaction
-	ali.Accordion.prototype = Object.create( ali.Interaction.prototype );
-	ali.Accordion.prototype.constructor = ali.Accordion;
+    // Inherits from ali.Interaction
+    ali.Accordion.prototype = Object.create(ali.Interaction.prototype);
+    ali.Accordion.prototype.constructor = ali.Accordion;
 
-	/**
-	 * Saved jQuery reference to the tabs in this interaction.
-	 * @type {jQuery}
-	 */
-	ali.Accordion.prototype.$tabs = undefined;
+    /**
+     * Saved jQuery reference to the tabs in this interaction.
+     * @type {jQuery}
+     */
+    ali.Accordion.prototype.$tabs = undefined;
 
-	/**
-	 * Initializes the Interaction. Called from constructor.
-	 */
-	ali.Accordion.prototype.init = function () {
-		var $initOpen = $( OPEN_TAB );
-		this.$tabs = $( TAB, this.$el );
-		this.$tabs.each( this.initTab.bind( this ) );
-		// If there was an expanded tab set by the user, expand that tab.
-		// Otherwise, just make the first element in the list active
-		if ( $initOpen.length > 0 ) {
-			/// DIRTY HACK: deferring this "show" call so that event handlers have a chance to be attached
-			/// before it fires.
-			this.defer( (function () {
-				this.show( $( $initOpen[ 0 ] ) );
-			}).bind( this ) );
-		} else {
-			this.getFirstTab().aria( 'tabindex', 0 );
-		}
-		// set a debounced resize event handler.
-		$( window ).on( 'resize', this._requestResize.bind( this ) );
-	};
+    /**
+     * Initializes the Interaction. Called from constructor.
+     */
+    ali.Accordion.prototype.init = function () {
+        var $initOpen = $(OPEN_TAB);
+        this.$tabs = $(TAB, this.$el);
+        this.$tabs.each(this.initTab.bind(this));
+        // If there was an expanded tab set by the user, expand that tab.
+        // Otherwise, just make the first element in the list active
+        if ($initOpen.length > 0) {
+            /// DIRTY HACK: deferring this "show" call so that event handlers have a chance to be attached
+            /// before it fires.
+            this.defer((function () {
+                this.show($($initOpen[0]));
+            }).bind(this));
+        } else {
+            this.getFirstTab().aria('tabindex', 0);
+        }
+        // set a debounced resize event handler.
+        $(window).on('resize', this._requestResize.bind(this));
+    };
 
-	/**
-	 * jQuery each callback; Initializes the tab/panel pair
-	 * @param i : {number} index of current element
-	 * @param el {jQuery} tab to operate on.
-	 */
-	ali.Accordion.prototype.initTab = function ( i, el ) {
-		var $tab, $panel, id;
-		$tab = $( el );
-		id = this.makeTargetID( $tab );
-		$panel = $tab.next( PANEL );
-		$tab.aria(
-			{
-				'role'     : "tab",
-				'tabindex' : "0",
-				'expanded' : "false",
-				'controls' : id
-			} )
-		    .off( 'click.ali' ).on( 'click.ali', this.tab_onClick.bind( this ) )
-		    .off( 'keydown.ali' ).on( 'keydown.ali', this.tab_onKeyDown.bind( this ) );
+    /**
+     * jQuery each callback; Initializes the tab/panel pair
+     * @param i : {number} index of current element
+     * @param el {jQuery} tab to operate on.
+     */
+    ali.Accordion.prototype.initTab = function (i, el) {
+        var $tab, $panel, id;
+        $tab = $(el);
+        id = this.makeTargetID($tab);
+        $panel = $tab.next(PANEL);
+        $tab.aria(
+            {
+                'role' : "tab",
+                'tabindex' : "0",
+                'expanded' : "false",
+                'controls' : id
+            })
+            .off('click.ali').on('click.ali', this.tab_onClick.bind(this))
+            .off('keydown.ali').on('keydown.ali', this.tab_onKeyDown.bind(this));
 
-		$panel.aria(
-			{
-				'role'     : "tabpanel",
-				'tabindex' : "-1",
-				'hidden'   : "true"
-			}
-		).attr(
-			{
-				'id'          : id,
-				'data-height' : this._getMeasuredHeight( $panel )
-			}
-		).off( 'keydown.ali' ).on( 'keydown.ali', this.panel_onKeyDown.bind( this ) );
-	};
+        $panel.aria(
+            {
+                'role' : "tabpanel",
+                'tabindex' : "-1",
+                'hidden' : "true"
+            }
+        ).attr(
+            {
+                'id' : id,
+                'data-height' : this._getMeasuredHeight($panel)
+            }
+        ).off('keydown.ali').on('keydown.ali', this.panel_onKeyDown.bind(this));
+    };
 
-	/**
-	 * Hides the panel corresponding to the provided tab and sets that tab to unexpanded.
-	 * @param $tab
-	 */
-	ali.Accordion.prototype.hide = function ( $tab ) {
-		this.getPanelFromTab( $tab ).aria(
-			{
-				'hidden'   : 'true',
-				'tabindex' : "-1"
-			}
-		).removeAttr( 'style' );
-		$tab.aria( 'expanded', 'false' );
-	};
+    /**
+     * Hides the panel corresponding to the provided tab and sets that tab to unexpanded.
+     * @param $tab
+     */
+    ali.Accordion.prototype.hide = function ($tab) {
+        this.getPanelFromTab($tab).aria(
+            {
+                'hidden' : 'true',
+                'tabindex' : "-1"
+            }
+        ).removeAttr('style');
+        $tab.aria('expanded', 'false');
+    };
 
-	/**
-	 *  Hides all panels
-	 */
-	ali.Accordion.prototype.hideAll = function () {
-		this.$tabs.each( (function ( i, el ) {
-			this.hide( $( el ) );
-		} ).bind( this ) );
-	};
+    /**
+     *  Hides all panels
+     */
+    ali.Accordion.prototype.hideAll = function () {
+        this.$tabs.each((function (i, el) {
+            this.hide($(el));
+        } ).bind(this));
+    };
 
-	/**
-	 * Shows the panel corresponding to the provided $tab and fires an `ali:itemSelected`.
-	 * If all tabs have been viewed, fires an `ali:complete` event.
-	 * @param $tab
-	 */
-	ali.Accordion.prototype.show = function ( $tab ) {
-		var $panel = this.getPanelFromTab( $tab );
-		var panelHeight = parseInt( $panel.attr( 'data-height' ) );
-		this.hideAll();
-		$panel.aria(
-			{
-				'hidden'   : 'false',
-				'tabindex' : "0"
-			}
-		);
-		if ( panelHeight > 0 ) {
-			$panel.css( 'max-height', panelHeight + 'px' );
-		}
-		$tab.aria(
-			{
-				'expanded' : 'true',
-				'tabindex' : '0'
-			}
-		).addClass( 'viewed' ).focus();
+    /**
+     * Shows the panel corresponding to the provided $tab and fires an `ali:itemSelected`.
+     * If all tabs have been viewed, fires an `ali:complete` event.
+     * @param $tab
+     */
+    ali.Accordion.prototype.show = function ($tab) {
+        var $panel = this.getPanelFromTab($tab);
+        var panelHeight = parseInt($panel.attr('data-height'));
+        this.hideAll();
+        $panel.aria(
+            {
+                'hidden' : 'false',
+                'tabindex' : "0"
+            }
+        );
+        if (panelHeight > 0) {
+            $panel.css('max-height', panelHeight + 'px');
+        }
+        $tab.aria(
+            {
+                'expanded' : 'true',
+                'tabindex' : '0'
+            }
+        ).addClass('viewed').focus();
 
-		this.itemSelected( $tab );
+        this.itemSelected($tab);
 
-		if ( $( '.viewed', this.$el ).length === this.$tabs.length && this.data.result === ali.STATUS.incomplete ) {
-			this.complete();
-		}
-	};
+        if ($('.viewed', this.$el).length === this.$tabs.length && this.data.result === ali.STATUS.incomplete) {
+            this.complete();
+        }
+    };
 
-	/**
-	 * Returns a panel controlled by the provided tab.
-	 * @param $tab : jQuery
-	 * @returns jQuery object for the panel.
-	 */
-	ali.Accordion.prototype.getPanelFromTab = function ( $tab ) {
-		return $( '#' + $tab.aria( 'controls' ) );
-	};
+    /**
+     * Overrides the default method - does nothing.
+     * @override
+     */
+    ali.Accordion.prototype.doFeedback = function () {
+        //noop
+    };
 
-	/**
-	 * Returns a tab that controls the provided panel.
-	 * @param $panel : jQuery
-	 * @returns jQuery object for the tab
-	 */
-	ali.Accordion.prototype.getTabFromPanel = function ( $panel ) {
-		return $( TAB + '[aria-controls="' + $panel.attr( 'id' ) + '"]' );
-	};
+    /**
+     * Returns a panel controlled by the provided tab.
+     * @param $tab : jQuery
+     * @returns jQuery object for the panel.
+     */
+    ali.Accordion.prototype.getPanelFromTab = function ($tab) {
+        return $('#' + $tab.aria('controls'));
+    };
 
-
-	/**
-	 * Iterates through all siblings following the provided tab until another tab is found.
-	 * If no tab is found, returns an empty jQuery object.
-	 * @param $tab
-	 * @returns {jQuery}
-	 * @note Maximum iterations is 2 * {number of tabs}
-	 * @private
-	 */
-	ali.Accordion.prototype._nextTab = function ( $tab ) {
-		var $next = $tab.next();
-		var count = this.$tabs.length * 2;
-		while ( $next.length > 0 && ! $next.is( TAB ) && count -- !== 0 ) {
-			$next = $next.next();
-		}
-		return $next;
-	};
-
-	/**
-	 * Returns the next tab in the accordion or the first tab if no next tab can be found.
-	 * @param $tab
-	 * @returns {jQuery}
-	 */
-	ali.Accordion.prototype.getNextTab = function ( $tab ) {
-		var $next = this._nextTab( $tab );
-		if ( $next.length === 0 ) {
-			return this.getFirstTab();
-		} else {
-			return $next;
-		}
-	};
+    /**
+     * Returns a tab that controls the provided panel.
+     * @param $panel : jQuery
+     * @returns jQuery object for the tab
+     */
+    ali.Accordion.prototype.getTabFromPanel = function ($panel) {
+        return $(TAB + '[aria-controls="' + $panel.attr('id') + '"]');
+    };
 
 
-	/**
-	 * Iterates over all siblings preceding the provided tab until another tab is found.
-	 * If no tab is found, returns an empty jQuery object.
-	 * @param $tab
-	 * @returns {jQuery}
-	 * @note Maximum iterations is 2 * {number of tabs}
-	 * @private
-	 */
-	ali.Accordion.prototype._previousTab = function ( $tab ) {
-		var $prev = $tab.prev();
-		var count = this.$tabs.length * 2;
-		while ( $prev.length > 0 && ! $prev.is( TAB ) && count -- !== 0 ) {
-			$prev = $prev.prev();
-		}
-		return $prev;
-	};
+    /**
+     * Iterates through all siblings following the provided tab until another tab is found.
+     * If no tab is found, returns an empty jQuery object.
+     * @param $tab
+     * @returns {jQuery}
+     * @note Maximum iterations is 2 * {number of tabs}
+     * @private
+     */
+    ali.Accordion.prototype._nextTab = function ($tab) {
+        var $next = $tab.next();
+        var count = this.$tabs.length * 2;
+        while ($next.length > 0 && !$next.is(TAB) && count-- !== 0) {
+            $next = $next.next();
+        }
+        return $next;
+    };
 
-	/**
-	 * Returns the previous tab in the accordion or the last tab if no previous tab can be found.
-	 * @param $tab
-	 * @returns {jQuery}
-	 */
-	ali.Accordion.prototype.getPreviousTab = function ( $tab ) {
-		var $prev = this._previousTab( $tab );
-		if ( $prev.length === 0 ) {
-			return this.getLastTab();
-		} else {
-			return $prev;
-		}
-	};
-
-
-	/**
-	 * Gets the first tab in the list.
-	 * @returns {jQuery}
-	 */
-	ali.Accordion.prototype.getFirstTab = function () {
-		return this.$tabs.first();
-	};
-
-	/**
-	 * Gets the last tab in the list.
-	 * @returns {jQuery}
-	 */
-	ali.Accordion.prototype.getLastTab = function () {
-		return this.$tabs.last();
-	};
+    /**
+     * Returns the next tab in the accordion or the first tab if no next tab can be found.
+     * @param $tab
+     * @returns {jQuery}
+     */
+    ali.Accordion.prototype.getNextTab = function ($tab) {
+        var $next = this._nextTab($tab);
+        if ($next.length === 0) {
+            return this.getFirstTab();
+        } else {
+            return $next;
+        }
+    };
 
 
-	/**
-	 * Keyboard event handler for when keyboard focus in on the tabs.
-	 * @private
-	 */
-	ali.Accordion.prototype.tab_onKeyDown = function ( e ) {
-		switch ( e.which ) {
-			case 13: // ENTER
-			case 32: // SPACE
-				e.preventDefault();
-				e.stopPropagation();
-				this.tab_onClick( e );
-				break;
-			case 37: // LEFT
-			case 38: // UP
-				e.preventDefault();
-				e.stopPropagation();
-				this.show( this.getPreviousTab( $( e.currentTarget ) ) );
-				break;
-			case 39: // RIGHT
-			case 40: // DOWN
-				e.preventDefault();
-				e.stopPropagation();
-				this.show( this.getNextTab( $( e.currentTarget ) ) );
-				break;
-			case 35: // END
-				e.preventDefault();
-				e.stopPropagation();
-				this.show( this.getLastTab() );
-				break;
-			case 36: // HOME
-				e.preventDefault();
-				e.stopPropagation();
-				this.show( this.getFirstTab() );
-				break;
-		}
-	};
+    /**
+     * Iterates over all siblings preceding the provided tab until another tab is found.
+     * If no tab is found, returns an empty jQuery object.
+     * @param $tab
+     * @returns {jQuery}
+     * @note Maximum iterations is 2 * {number of tabs}
+     * @private
+     */
+    ali.Accordion.prototype._previousTab = function ($tab) {
+        var $prev = $tab.prev();
+        var count = this.$tabs.length * 2;
+        while ($prev.length > 0 && !$prev.is(TAB) && count-- !== 0) {
+            $prev = $prev.prev();
+        }
+        return $prev;
+    };
 
-	/**
-	 * Tab click event
-	 * @private
-	 */
-	ali.Accordion.prototype.tab_onClick = function ( e ) {
-		var $target = $( e.target );
-		if ( $target.aria( 'expanded' ) !== 'true' ) {
-			this.show( $target );
-		} else {
-			this.hide( $target );
-		}
-	};
-
-	/**
-	 * Keyboard event handler for when keyboard focus is in a panel.
-	 * @private
-	 */
-	ali.Accordion.prototype.panel_onKeyDown = function ( e ) {
-		if ( (e.ctrlKey || e.metaKey) && e.currentTarget ) {
-			var $tab, $newTab;
-			var $panel = $( e.currentTarget );
-			switch ( e.which ) {
-				case 38: // UP
-					e.preventDefault();
-					e.stopPropagation();
-					this.getTabFromPanel( $panel ).focus();
-					break;
-				case 33: // PAGE UP
-					e.preventDefault();
-					e.stopPropagation();
-					$tab = this.getFirstTab();
-					if ( $tab.aria( 'expanded' ) === 'false' ) {
-						this.show( $tab );
-					}
-					$tab.focus();
-					break;
-				case 40: //  DOWN
-					e.preventDefault();
-					e.stopPropagation();
-					$tab = this.getLastTab();
-					if ( $tab.aria( 'expanded' ) === 'false' ) {
-						this.show( $tab );
-					}
-					$tab.focus();
-					break;
-			}
-		}
-	};
+    /**
+     * Returns the previous tab in the accordion or the last tab if no previous tab can be found.
+     * @param $tab
+     * @returns {jQuery}
+     */
+    ali.Accordion.prototype.getPreviousTab = function ($tab) {
+        var $prev = this._previousTab($tab);
+        if ($prev.length === 0) {
+            return this.getLastTab();
+        } else {
+            return $prev;
+        }
+    };
 
 
-	/**
-	 * Window resize handler.
-	 * @param e
-	 */
-	ali.Accordion.prototype.onResize = function ( e ) {
-		this._requestResize();
-	};
+    /**
+     * Gets the first tab in the list.
+     * @returns {jQuery}
+     */
+    ali.Accordion.prototype.getFirstTab = function () {
+        return this.$tabs.first();
+    };
 
-	/**
-	 * Requests a resize event if the current control is not currently performing a resize event.
-	 * Events are handled before the next paint and debounced using requestAnimationFrame
-	 * @private
-	 */
-	ali.Accordion.prototype._requestResize = function () {
-		if ( ! this._resizing ) {
-			requestAnimationFrame( this._resizePanels.bind( this ) );
-			this._resizing = true;
-		}
-	};
+    /**
+     * Gets the last tab in the list.
+     * @returns {jQuery}
+     */
+    ali.Accordion.prototype.getLastTab = function () {
+        return this.$tabs.last();
+    };
 
-	/**
-	 * Callback passed to requestAnimationFrame; sets the max-height for each panel, adjusting the height
-	 * for any panel currently open.
-	 * @private
-	 */
-	ali.Accordion.prototype._resizePanels = function () {
-		this.$tabs.each( (function ( i, el ) {
-			var $panel = $( el ).next( PANEL );
-			$panel.attr( 'data-height', this._getMeasuredHeight( $panel ) );
-			if ( $panel.aria( 'hidden' ) === 'false' ) {
-				$panel.css( 'min-height', this._getMeasuredHeight( $panel ) + 'px' );
-			}
-		}).bind( this ) );
-		this._resizing = false;
-	};
 
-	/**
-	 * Creates an clone element on the DOM of the provided panel and measures it's height.
-	 * @param $panel
-	 * @returns {int} height of element
-	 * @private
-	 */
-	ali.Accordion.prototype._getMeasuredHeight = function ( $panel ) {
-		var $div = $( '<div id="ali-temp" aria-hidden="true" style="overflow:hidden;height:1px;width:100%;visibility: hidden"></div>' ).appendTo( this.$el );
-		var $tmp = $( '<dd class="accordion-panel"></dd>' ).html( $panel.html() ).appendTo( $div );
-		var h = $tmp.height();
-		$div.remove();
-		return h;
-	};
+    /**
+     * Keyboard event handler for when keyboard focus in on the tabs.
+     * @private
+     */
+    ali.Accordion.prototype.tab_onKeyDown = function (e) {
+        switch (e.which) {
+            case 13: // ENTER
+            case 32: // SPACE
+                e.preventDefault();
+                e.stopPropagation();
+                this.tab_onClick(e);
+                break;
+            case 37: // LEFT
+            case 38: // UP
+                e.preventDefault();
+                e.stopPropagation();
+                this.show(this.getPreviousTab($(e.currentTarget)));
+                break;
+            case 39: // RIGHT
+            case 40: // DOWN
+                e.preventDefault();
+                e.stopPropagation();
+                this.show(this.getNextTab($(e.currentTarget)));
+                break;
+            case 35: // END
+                e.preventDefault();
+                e.stopPropagation();
+                this.show(this.getLastTab());
+                break;
+            case 36: // HOME
+                e.preventDefault();
+                e.stopPropagation();
+                this.show(this.getFirstTab());
+                break;
+        }
+    };
 
-	/*
-	 * jQuery Plugin
-	 */
-	function Plugin() {
-		return this.each( function () {
-			new ali.Accordion( this );
-		} );
-	}
+    /**
+     * Tab click event
+     * @private
+     */
+    ali.Accordion.prototype.tab_onClick = function (e) {
+        var $target = $(e.target);
+        if ($target.aria('expanded') !== 'true') {
+            this.show($target);
+        } else {
+            this.hide($target);
+        }
+    };
 
-	var old = $.fn.accordion;
-	$.fn.accordion = Plugin;
-	$.fn.accordion.Constructor = ali.Accordion;
+    /**
+     * Keyboard event handler for when keyboard focus is in a panel.
+     * @private
+     */
+    ali.Accordion.prototype.panel_onKeyDown = function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.currentTarget) {
+            var $tab, $newTab;
+            var $panel = $(e.currentTarget);
+            switch (e.which) {
+                case 38: // UP
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.getTabFromPanel($panel).focus();
+                    break;
+                case 33: // PAGE UP
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $tab = this.getFirstTab();
+                    if ($tab.aria('expanded') === 'false') {
+                        this.show($tab);
+                    }
+                    $tab.focus();
+                    break;
+                case 40: //  DOWN
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $tab = this.getLastTab();
+                    if ($tab.aria('expanded') === 'false') {
+                        this.show($tab);
+                    }
+                    $tab.focus();
+                    break;
+            }
+        }
+    };
 
-	$.fn.accordion.noConflict = function () {
-		$.fn.accordion = old;
-		return this;
-	};
 
-})( jQuery );
+    /**
+     * Window resize handler.
+     * @param e
+     */
+    ali.Accordion.prototype.onResize = function (e) {
+        this._requestResize();
+    };
+
+    /**
+     * Requests a resize event if the current control is not currently performing a resize event.
+     * Events are handled before the next paint and debounced using requestAnimationFrame
+     * @private
+     */
+    ali.Accordion.prototype._requestResize = function () {
+        if (!this._resizing) {
+            requestAnimationFrame(this._resizePanels.bind(this));
+            this._resizing = true;
+        }
+    };
+
+    /**
+     * Callback passed to requestAnimationFrame; sets the max-height for each panel, adjusting the height
+     * for any panel currently open.
+     * @private
+     */
+    ali.Accordion.prototype._resizePanels = function () {
+        this.$tabs.each((function (i, el) {
+            var $panel = $(el).next(PANEL);
+            $panel.attr('data-height', this._getMeasuredHeight($panel));
+            if ($panel.aria('hidden') === 'false') {
+                $panel.css('min-height', this._getMeasuredHeight($panel) + 'px');
+            }
+        }).bind(this));
+        this._resizing = false;
+    };
+
+    /**
+     * Creates an clone element on the DOM of the provided panel and measures it's height.
+     * @param $panel
+     * @returns {int} height of element
+     * @private
+     */
+    ali.Accordion.prototype._getMeasuredHeight = function ($panel) {
+        var $div = $('<div id="ali-temp" aria-hidden="true" style="overflow:hidden;height:1px;width:100%;visibility: hidden"></div>').appendTo(this.$el);
+        var $tmp = $('<dd class="accordion-panel"></dd>').html($panel.html()).appendTo($div);
+        var h = $tmp.height();
+        $div.remove();
+        return h;
+    };
+
+    /*
+     * jQuery Plugin
+     */
+    function Plugin() {
+        return this.each(function () {
+            new ali.Accordion(this);
+        });
+    }
+
+    var old = $.fn.accordion;
+    $.fn.accordion = Plugin;
+    $.fn.accordion.Constructor = ali.Accordion;
+
+    $.fn.accordion.noConflict = function () {
+        $.fn.accordion = old;
+        return this;
+    };
+
+})(jQuery);
 ;
 /*
  * --------------------------------------------------------------------------
@@ -1146,407 +1156,414 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-(function ( $ ) {
-	"use strict";
+(function ($) {
+    "use strict";
 
-	// Make the global object available and abort if this file is used without it.
-	var ali = window.ali;
-	if ( $.type( ali ) !== 'object' ) {
-		return;
-	}
+    // Make the global object available and abort if this file is used without it.
+    var ali = window.ali;
+    if ($.type(ali) !== 'object') {
+        return;
+    }
 
-	var DESCRIPTION = 'Tab Control interaction.';
-	var TYPE = ali.TYPE.other;
-	/*
-	 * Saved queries
-	 */
-	var TABLIST = '.tab-control-tablist';
-	var TABS = TABLIST + ' li';
-	var SELECTED_TAB = TABS + '[aria-selected="true"]';
-	var PANELS = '.tab-control-panel';
+    var DESCRIPTION = 'Tab Control interaction.';
+    var TYPE = ali.TYPE.other;
+    /*
+     * Saved queries
+     */
+    var TABLIST = '.tab-control-tablist';
+    var TABS = TABLIST + ' li';
+    var SELECTED_TAB = TABS + '[aria-selected="true"]';
+    var PANELS = '.tab-control-panel';
 
-	/**
-	 * Tab Control Interaction
-	 * @param element DOMElement
-	 * @constructor
-	 */
-	ali.TabControl = function ( element ) {
-		ali.Interaction.call( this, element, TYPE, DESCRIPTION );
-		this.init();
-	};
+    /**
+     * Tab Control Interaction
+     * @param element DOMElement
+     * @constructor
+     */
+    ali.TabControl = function (element) {
+        ali.Interaction.call(this, element, TYPE, DESCRIPTION);
+        this.init();
+    };
 
-	// Inherits from ali.Interaction
-	ali.TabControl.prototype = Object.create( ali.Interaction.prototype );
-	ali.TabControl.prototype.constructor = ali.TabControl;
+    // Inherits from ali.Interaction
+    ali.TabControl.prototype = Object.create(ali.Interaction.prototype);
+    ali.TabControl.prototype.constructor = ali.TabControl;
 
-	/**
-	 * Saved jQuery reference to the tabs in this interaction.
-	 * @type {jQuery}
-	 */
-	ali.Accordion.prototype.$tabs = undefined;
+    /**
+     * Saved jQuery reference to the tabs in this interaction.
+     * @type {jQuery}
+     */
+    ali.Accordion.prototype.$tabs = undefined;
 
-	/**
-	 * Saved jQuery reference to the visual indicator for this interaction.
-	 * @type {jQuery}
-	 */
-	ali.Accordion.prototype.$vi = undefined;
-	ali.Accordion.prototype.__activeTab = undefined;
+    /**
+     * Saved jQuery reference to the visual indicator for this interaction.
+     * @type {jQuery}
+     */
+    ali.Accordion.prototype.$vi = undefined;
+    ali.Accordion.prototype.__activeTab = undefined;
 
-	/**
-	 * Initializes the Interaction. Called from constructor.
-	 */
-	ali.TabControl.prototype.init = function () {
-		var $tablist = $( TABLIST, this.$el );
-		this.$tabs = $( TABS, this.$el );
-		var $selected = $( SELECTED_TAB, this.$el );
-		var $panels = $( PANELS, this.$el );
-		var id = this.$el.attr( 'id' );
-		$panels.each( (function ( i, el ) {
-			var $panel = $( el );
-			$panel.attr( 'id', id + '-panel-' + i )
-			      .aria( {
-				             'role'      : 'tabpanel',
-				             'hidden'    : 'true',
-				             'tabindex'  : '-1',
-				             'labeledby' : id + '-tab-' + i
-			             } )
-			      .off( 'keydown.ali' )
-			      .on( 'keydown.ali', this.panel_onKeyDown.bind( this ) );
-		}).bind( this ) );
+    /**
+     * Initializes the Interaction. Called from constructor.
+     */
+    ali.TabControl.prototype.init = function () {
+        var $tablist = $(TABLIST, this.$el);
+        this.$tabs = $(TABS, this.$el);
+        var $selected = $(SELECTED_TAB, this.$el);
+        var $panels = $(PANELS, this.$el);
+        var id = this.$el.attr('id');
+        $panels.each((function (i, el) {
+            var $panel = $(el);
+            $panel.attr('id', id + '-panel-' + i)
+                .aria({
+                          'role' : 'tabpanel',
+                          'hidden' : 'true',
+                          'tabindex' : '-1',
+                          'labeledby' : id + '-tab-' + i
+                      })
+                .off('keydown.ali')
+                .on('keydown.ali', this.panel_onKeyDown.bind(this));
+        }).bind(this));
 
-		$tablist.aria( {
-			               'role'   : 'tablist',
-			               'hidden' : 'true'
-		               } );
+        $tablist.aria({
+                          'role' : 'tablist',
+                          'hidden' : 'true'
+                      });
 
-		this.$tabs.each( (function ( i, el ) {
-			var $tab = $( el );
-			$tab.attr( 'id', id + '-tab-' + i )
-			    .aria( {
-				           'role'     : 'tab',
-				           'controls' : id + '-panel-' + i,
-				           'tabindex' : '-1',
-				           'selected' : 'false'
-			           } )
-			    .off( 'click.ali' ).on( 'click.ali', this.tab_onClick.bind( this ) )
-			    .off( 'keydown.ali' ).on( 'keydown.ali', this.tab_onKeyDown.bind( this ) );
-		} ).bind( this ) );
+        this.$tabs.each((function (i, el) {
+            var $tab = $(el);
+            $tab.attr('id', id + '-tab-' + i)
+                .aria({
+                          'role' : 'tab',
+                          'controls' : id + '-panel-' + i,
+                          'tabindex' : '-1',
+                          'selected' : 'false'
+                      })
+                .off('click.ali').on('click.ali', this.tab_onClick.bind(this))
+                .off('keydown.ali').on('keydown.ali', this.tab_onKeyDown.bind(this));
+        } ).bind(this));
 
-		this.$vi = $( '<span class="vi" role="presentation"></span>' );
-		$tablist.append( this.$vi );
+        this.$vi = $('<span class="vi" role="presentation"></span>');
+        $tablist.append(this.$vi);
 
-		if ( $selected.length > 0 ) {
-			$selected = $( $selected[ 0 ] );
-		} else {
-			$selected = $( this.$tabs[ 0 ] );
-		}
+        if ($selected.length > 0) {
+            $selected = $($selected[0]);
+        } else {
+            $selected = $(this.$tabs[0]);
+        }
 
-		$( window ).on( 'resize', this._requestResize.bind( this ) );
+        $(window).on('resize', this._requestResize.bind(this));
 
-		this.defer( (function () {
-			$tablist.aria( 'hidden', 'false' );
-			this.show( $selected );
-		}).bind( this ) );
-	};
-
-
-	/**
-	 * Hides the panel corresponding to the provided tab and sets that tab to unexpanded.
-	 * @param $tab
-	 */
-	ali.TabControl.prototype.hide = function ( $tab ) {
-		this.getPanelFromTab( $tab ).aria(
-			{
-				'hidden'   : 'true',
-				'tabindex' : "-1"
-			}
-		);
-		$tab.aria( {
-			           'selected' : 'false',
-			           'tabindex' : "-1"
-		           } );
-	};
-
-	/**
-	 *  Hides all panels
-	 */
-	ali.TabControl.prototype.hideAll = function () {
-		this.$tabs.each( (function ( i, el ) {
-			this.hide( $( el ) );
-		} ).bind( this ) );
-	};
-
-	/**
-	 * Shows the panel corresponding to the provided $tab and fires an `ali:itemSelected`.
-	 * If all tabs have been viewed, fires an `ali:complete` event.
-	 * @param $tab
-	 */
-	ali.TabControl.prototype.show = function ( $tab ) {
-		var $panel = this.getPanelFromTab( $tab );
-		this.hideAll();
-		$panel.aria(
-			{
-				'hidden'   : 'false',
-				'tabindex' : "0"
-			}
-		);
-
-		$tab.aria(
-			{
-				'selected' : 'true',
-				'tabindex' : '0'
-			}
-		).addClass( 'viewed' ).focus();
-
-		this.itemSelected( $tab );
-		this.updateVI( $tab );
-
-		if ( $( '.viewed', this.$el ).length === this.$tabs.length && this.data.result === ali.STATUS.incomplete ) {
-			this.complete();
-		}
-	};
+        this.defer((function () {
+            $tablist.aria('hidden', 'false');
+            this.show($selected);
+        }).bind(this));
+    };
 
 
-	/**
-	 * Returns a panel controlled by the provided tab.
-	 * @param $tab : jQuery
-	 * @returns jQuery object for the panel.
-	 */
-	ali.TabControl.prototype.getPanelFromTab = function ( $tab ) {
-		return $( '#' + $tab.aria( 'controls' ) );
-	};
+    /**
+     * Hides the panel corresponding to the provided tab and sets that tab to unexpanded.
+     * @param $tab
+     */
+    ali.TabControl.prototype.hide = function ($tab) {
+        this.getPanelFromTab($tab).aria(
+            {
+                'hidden' : 'true',
+                'tabindex' : "-1"
+            }
+        );
+        $tab.aria({
+                      'selected' : 'false',
+                      'tabindex' : "-1"
+                  });
+    };
 
-	/**
-	 * Returns a tab that controls the provided panel.
-	 * @param $panel : jQuery
-	 * @returns jQuery object for the tab
-	 */
-	ali.TabControl.prototype.getTabFromPanel = function ( $panel ) {
-		return $( TABS + '[aria-controls="' + $panel.attr( 'id' ) + '"]' );
-	};
+    /**
+     *  Hides all panels
+     */
+    ali.TabControl.prototype.hideAll = function () {
+        this.$tabs.each((function (i, el) {
+            this.hide($(el));
+        } ).bind(this));
+    };
+
+    /**
+     * Shows the panel corresponding to the provided $tab and fires an `ali:itemSelected`.
+     * If all tabs have been viewed, fires an `ali:complete` event.
+     * @param $tab
+     */
+    ali.TabControl.prototype.show = function ($tab) {
+        var $panel = this.getPanelFromTab($tab);
+        this.hideAll();
+        $panel.aria(
+            {
+                'hidden' : 'false',
+                'tabindex' : "0"
+            }
+        );
+
+        $tab.aria(
+            {
+                'selected' : 'true',
+                'tabindex' : '0'
+            }
+        ).addClass('viewed').focus();
+
+        this.itemSelected($tab);
+        this.updateVI($tab);
+
+        if ($('.viewed', this.$el).length === this.$tabs.length && this.data.result === ali.STATUS.incomplete) {
+            this.complete();
+        }
+    };
+
+    /**
+     * Overrides the default method - does nothing.
+     * @override
+     */
+    ali.TabControl.prototype.doFeedback = function () {
+        //noop
+    };
+
+    /**
+     * Returns a panel controlled by the provided tab.
+     * @param $tab : jQuery
+     * @returns jQuery object for the panel.
+     */
+    ali.TabControl.prototype.getPanelFromTab = function ($tab) {
+        return $('#' + $tab.aria('controls'));
+    };
+
+    /**
+     * Returns a tab that controls the provided panel.
+     * @param $panel : jQuery
+     * @returns jQuery object for the tab
+     */
+    ali.TabControl.prototype.getTabFromPanel = function ($panel) {
+        return $(TABS + '[aria-controls="' + $panel.attr('id') + '"]');
+    };
 
 
-	/**
-	 * Iterates through all siblings following the provided tab until another tab is found.
-	 * If no tab is found, returns an empty jQuery object.
-	 * @param $tab
-	 * @returns {jQuery}
-	 * @note Maximum iterations is 2 * {number of tabs}
-	 * @private
-	 */
-	ali.TabControl.prototype._nextTab = function ( $tab ) {
-		var $next = $tab.next();
-		var count = this.$tabs.length * 2;
-		while ( $next.length > 0 && ! $next.is( TABS ) && count -- !== 0 ) {
-			$next = $next.next();
-		}
-		return $next;
-	};
+    /**
+     * Iterates through all siblings following the provided tab until another tab is found.
+     * If no tab is found, returns an empty jQuery object.
+     * @param $tab
+     * @returns {jQuery}
+     * @note Maximum iterations is 2 * {number of tabs}
+     * @private
+     */
+    ali.TabControl.prototype._nextTab = function ($tab) {
+        var $next = $tab.next();
+        var count = this.$tabs.length * 2;
+        while ($next.length > 0 && !$next.is(TABS) && count-- !== 0) {
+            $next = $next.next();
+        }
+        return $next;
+    };
 
-	/**
-	 * Returns the next tab in the accordion or the first tab if no next tab can be found.
-	 * @param $tab
-	 * @returns {jQuery}
-	 */
-	ali.TabControl.prototype.getNextTab = function ( $tab ) {
-		var $next = this._nextTab( $tab );
-		if ( $next.length === 0 ) {
-			return this.getFirstTab();
-		} else {
-			return $next;
-		}
-	};
-
-
-	/**
-	 * Iterates over all siblings preceding the provided tab until another tab is found.
-	 * If no tab is found, returns an empty jQuery object.
-	 * @param $tab
-	 * @returns {jQuery}
-	 * @note Maximum iterations is 2 * {number of tabs}
-	 * @private
-	 */
-	ali.TabControl.prototype._previousTab = function ( $tab ) {
-		var $prev = $tab.prev();
-		var count = this.$tabs.length * 2;
-		while ( $prev.length > 0 && ! $prev.is( TABS ) && count -- !== 0 ) {
-			$prev = $prev.prev();
-		}
-		return $prev;
-	};
-
-	/**
-	 * Returns the previous tab in the accordion or the last tab if no previous tab can be found.
-	 * @param $tab
-	 * @returns {jQuery}
-	 */
-	ali.TabControl.prototype.getPreviousTab = function ( $tab ) {
-		var $prev = this._previousTab( $tab );
-		if ( $prev.length === 0 ) {
-			return this.getLastTab();
-		} else {
-			return $prev;
-		}
-	};
+    /**
+     * Returns the next tab in the accordion or the first tab if no next tab can be found.
+     * @param $tab
+     * @returns {jQuery}
+     */
+    ali.TabControl.prototype.getNextTab = function ($tab) {
+        var $next = this._nextTab($tab);
+        if ($next.length === 0) {
+            return this.getFirstTab();
+        } else {
+            return $next;
+        }
+    };
 
 
-	/**
-	 * Gets the first tab in the list.
-	 * @returns {jQuery}
-	 */
-	ali.TabControl.prototype.getFirstTab = function () {
-		return this.$tabs.first();
-	};
+    /**
+     * Iterates over all siblings preceding the provided tab until another tab is found.
+     * If no tab is found, returns an empty jQuery object.
+     * @param $tab
+     * @returns {jQuery}
+     * @note Maximum iterations is 2 * {number of tabs}
+     * @private
+     */
+    ali.TabControl.prototype._previousTab = function ($tab) {
+        var $prev = $tab.prev();
+        var count = this.$tabs.length * 2;
+        while ($prev.length > 0 && !$prev.is(TABS) && count-- !== 0) {
+            $prev = $prev.prev();
+        }
+        return $prev;
+    };
 
-	/**
-	 * Gets the last tab in the list.
-	 * @returns {jQuery}
-	 */
-	ali.TabControl.prototype.getLastTab = function () {
-		return this.$tabs.last();
-	};
+    /**
+     * Returns the previous tab in the accordion or the last tab if no previous tab can be found.
+     * @param $tab
+     * @returns {jQuery}
+     */
+    ali.TabControl.prototype.getPreviousTab = function ($tab) {
+        var $prev = this._previousTab($tab);
+        if ($prev.length === 0) {
+            return this.getLastTab();
+        } else {
+            return $prev;
+        }
+    };
 
-	/**
-	 * Keyboard event handler for when keyboard focus is in a panel.
-	 * @private
-	 */
-	ali.TabControl.prototype.panel_onKeyDown = function ( e ) {
-		if ( (e.ctrlKey || e.metaKey) && e.currentTarget ) {
-			var $tab;
-			var $panel = $( e.currentTarget );
-			switch ( e.which ) {
-				case 38: // UP
-					e.preventDefault();
-					e.stopPropagation();
-					this.getTabFromPanel( $panel ).focus();
-					break;
-				case 33: // PAGE UP
-					e.preventDefault();
-					e.stopPropagation();
-					$tab = this.getFirstTab();
-					if ( $tab.aria( 'expanded' ) === 'false' ) {
-						this.show( $tab );
-					}
-					$tab.focus();
-					break;
-				case 40: //  DOWN
-					e.preventDefault();
-					e.stopPropagation();
-					$tab = this.getLastTab();
-					if ( $tab.aria( 'expanded' ) === 'false' ) {
-						this.show( $tab );
-					}
-					$tab.focus();
-					break;
-			}
-		}
-	};
 
-	/**
-	 * Tab click event
-	 * @private
-	 */
-	ali.TabControl.prototype.tab_onClick = function ( e ) {
-		var $target = $( e.target );
-		if ( $target.aria( 'selected' ) !== 'true' ) {
-			this.hideAll();
-			this.show( $target );
-		}
-	};
+    /**
+     * Gets the first tab in the list.
+     * @returns {jQuery}
+     */
+    ali.TabControl.prototype.getFirstTab = function () {
+        return this.$tabs.first();
+    };
 
-	/**
-	 * Keyboard event handler for when keyboard focus in on the tabs.
-	 * @private
-	 */
-	ali.TabControl.prototype.tab_onKeyDown = function ( e ) {
-		switch ( e.which ) {
-			case 13: // ENTER
-			case 32: // SPACE
-				e.preventDefault();
-				e.stopPropagation();
-				this.tab_onClick( e );
-				break;
-			case 37: // LEFT
-			case 38: // UP
-				e.preventDefault();
-				e.stopPropagation();
-				this.show( this.getPreviousTab( $( e.currentTarget ) ) );
-				break;
-			case 39: // RIGHT
-			case 40: // DOWN
-				e.preventDefault();
-				e.stopPropagation();
-				this.show( this.getNextTab( $( e.currentTarget ) ) );
-				break;
-			case 35: // END
-				e.preventDefault();
-				e.stopPropagation();
-				this.show( this.getLastTab() );
-				break;
-			case 36: // HOME
-				e.preventDefault();
-				e.stopPropagation();
-				this.show( this.getFirstTab() );
-				break;
-		}
-	};
+    /**
+     * Gets the last tab in the list.
+     * @returns {jQuery}
+     */
+    ali.TabControl.prototype.getLastTab = function () {
+        return this.$tabs.last();
+    };
 
-	/**
-	 * Window resize handler.
-	 * @param e
-	 */
-	ali.TabControl.prototype.onResize = function ( e ) {
-		this._requestResize();
-	};
+    /**
+     * Keyboard event handler for when keyboard focus is in a panel.
+     * @private
+     */
+    ali.TabControl.prototype.panel_onKeyDown = function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.currentTarget) {
+            var $tab;
+            var $panel = $(e.currentTarget);
+            switch (e.which) {
+                case 38: // UP
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.getTabFromPanel($panel).focus();
+                    break;
+                case 33: // PAGE UP
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $tab = this.getFirstTab();
+                    if ($tab.aria('expanded') === 'false') {
+                        this.show($tab);
+                    }
+                    $tab.focus();
+                    break;
+                case 40: //  DOWN
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $tab = this.getLastTab();
+                    if ($tab.aria('expanded') === 'false') {
+                        this.show($tab);
+                    }
+                    $tab.focus();
+                    break;
+            }
+        }
+    };
 
-	/**
-	 * Requests a resize event if the current control is not currently performing a resize event.
-	 * Events are handled before the next paint and debounced using requestAnimationFrame
-	 * @private
-	 */
-	ali.TabControl.prototype._requestResize = function () {
-		if ( ! this._resizing ) {
-			this._resizing = true;
-			this.__activeTab = $( SELECTED_TAB, this.$el );
-			requestAnimationFrame( this.updateVI.bind( this ) );
-		}
-	};
+    /**
+     * Tab click event
+     * @private
+     */
+    ali.TabControl.prototype.tab_onClick = function (e) {
+        var $target = $(e.target);
+        if ($target.aria('selected') !== 'true') {
+            this.hideAll();
+            this.show($target);
+        }
+    };
 
-	/**
-	 * Resizes the visual indicator (vi) for the active tab.
-	 * @param $tab {number|jQuery}
-	 */
-	ali.TabControl.prototype.updateVI = function ( $tab ) {
-		// if the passed parameter is a number, this method is being called by
-		// a rAF, so set the $tab variable and reset the resizing flag.
-		if ( $.type( $tab ) === 'number' ) {
-			this._resizing = false;
-			$tab = this.__activeTab;
-		}
-		var pos = $tab.position();
-		var w = $tab.outerWidth();
-		this.$vi.css( { width : w + 'px', left : pos.left + 'px' } );
-	};
+    /**
+     * Keyboard event handler for when keyboard focus in on the tabs.
+     * @private
+     */
+    ali.TabControl.prototype.tab_onKeyDown = function (e) {
+        switch (e.which) {
+            case 13: // ENTER
+            case 32: // SPACE
+                e.preventDefault();
+                e.stopPropagation();
+                this.tab_onClick(e);
+                break;
+            case 37: // LEFT
+            case 38: // UP
+                e.preventDefault();
+                e.stopPropagation();
+                this.show(this.getPreviousTab($(e.currentTarget)));
+                break;
+            case 39: // RIGHT
+            case 40: // DOWN
+                e.preventDefault();
+                e.stopPropagation();
+                this.show(this.getNextTab($(e.currentTarget)));
+                break;
+            case 35: // END
+                e.preventDefault();
+                e.stopPropagation();
+                this.show(this.getLastTab());
+                break;
+            case 36: // HOME
+                e.preventDefault();
+                e.stopPropagation();
+                this.show(this.getFirstTab());
+                break;
+        }
+    };
 
-	/*
-	 * jQuery Plugin
-	 */
-	function Plugin() {
-		return this.each( function () {
-			new ali.TabControl( this );
-		} );
-	}
+    /**
+     * Window resize handler.
+     * @param e
+     */
+    ali.TabControl.prototype.onResize = function (e) {
+        this._requestResize();
+    };
 
-	var old = $.fn.tabcontrol;
-	$.fn.tabcontrol = Plugin;
-	$.fn.tabcontrol.Constructor = ali.TabControl;
+    /**
+     * Requests a resize event if the current control is not currently performing a resize event.
+     * Events are handled before the next paint and debounced using requestAnimationFrame
+     * @private
+     */
+    ali.TabControl.prototype._requestResize = function () {
+        if (!this._resizing) {
+            this._resizing = true;
+            this.__activeTab = $(SELECTED_TAB, this.$el);
+            requestAnimationFrame(this.updateVI.bind(this));
+        }
+    };
 
-	$.fn.tabcontrol.noConflict = function () {
-		$.fn.tabcontrol = old;
-		return this;
-	};
+    /**
+     * Resizes the visual indicator (vi) for the active tab.
+     * @param $tab {number|jQuery}
+     */
+    ali.TabControl.prototype.updateVI = function ($tab) {
+        // if the passed parameter is a number, this method is being called by
+        // a rAF, so set the $tab variable and reset the resizing flag.
+        if ($.type($tab) === 'number') {
+            this._resizing = false;
+            $tab = this.__activeTab;
+        }
+        var pos = $tab.position();
+        var w = $tab.outerWidth();
+        this.$vi.css({ width : w + 'px', left : pos.left + 'px' });
+    };
 
-})( jQuery );
+    /*
+     * jQuery Plugin
+     */
+    function Plugin() {
+        return this.each(function () {
+            new ali.TabControl(this);
+        });
+    }
+
+    var old = $.fn.tabcontrol;
+    $.fn.tabcontrol = Plugin;
+    $.fn.tabcontrol.Constructor = ali.TabControl;
+
+    $.fn.tabcontrol.noConflict = function () {
+        $.fn.tabcontrol = old;
+        return this;
+    };
+
+})(jQuery);
 ;
 /*
  * --------------------------------------------------------------------------
@@ -1817,306 +1834,310 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-(function ( $ ) {
-	"use strict";
+(function ($) {
+    "use strict";
 
-	// Make the global object available and abort if this file is used without it.
-	var ali = window.ali;
-	if ( $.type( ali ) !== 'object' ) {
-		return;
-	}
+    // Make the global object available and abort if this file is used without it.
+    var ali = window.ali;
+    if ($.type(ali) !== 'object') {
+        return;
+    }
 
-	var DESCRIPTION = 'Sequenced elements interaction.';
-	var TYPE = ali.TYPE.sequencing;
+    var DESCRIPTION = 'Sequenced elements interaction.';
+    var TYPE = ali.TYPE.sequencing;
 
-	var TRANSITION_DURATION = 400;
+    var TRANSITION_DURATION = 400;
 
-	/**
-	 * Ordered Items interaction class
-	 * @param element DOMElement
-	 * @constructor
-	 */
-	ali.OrderedItems = function ( element ) {
-		ali.Interaction.call( this, element, TYPE, DESCRIPTION );
-		this.init();
-	};
+    /**
+     * Ordered Items interaction class
+     * @param element DOMElement
+     * @constructor
+     */
+    ali.OrderedItems = function (element) {
+        ali.Interaction.call(this, element, TYPE, DESCRIPTION);
+        this.init();
+    };
 
-	// Inherits from ali.Interaction
-	ali.OrderedItems.prototype = Object.create( ali.Interaction.prototype );
-	ali.OrderedItems.prototype.constructor = ali.OrderedItems;
+    // Inherits from ali.Interaction
+    ali.OrderedItems.prototype = Object.create(ali.Interaction.prototype);
+    ali.OrderedItems.prototype.constructor = ali.OrderedItems;
 
 
-	/**
-	 * Collection of items ( usually 'li' elements ).
-	 * @type {undefined}
-	 */
-	ali.OrderedItems.prototype.$items = undefined;
+    /**
+     * Collection of items ( usually 'li' elements ).
+     * @type {undefined}
+     */
+    ali.OrderedItems.prototype.$items = undefined;
 
-	/**
-	 * Collection of items ( usually 'select' elements ).
-	 * @type {undefined}
-	 */
-	ali.OrderedItems.prototype.$selects = undefined;
+    /**
+     * Collection of items ( usually 'select' elements ).
+     * @type {undefined}
+     */
+    ali.OrderedItems.prototype.$selects = undefined;
 
-	/**
-	 * Flag used in rAF to debounce
-	 * @type {boolean}
-	 * @private
-	 */
-	ali.OrderedItems.prototype._resizing = false;
+    /**
+     * Flag used in rAF to debounce
+     * @type {boolean}
+     * @private
+     */
+    ali.OrderedItems.prototype._resizing = false;
 
-	/**
-	 * Container for the currently moving item
-	 * Required as some rAF uses lose their locals
-	 * @type {jQuery}
-	 */
-	ali.OrderedItems.prototype.$currentItem = undefined;
+    /**
+     * Container for the currently moving item
+     * Required as some rAF uses lose their locals
+     * @type {jQuery}
+     */
+    ali.OrderedItems.prototype.$currentItem = undefined;
 
-	/**
-	 * Initializes the Interaction. Called from constructor.
-	 */
-	ali.OrderedItems.prototype.init = function () {
-		this.$items = $( 'li', this.el );
-		this.createElements();
+    /**
+     * Initializes the Interaction. Called from constructor.
+     */
+    ali.OrderedItems.prototype.init = function () {
+        this.$items = $('li', this.el);
+        this.createElements();
 
-		this.$selects = $( 'select', this.el );
-		this.$el.off( 'submit.ali' ).on( 'submit.ali', this.form_onSubmit.bind( this ) );
-		$( window ).on( 'resize', this.window_onResize.bind( this ) );
-		this.updateHeight();
-		this.updateClasses();
-	};
+        this.$selects = $('select', this.el);
+        this.$el.off('submit.ali').on('submit.ali', this.form_onSubmit.bind(this));
+        $(window).on('resize', this.window_onResize.bind(this));
+        this.updateHeight();
+        this.updateClasses();
+    };
 
-	/**
-	 * Adds the select dropdown and icon base HTML for each list item.
-	 */
-	ali.OrderedItems.prototype.createElements = function () {
-		var num = this.$items.length;
-		// only create the select drop-down once
-		var $sel = $( '<select></select>' );
-		for ( var i = 1; i <= num; i ++ ) {
-			$sel.append( '<option>' + i + '</option>' );
-		}
+    /**
+     * Adds the select dropdown and icon base HTML for each list item.
+     */
+    ali.OrderedItems.prototype.createElements = function () {
+        var num = this.$items.length;
+        // only create the select drop-down once
+        var $sel = $('<select></select>');
+        for (var i = 1; i <= num; i++) {
+            $sel.append('<option>' + i + '</option>');
+        }
 
-		this.$items.each( function ( index, el ) {
-			var $el = $( el );
-			var id = "el-" + index;
+        this.$items.each(function (index, el) {
+            var $el = $(el);
+            var id = "el-" + index;
 
-			// clone the drop-down and attach the generated ID and index
-			var $selInstance = $sel.clone();
-			$selInstance.attr( 'id', id );
-			$selInstance[ 0 ].selectedIndex = index;
+            // clone the drop-down and attach the generated ID and index
+            var $selInstance = $sel.clone();
+            $selInstance.attr('id', id);
+            $selInstance[0].selectedIndex = index;
 
-			// Add the select and icon to the current element
-			var $sl = $( '<span class="item-select"></span>' ).append( $selInstance );
-			$el.append( $sl ).prepend( '<i>' + (index + 1) + '</i>' );
+            // Add the select and icon to the current element
+            var $sl = $('<span class="item-select"></span>').append($selInstance);
+            $el.append($sl).prepend('<i>' + (index + 1) + '</i>');
 
-			// link user-created label to the code-created select drop-down
-			$( 'label', $el ).attr( 'for', id );
-		} );
-	};
+            // link user-created label to the code-created select drop-down
+            $('label', $el).attr('for', id);
+        });
+    };
 
-	/**
-	 * Event Handler for the resize event. Handler de-bounces the events
-	 * using rAF and a _resizing flag.
-	 * @see updateHeight
-	 */
-	ali.OrderedItems.prototype.window_onResize = function () {
-		if ( ! this._resizing ) {
-			this._resizing = true;
-			window.requestAnimationFrame( this.updateHeight.bind( this ) );
-		}
-	};
+    /**
+     * Event Handler for the resize event. Handler de-bounces the events
+     * using rAF and a _resizing flag.
+     * @see updateHeight
+     */
+    ali.OrderedItems.prototype.window_onResize = function () {
+        if (!this._resizing) {
+            this._resizing = true;
+            window.requestAnimationFrame(this.updateHeight.bind(this));
+        }
+    };
 
-	/**
-	 *  Equalizes the height of all items and updates the height of the list element itself
-	 *  Only called by rAF and on init
-	 */
-	ali.OrderedItems.prototype.updateHeight = function () {
-		// Equalize the elements height based on the height of the label with padding
-		var h = 0;
-		this.$items.each( function ( i, el ) {
-			h = Math.max( h, $( 'label', el ).outerHeight() );
-		} );
-		this.$items.height( h );
+    /**
+     *  Equalizes the height of all items and updates the height of the list element itself
+     *  Only called by rAF and on init
+     */
+    ali.OrderedItems.prototype.updateHeight = function () {
+        // Equalize the elements height based on the height of the label with padding
+        var h = 0;
+        this.$items.each(function (i, el) {
+            h = Math.max(h, $('label', el).outerHeight());
+        });
+        this.$items.height(h);
 
-		// Using the first item to find the outerHeight "withMargin"
-		// now that they've been equalized
-		var oH = $( this.$items[ 0 ] ).outerHeight( true );
-		$( '.list-elements', this.$el ).height( ( oH * this.$items.length) );
+        // Using the first item to find the outerHeight "withMargin"
+        // now that they've been equalized
+        var oH = $(this.$items[0]).outerHeight(true);
+        $('.list-elements', this.$el).height(( oH * this.$items.length));
 
-		// reset the flag
-		this._resizing = false;
-	};
+        // reset the flag
+        this._resizing = false;
+    };
 
-	/**
-	 * Adds the focus and change events to the select drop-downs
-	 */
-	ali.OrderedItems.prototype.addSelectEvents = function () {
-		this.$selects
-		    .off( 'change.ali' ).on( 'change.ali', this.select_onChange.bind( this ) )
-		    .off( 'focus.ali' ).on( 'focus.ali', this.select_onFocus.bind( this ) );
-	};
+    /**
+     * Adds the focus and change events to the select drop-downs
+     */
+    ali.OrderedItems.prototype.addSelectEvents = function () {
+        this.$selects
+            .off('change.ali').on('change.ali', this.select_onChange.bind(this))
+            .off('focus.ali').on('focus.ali', this.select_onFocus.bind(this));
+    };
 
-	/**
-	 * Removes the focus and change events from the select drop-downs so we can
-	 * manipulate them without generating too events
-	 */
-	ali.OrderedItems.prototype.removeSelectEvents = function () {
-		this.$selects.off( 'change.ali' ).off( 'focus.ali' );
-	};
+    /**
+     * Removes the focus and change events from the select drop-downs so we can
+     * manipulate them without generating too events
+     */
+    ali.OrderedItems.prototype.removeSelectEvents = function () {
+        this.$selects.off('change.ali').off('focus.ali');
+    };
 
-	/**
-	 * Very simple event handler that assigns a data value to the
-	 * element containing the current value.
-	 * @param e {Event}
-	 */
-	ali.OrderedItems.prototype.select_onFocus = function ( e ) {
-		$( e.target ).attr( 'data-prev-value', e.target.selectedIndex );
-	};
+    /**
+     * Very simple event handler that assigns a data value to the
+     * element containing the current value.
+     * @param e {Event}
+     */
+    ali.OrderedItems.prototype.select_onFocus = function (e) {
+        $(e.target).attr('data-prev-value', e.target.selectedIndex);
+    };
 
-	/**
-	 * Event handler for the change event
-	 * @param e
-	 */
-	ali.OrderedItems.prototype.select_onChange = function ( e ) {
-		// remove the events on the drop-downs so we don't create
-		// pointless events while manipulating the selects
-		this.removeSelectEvents();
-		this.$currentItem = $( e.target );
+    /**
+     * Event handler for the change event
+     * @param e
+     */
+    ali.OrderedItems.prototype.select_onChange = function (e) {
+        // remove the events on the drop-downs so we don't create
+        // pointless events while manipulating the selects
+        this.removeSelectEvents();
+        this.$currentItem = $(e.target);
 
-		// add the 'moving' class to the current item
-		// in the base style this adds the shadow and a z-index
-		$( this.$currentItem.parents( 'li' ) )
-			.addClass( 'moving' )
-			// Remove the class on transition end
-			// Much love to the Bootstrap crew for the
-			// emulation pattern
-			.one( ali.transitionEnd, function ( e ) {
-				$( e.target ).removeClass( 'moving' );
-			} )
-			.emulateTransitionEnd( TRANSITION_DURATION );
+        // add the 'moving' class to the current item
+        // in the base style this adds the shadow and a z-index
+        $(this.$currentItem.parents('li'))
+            .addClass('moving')
+            // Remove the class on transition end
+            // Much love to the Bootstrap crew for the
+            // emulation pattern
+            .one(ali.transitionEnd, function (e) {
+                $(e.target).removeClass('moving');
+            })
+            .emulateTransitionEnd(TRANSITION_DURATION);
 
-		this.itemSelected( this.$currentItem );
-		// reordering is a little time-consuming so defer it
-		// until before the next paint
-		window.requestAnimationFrame( this.reorderValues.bind( this ) );
-	};
+        this.itemSelected(this.$currentItem);
+        // reordering is a little time-consuming so defer it
+        // until before the next paint
+        window.requestAnimationFrame(this.reorderValues.bind(this));
+    };
 
-	/**
-	 *
-	 * @param e
-	 */
-	ali.OrderedItems.prototype.form_onSubmit = function ( e ) {
-		e.preventDefault();
-		e.stopPropagation();
+    /**
+     *
+     * @param e
+     */
+    ali.OrderedItems.prototype.form_onSubmit = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
 
-		var correct = true;
-		var selectedOrder = [];
-		var correctOrder = [];
+        var correct = true;
+        var selectedOrder = [];
+        var correctOrder = [];
 
-		this.$items.each( function () {
-			var $el = $( this );
-			var $sel = $( 'select', $el );
-			// get the correct and selected index
-			var cIndex = parseInt( $el.attr( 'data-correct' ), 10 );
-			var sIndex = parseInt( $sel[ 0 ].selectedIndex + 1 );
+        this.$items.each(function () {
+            var $el = $(this);
+            var $sel = $('select', $el);
+            // get the correct and selected index
+            var cIndex = parseInt($el.attr('data-correct'), 10);
+            var sIndex = parseInt($sel[0].selectedIndex + 1);
 
-			//create SCORM/xAPI arrays for correct & selected
-			var label = $( 'label', $el ).text();
-			selectedOrder[ sIndex ] = label;
-			correctOrder[ cIndex ] = label;
+            //create SCORM/xAPI arrays for correct & selected
+            var label = $('label', $el).text();
+            selectedOrder[sIndex] = label;
+            correctOrder[cIndex] = label;
 
-			// If one step is out of order, this was answered incorrectly.
-			if ( cIndex !== sIndex ) {
-				correct = false;
-			}
-		} );
+            // If one step is out of order, this was answered incorrectly.
+            if (cIndex !== sIndex) {
+                correct = false;
+            }
+        });
 
-		this.setCorrectResponses( correctOrder );
-		this.setLearnerResponses( selectedOrder );
-		this.complete( correct ? ali.STATUS.correct : ali.STATUS.incorrect );
-	};
+        this.setCorrectResponses(correctOrder);
+        this.setLearnerResponses(selectedOrder);
+        this.complete(correct ? ali.STATUS.correct : ali.STATUS.incorrect);
+    };
 
-	/**
-	 * Re-orders the elements based off of the current select element.
-	 *
-	 * There has to be a less complex way of handling this, But I'm tired
-	 * and have not had enough caffeine.
-	 */
-	ali.OrderedItems.prototype.reorderValues = function () {
-		var newValue = this.$currentItem[ 0 ].selectedIndex;
-		var previousValue = this.previousValue( this.$currentItem );
 
-		// Remove this item from the order
-		this.$selects.each( (function ( i, el ) {
-			var $el = $( el );
-			if ( ! $el.is( this.$currentItem ) ) {
-				var localVal = $el[ 0 ].selectedIndex;
-				if ( localVal >= previousValue ) {
-					$el[ 0 ].selectedIndex = localVal - 1;
-				}
-			}
-		}).bind( this ) );
+    ali.OrderedItems.prototype.doFeedback = function () {
+        //noop
+    };
+    /**
+     * Re-orders the elements based off of the current select element.
+     *
+     * There has to be a less complex way of handling this, But I'm tired
+     * and have not had enough caffeine.
+     */
+    ali.OrderedItems.prototype.reorderValues = function () {
+        var newValue = this.$currentItem[0].selectedIndex;
+        var previousValue = this.previousValue(this.$currentItem);
 
-		// Insert the changed element at it's new location,
-		// moving the others up.
-		this.$selects.each( (function ( i, el ) {
-			var $el = $( el );
-			if ( ! $el.is( this.$currentItem ) ) {
-				var localVal = $el[ 0 ].selectedIndex;
-				if ( localVal >= newValue ) {
-					$el[ 0 ].selectedIndex = localVal + 1;
-				}
-			}
-		}).bind( this ) );
-		// Altering the UI should wait until the next paint
-		window.requestAnimationFrame( this.updateClasses.bind( this ) );
-	};
+        // Remove this item from the order
+        this.$selects.each((function (i, el) {
+            var $el = $(el);
+            if (!$el.is(this.$currentItem)) {
+                var localVal = $el[0].selectedIndex;
+                if (localVal >= previousValue) {
+                    $el[0].selectedIndex = localVal - 1;
+                }
+            }
+        }).bind(this));
 
-	/**
-	 * Adds classes to the list elements, causing the elements to animate into
-	 * their new position.
-	 */
-	ali.OrderedItems.prototype.updateClasses = function () {
-		this.$items.each( function ( i, el ) {
-			var $el = $( el );
-			var $select = $( 'select', $el );
-			$el.removeClass( function ( index, css ) {
-				return (css.match( /(^|\s)item-\S+/g ) || []).join( ' ' );
-			} ).addClass( 'item-' + $select.val() );
-			$( 'i', $el ).text( $select.val() );
-		} );
+        // Insert the changed element at it's new location,
+        // moving the others up.
+        this.$selects.each((function (i, el) {
+            var $el = $(el);
+            if (!$el.is(this.$currentItem)) {
+                var localVal = $el[0].selectedIndex;
+                if (localVal >= newValue) {
+                    $el[0].selectedIndex = localVal + 1;
+                }
+            }
+        }).bind(this));
+        // Altering the UI should wait until the next paint
+        window.requestAnimationFrame(this.updateClasses.bind(this));
+    };
 
-		// add the events back
-		this.addSelectEvents();
+    /**
+     * Adds classes to the list elements, causing the elements to animate into
+     * their new position.
+     */
+    ali.OrderedItems.prototype.updateClasses = function () {
+        this.$items.each(function (i, el) {
+            var $el = $(el);
+            var $select = $('select', $el);
+            $el.removeClass(function (index, css) {
+                return (css.match(/(^|\s)item-\S+/g) || []).join(' ');
+            }).addClass('item-' + $select.val());
+            $('i', $el).text($select.val());
+        });
 
-		if ( this.$currentItem && this.$currentItem.length > 0 ) {
-			// trigger the focus event on the current item so that the
-			// current value is populated
-			this.$currentItem.trigger( 'focus' );
-		}
-	};
+        // add the events back
+        this.addSelectEvents();
 
-	ali.OrderedItems.prototype.previousValue = function ( $el ) {
-		return parseInt( $el.attr( 'data-prev-value' ), 10 );
-	};
+        if (this.$currentItem && this.$currentItem.length > 0) {
+            // trigger the focus event on the current item so that the
+            // current value is populated
+            this.$currentItem.trigger('focus');
+        }
+    };
 
-	/*
-	 * jQuery Plugin
-	 */
-	function Plugin() {
-		return this.each( function () {
-			new ali.OrderedItems( this );
-		} );
-	}
+    ali.OrderedItems.prototype.previousValue = function ($el) {
+        return parseInt($el.attr('data-prev-value'), 10);
+    };
 
-	var old = $.fn.ordereditems;
-	$.fn.ordereditems = Plugin;
-	$.fn.ordereditems.Constructor = ali.OrderedItems;
+    /*
+     * jQuery Plugin
+     */
+    function Plugin() {
+        return this.each(function () {
+            new ali.OrderedItems(this);
+        });
+    }
 
-	$.fn.ordereditems.noConflict = function () {
-		$.fn.ordereditems = old;
-		return this;
-	};
+    var old = $.fn.ordereditems;
+    $.fn.ordereditems = Plugin;
+    $.fn.ordereditems.Constructor = ali.OrderedItems;
+
+    $.fn.ordereditems.noConflict = function () {
+        $.fn.ordereditems = old;
+        return this;
+    };
 })
-( jQuery );
+(jQuery);
