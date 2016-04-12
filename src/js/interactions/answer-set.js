@@ -41,9 +41,6 @@
      * Initialization.
      */
     ali.AnswerSet.prototype.init = function () {
-        if (ali.Feedback.hasFeedback(this.$el)) {
-            ali.Feedback.initInteraction(this.$el);
-        }
         $(QUESTION, this.$el).each((function (i, el) {
             $(el).aria({
                            'live' : "assertive",
@@ -77,7 +74,6 @@
         this.setCorrectResponses([$(SELECT + ' option', $target).eq(parseInt($target.attr(CORRECT_ATTR), 10)).val()]);
         this.setLearnerResponses([$(SELECT, $target).val()]);
         this.itemComplete(is_correct ? ali.STATUS.correct : ali.STATUS.incorrect, $target);
-
         this.allQuestionsComplete();
     };
 
@@ -85,16 +81,10 @@
      * 
      */
     ali.AnswerSet.prototype.allQuestionsComplete = function () {
-        var num_questions = $(QUESTION).length;
-        var is_correct, result, className;
-
+        var num_questions = $(QUESTION).length, is_correct;
         if (num_questions === $(QUESTION + '[aria-disabled="true"]').length) {
             is_correct = num_questions === $(QUESTION + ' .correct').length;
-            result = is_correct ? ali.STATUS.correct : ali.STATUS.incorrect;
-            className = is_correct ? '.correct' : '.incorrect';
-            ali.Dialog.showDialog(this.$el, className);
-            ali.Feedback.showFeedback(this.$el, className);
-            this.complete(result);
+            this.complete(is_correct ? ali.STATUS.correct : ali.STATUS.incorrect);
         }
     };
 

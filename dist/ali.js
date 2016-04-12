@@ -253,133 +253,133 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * --------------------------------------------------------------------------
  */
 
-(function ($) {
-    "use strict";
+(function ( $ ) {
+	"use strict";
 
-    /**
-     * Template local
-     */
-    var _t = window.htmlTemplates;
+	/**
+	 * Template local
+	 */
+	var _t = window.htmlTemplates;
 
 
-    Mustache.parse(_t.feedback);
-    Mustache.parse(_t.feedbackContainer);
+	Mustache.parse( _t.feedback );
+	Mustache.parse( _t.feedbackContainer );
 
-    var FEEDBACK_CONTENT = '.feedback-content';
+	var FEEDBACK_CONTENT = '.feedback-content';
 
-    /**
-     * Reusable Dialog object
-     * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
-     */
-    window.ali.Feedback = {
-        _count : 0,
+	/**
+	 * Reusable Dialog object
+	 * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
+	 */
+	window.ali.Feedback = {
+		_count : 0,
 
-        /**
-         * Initializes an interaction,  adding an element with the role "status" and
-         * aria-live so that it is read for assistive technology.
-         * @param $control
-         */
-        initInteraction : function ($control) {
-            if ($control.length > 0) {
-                $control.append(_t.feedbackContainer);
-            }
-        },
+		/**
+		 * Initializes an interaction,  adding an element with the role "status" and
+		 * aria-live so that it is read for assistive technology.
+		 * @param $control
+		 */
+		initInteraction : function ( $control ) {
+			if ( $control.length > 0 ) {
+				$control.append( _t.feedbackContainer );
+			}
+		},
 
-        /**
-         * Returns a jQuery set of any feedback content elements.
-         * @param $el {jQuery} An interaction
-         * @returns {jQuery} a set of jQuery feedback elements.
-         */
-        getFeedbackElements : function ($el) {
-            return $(FEEDBACK_CONTENT, $el);
-        },
+		/**
+		 * Returns a jQuery set of any feedback content elements.
+		 * @param $el {jQuery} An interaction
+		 * @returns {jQuery} a set of jQuery feedback elements.
+		 */
+		getFeedbackElements : function ( $el ) {
+			return $( FEEDBACK_CONTENT, $el );
+		},
 
-        /**
-         * Returns true if the interaction contains an feedback element
-         * @param $el
-         * @returns {boolean}
-         */
-        hasFeedback : function ($el) {
-            return this.getFeedbackElements($el).length > 0;
-        },
+		/**
+		 * Returns true if the interaction contains an feedback element
+		 * @param $el
+		 * @returns {boolean}
+		 */
+		hasFeedback : function ( $el ) {
+			return this.getFeedbackElements( $el ).length > 0;
+		},
 
-        /**
-         * Returns a feedback content element for this interaction with the given className, if available.
-         * @param $el an interaction
-         * @param className a className
-         * @returns {jQuery}
-         */
-        getFeedbackContent : function ($el, className) {
-            var $content = this.getFeedbackElements($el);
-            if (className === undefined || $content.length === 1) {
-                return $($content[0]);
-            } else {
-                for( var i = 0; i < $content.length; i++){
-                    var $fc = $( $content.get(i));
-                    if ($fc.is(className)) {
-                        return $fc;
-                    }
-                }
-            }
-        },
+		/**
+		 * Returns a feedback content element for this interaction with the given className, if available.
+		 * @param $el an interaction
+		 * @param className a className
+		 * @returns {jQuery}
+		 */
+		getFeedbackContent : function ( $el, className ) {
+			var $content = this.getFeedbackElements( $el );
+			if ( className === undefined || $content.length === 1 ) {
+				return $( $content[ 0 ] );
+			} else {
+				for ( var i = 0; i < $content.length; i ++ ) {
+					var $fc = $( $content.get( i ) );
+					if ( $fc.is( "." + className ) ) {
+						return $fc;
+					}
+				}
+			}
+		},
 
-        /**
-         * Finds and displays the appropriate feedback
-         * @param $el
-         * @param className
-         * @returns {boolean}
-         */
-        showFeedback : function ($el, className) {
-            if (this.hasFeedback($el)) {
-                var $content = this.getFeedbackContent($el, className);
+		/**
+		 * Finds and displays the appropriate feedback
+		 * @param $el
+		 * @param className
+		 * @returns {boolean}
+		 */
+		showFeedback : function ( $el, className ) {
+			if ( this.hasFeedback( $el ) ) {
+				var $content = this.getFeedbackContent( $el, className );
 
-                if ($content.length > 0) {
-                    this.show($content, $el);
-                    return true;
-                }
-            }
-            return false;
-        },
+				if ( $content.length > 0 ) {
+					this.show( $content, $el );
+					return true;
+				}
+			}
+			return false;
+		},
 
-        /**
-         * Displays the feedback
-         * @param $content
-         * @param $el
-         */
-        show : function ($content, $el) {
-            var $instance = $(Mustache.render(_t.feedback, { count : ++this._count, content : $content.html() }));
-            var cl = $content[0].classList;
-            for (var i = 0; i < cl.length; i++) {
-                if (cl.item(i).indexOf('feedback') < 0) {
-                    $instance.addClass(cl.item(i));
-                }
-            }
-            $('[role="status"]', $el).append($instance);
-            this.scrollToAndFocus($instance);
-        },
+		/**
+		 * Displays the feedback
+		 * @param $content
+		 * @param $el
+		 */
+		show : function ( $content, $el ) {
+			var $instance = $( Mustache.render( _t.feedback, { count : ++ this._count, content : $content.html() } ) );
+			var cl = $content[ 0 ].classList;
+			for ( var i = 0; i < cl.length; i ++ ) {
+				if ( cl.item( i ).indexOf( 'feedback' ) < 0 ) {
+					$instance.addClass( cl.item( i ) );
+				}
+			}
+			$( '[role="status"]', $el ).append( $instance );
+			this.scrollToAndFocus( $instance );
+		},
 
-        /**
-         * Animates scrolling the browser window to the feedback element and sets the
-         * focus on the element once in position.
-         * @param $el
-         */
-        scrollToAndFocus : function ($el) {
-            $('html,body').animate(
-                {
-                    scrollTop : $el.offset().top
-                },
-                {
-                    duration : 1000,
-                    easing : '',
-                    complete : function () {
-                        $el.trigger('focus');
-                    }
-                }
-            );
-        }
-    };
+		/**
+		 * Animates scrolling the browser window to the feedback element and sets the
+		 * focus on the element once in position.
+		 * @param $el
+		 */
+		scrollToAndFocus : function ( $el ) {
+			$( 'html,body' ).animate(
+				{
+					scrollTop : $el.offset().top
+				},
+				{
+					duration : 1000,
+					easing   : '',
+					complete : function () {
+						$el.trigger( 'focus' );
+					}
+				}
+			);
+		}
+	};
 
-})(jQuery);
+})( jQuery );
 ;
 /*
  * --------------------------------------------------------------------------
@@ -387,185 +387,210 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-(function ($) {
-    "use strict";
+(function ( $ ) {
+	"use strict";
 
-    // Make the global object available and abort if this file is used without it.
-    var ali = window.ali;
-    if ($.type(ali) !== 'object') {
-        return;
-    }
+	// Make the global object available and abort if this file is used without it.
+	var ali = window.ali;
+	if ( $.type( ali ) !== 'object' ) {
+		return;
+	}
 
-    var NOTICE_DATA = "data-ali-notice-" ;
+	var NOTICE_DATA = "data-ali-notice-";
 
 
-    /**
-     *  The parent class for all interactions.
-     * @param element : DOMElement
-     * @param type : string
-     * @param description : string
-     * @constructor
-     */
-    ali.Interaction = function (element, type, description) {
-        this.$el = $(element);
-        if ('string' === $.type(type)) {
-            this.data.type = type;
-        }
-        if ('string' === $.type(description)) {
-            this.data.description = description;
-        }
-    };
+	/**
+	 *  The parent class for all interactions.
+	 * @param element : DOMElement
+	 * @param type : string
+	 * @param description : string
+	 * @constructor
+	 */
+	ali.Interaction = function ( element, type, description ) {
+		this.$el = $( element );
+		if ( 'string' === $.type( type ) ) {
+			this.data.type = type;
+		}
+		if ( 'string' === $.type( description ) ) {
+			this.data.description = description;
+		}
+		if ( ali.Feedback.hasFeedback( this.$el ) ) {
+			ali.Feedback.initInteraction( this.$el );
+		}
+	};
 
-    /**
-     * Event data sent with each event.
-     * @type {{id: string, start: number, type: string, correct_responses: Array, learner_response: Array, result:
+	/**
+	 * Event data sent with each event.
+	 * @type {{id: string, start: number, type: string, correct_responses: Array, learner_response: Array, result:
      *     string, latency: number, description: string}}
-     */
-    ali.Interaction.prototype.data = {
-        'id' : '',
-        'start' : 0,
-        'type' : ali.TYPE.other,
-        'correct_responses' : [],
-        'learner_response' : [],
-        'result' : ali.STATUS.incomplete,
-        'latency' : 0,
-        'description' : 'Ali Interaction'
-    };
+	 */
+	ali.Interaction.prototype.data = {
+		'id'                : '',
+		'start'             : 0,
+		'type'              : ali.TYPE.other,
+		'correct_responses' : [],
+		'learner_response'  : [],
+		'result'            : ali.STATUS.incomplete,
+		'latency'           : 0,
+		'description'       : 'Ali Interaction'
+	};
 
-    /**
-     * The timestamp of the completion of the last item. Used only for multi-part interactions.
-     * @type {number}
-     * @private
-     */
-    ali.Interaction.prototype.__last = 0;
+	/**
+	 * The timestamp of the completion of the last item. Used only for multi-part interactions.
+	 * @type {number}
+	 * @private
+	 */
+	ali.Interaction.prototype.__last = 0;
 
-    /**
-     * Reference to dialog instance. Should only ever hold one element.
-     * @type {jQuery|undefined}
-     */
-    ali.Interaction.prototype.$dialog = undefined;
+	/**
+	 * Reference to dialog instance. Should only ever hold one element.
+	 * @type {jQuery|undefined}
+	 */
+	ali.Interaction.prototype.$dialog = undefined;
 
-    /**
-     * Utility function that creates an ID using the the ID of the passed element or the text of the passed element.
-     * @param $el Element used to define the ID.
-     * @returns {string} Target ID for use with `aria-controls`
-     */
-    ali.Interaction.prototype.makeTargetID = function ($el) {
-        var str = $el.attr('id');
-        if (str === undefined) {
-            str = $el.text().replace(/[\W_]+/g, "").toLowerCase();
-            if (str.length > 10) {
-                str = str.substring(0, 10);
-            }
-        } else {
-            str += '-target';
-        }
-        return str;
-    };
+	/**
+	 * Utility function that creates an ID using the the ID of the passed element or the text of the passed element.
+	 * @param $el Element used to define the ID.
+	 * @returns {string} Target ID for use with `aria-controls`
+	 */
+	ali.Interaction.prototype.makeTargetID = function ( $el ) {
+		var str = $el.attr( 'id' );
+		if ( str === undefined ) {
+			str = $el.text().replace( /[\W_]+/g, "" ).toLowerCase();
+			if ( str.length > 10 ) {
+				str = str.substring( 0, 10 );
+			}
+		} else {
+			str += '-target';
+		}
+		return str;
+	};
 
-    ali.Interaction.prototype.truthy = function (string) {
-        return string === true || string === "true" || string === "t";
-    };
+	/**
+	 * Because javascript and the LMS I work with on occasion don't agree on what true means
+	 * Used sparingly...
+	 * @param string {string|boolean}
+	 * @returns {boolean}
+	 */
+	ali.Interaction.prototype.truthy = function ( string ) {
+		return string === true || string === "true" || string === "t";
+	};
 
-    /**
-     * Allows a method to be called later, just before the next UI paint.
-     * @param callback
-     */
-    ali.Interaction.prototype.defer = function (callback) {
-        var func = function () {
-            callback.apply(this);
-        };
-        requestAnimationFrame(func.bind(this));
-    };
+	/**
+	 * Allows a method to be called later, just before the next UI paint.
+	 * @param callback
+	 */
+	ali.Interaction.prototype.defer = function ( callback ) {
+		var func = function () {
+			callback.apply( this );
+		};
+		requestAnimationFrame( func.bind( this ) );
+	};
 
-    /**
-     * Allows interactions to set their learner responses for this interaction.
-     * @param responses : array An array of responses specific to the interaction
-     */
-    ali.Interaction.prototype.setLearnerResponses = function (responses) {
-        if ('array' === $.type(responses)) {
-            this.data.learner_response = responses;
-        }
-    };
+	/**
+	 * Allows interactions to set their learner responses for this interaction.
+	 * @param responses : array An array of responses specific to the interaction
+	 */
+	ali.Interaction.prototype.setLearnerResponses = function ( responses ) {
+		if ( 'array' === $.type( responses ) ) {
+			this.data.learner_response = responses;
+		}
+	};
 
-    /**
-     * Allows interactions to set their correct responses for this interaction.
-     * @param responses : {array} An array of responses specific to the interaction
-     */
-    ali.Interaction.prototype.setCorrectResponses = function (responses) {
-        if ('array' === $.type(responses)) {
-            this.data.correct_responses = responses;
-        }
-    };
+	/**
+	 * Allows interactions to set their correct responses for this interaction.
+	 * @param responses : {array} An array of responses specific to the interaction
+	 */
+	ali.Interaction.prototype.setCorrectResponses = function ( responses ) {
+		if ( 'array' === $.type( responses ) ) {
+			this.data.correct_responses = responses;
+		}
+	};
 
-    /**
-     * Complete event. Fired when all unique user actions have been performed for this interaction.
-     * This could be once all items have been viewed, or when the question or questions have been judged.
-     * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
-     * correct or incorrect, if appropriate.
-     */
-    ali.Interaction.prototype.complete = function (status) {
-        var e, d = new Date();
-        if ('undefined' === $.type(status) || '' === status.trim()) {
-            status = 'complete';
-        }
-        this.data.id = this.$el.attr('id');
-        this.data.result = status;
-        this.data.latency = d.getTime() - this.data.start;
-        e = new jQuery.Event('ali:complete');
-        this.$el.trigger(e, [this.data]);
-    };
+	/**
+	 * Complete event. Fired when all unique user actions have been performed for this interaction.
+	 * This could be once all items have been viewed, or when the question or questions have been judged.
+	 * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
+	 * correct or incorrect, if appropriate.
+	 */
+	ali.Interaction.prototype.complete = function ( status ) {
+		var e, d = new Date();
+		if ( 'undefined' === $.type( status ) || '' === status.trim() ) {
+			status = 'complete';
+		}
+		this.data.id = this.$el.attr( 'id' );
+		this.data.result = status;
+		this.data.latency = d.getTime() - this.data.start;
 
-    /**
-     * Event trigger method to indicate that an item has been selected.
-     * @param $item : jQuery object for the element selected.
-     */
-    ali.Interaction.prototype.itemSelected = function ($item) {
-        var clonedData = Object.assign({}, this.data);
-        clonedData.id = $item.attr('id');
-        var e = new jQuery.Event('ali:itemSelected');
-        this.$el.trigger(e, [clonedData, $item]);
-    };
 
-    /**
-     * Event trigger method to indicate that an item has been completed.
-     * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
-     * correct or incorrect, if appropriate.
-     * @param $item : jQuery object for the element selected.
-     */
-    ali.Interaction.prototype.itemComplete = function (status, $item) {
-        if ('undefined' === $.type(status) || '' === status.trim()) {
-            status = ali.STATUS.complete;
-        }
-        if ('undefined' === $.type($item) || 0 === $item.length) {
-            $item = this.$el;
-        }
+		if ( ! ali.Dialog.showDialog( this.$el, status ) && ! ali.Feedback.showFeedback( this.$el, status ) ) {
+			this.showNotice( status );
+		}
 
-        var clonedData = Object.assign({}, this.data);
-        clonedData.id = $item.attr('id');
-        var d = new Date();
-        var e = new jQuery.Event('ali:itemComplete');
-        clonedData.result = status;
-        clonedData.latency = d.getTime() - this.__last;
-        this.__last = d.getTime();
-        this.$el.trigger(e, [clonedData, $item]);
-    };
+		e = new jQuery.Event( 'ali:complete' );
+		this.$el.trigger( e, [ this.data ] );
 
-    ali.Interaction.prototype.showNotice = function (message, cls) {
-        var noticeAttr = NOTICE_DATA + cls;
-        var noticeText = this.$el.attr(noticeAttr);
-        if (undefined !== noticeText && '' !== noticeText.trim()) {
-            var $container = $('<div>')
-                .addClass('notice-container')
-                .aria({ 'live' : 'assertive' })
-                .appendTo(this.$el);
-            cls = 'notice ' + cls;
-            var $notice = $('<div>').aria('hidden', 'true').addClass(cls).html(message);
-            $container.append($notice);
-            setTimeout(function () { $notice.aria('hidden', 'false'); }, 100);
-        }
-    };
-})(jQuery);
+
+	};
+
+	/**
+	 * Event trigger method to indicate that an item has been selected.
+	 * @param $item : jQuery object for the element selected.
+	 */
+	ali.Interaction.prototype.itemSelected = function ( $item ) {
+		var clonedData = Object.assign( {}, this.data );
+		clonedData.id = $item.attr( 'id' );
+		var e = new jQuery.Event( 'ali:itemSelected' );
+		this.$el.trigger( e, [ clonedData, $item ] );
+	};
+
+	/**
+	 * Event trigger method to indicate that an item has been completed.
+	 * @param status : string From the ali.STATUS constant; Should indicate the status of the interaction, including
+	 * correct or incorrect, if appropriate.
+	 * @param $item : jQuery object for the element selected.
+	 */
+	ali.Interaction.prototype.itemComplete = function ( status, $item ) {
+		if ( 'undefined' === $.type( status ) || '' === status.trim() ) {
+			status = ali.STATUS.complete;
+		}
+		if ( 'undefined' === $.type( $item ) || 0 === $item.length ) {
+			$item = this.$el;
+		}
+
+		var clonedData = Object.assign( {}, this.data );
+		clonedData.id = $item.attr( 'id' );
+		var d = new Date();
+		var e = new jQuery.Event( 'ali:itemComplete' );
+		clonedData.result = status;
+		clonedData.latency = d.getTime() - this.__last;
+		this.__last = d.getTime();
+		this.$el.trigger( e, [ clonedData, $item ] );
+	};
+
+	/**
+	 *
+	 * @param message
+	 * @param cls
+	 */
+	ali.Interaction.prototype.showNotice = function ( status ) {
+		var noticeAttr = NOTICE_DATA + status;
+		var noticeText = this.$el.attr( noticeAttr );
+
+		if ( undefined !== noticeText && '' !== noticeText.trim() ) {
+			var $container = $( '<div>' )
+				.addClass( 'notice-container' )
+				.aria( { 'live' : 'assertive' } )
+				.appendTo( this.$el );
+			var cls = 'notice ' + status;
+			var $notice = $( '<div>' ).aria( 'hidden', 'true' ).addClass( cls ).html( noticeText );
+			$container.append( $notice );
+			setTimeout( function () {
+				$notice.aria( 'hidden', 'false' );
+			}, 100 );
+		}
+	};
+})( jQuery );
 ;
 /*
  * --------------------------------------------------------------------------
@@ -573,134 +598,134 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-(function ($) {
-    "use strict";
+(function ( $ ) {
+	"use strict";
 
-    var DIALOG_CONTENT = '.dialog-content';
+	var DIALOG_CONTENT = '.dialog-content';
 
-    /**
-     * Template local
-     */
-    var _t = window.htmlTemplates;
+	/**
+	 * Template local
+	 */
+	var _t = window.htmlTemplates;
 
-    /** 
-     * Reusable Dialog object
-     * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
-     */
-    window.ali.Dialog = {
+	/**
+	 * Reusable Dialog object
+	 * @type {{_instance: jQuery, show: ali.Dialog.show, hide: ali.Dialog.hide}}
+	 */
+	window.ali.Dialog = {
 
-        _instance : undefined,
+		_instance : undefined,
 
-        /**
-         * Returns a jQuery set of dialog content elements.
-         * @param $el
-         * @returns {jQuery}
-         */
-        getDialogElements : function ($el) {
-            return $(DIALOG_CONTENT, $el);
-        },
+		/**
+		 * Returns a jQuery set of dialog content elements.
+		 * @param $el
+		 * @returns {jQuery}
+		 */
+		getDialogElements : function ( $el ) {
+			return $( DIALOG_CONTENT, $el );
+		},
 
-        /**
-         * Returns true if the current interaction has dialog content.
-         * @param $el
-         * @returns {boolean}
-         */
-        hasDialog : function ($el) {
-            return this.getDialogElements($el).length > 0;
-        },
+		/**
+		 * Returns true if the current interaction has dialog content.
+		 * @param $el
+		 * @returns {boolean}
+		 */
+		hasDialog : function ( $el ) {
+			return this.getDialogElements( $el ).length > 0;
+		},
 
-        /**
-         * Returns the correct dialog content corresponding to the provided className.
-         * @param $el
-         * @param className
-         * @returns {*|HTMLElement}
-         */
-        getDialogContent : function ($el, className) {
-            var $dialogContent = this.getDialogElements($el);
-            if (className === undefined || $dialogContent.length === 1) {
-                return $($dialogContent[0]);
-            } else {
-                for( var i = 0; i < $dialogContent.length; i++){
-                    var $fc = $( $dialogContent.get(i));
-                    if ($fc.is(className)) {
-                        return $fc;
-                    }
-                }
-            }
-        },
+		/**
+		 * Returns the correct dialog content corresponding to the provided className.
+		 * @param $el
+		 * @param className
+		 * @returns {*|HTMLElement}
+		 */
+		getDialogContent : function ( $el, className ) {
+			var $dialogContent = this.getDialogElements( $el );
+			if ( className === undefined || $dialogContent.length === 1 ) {
+				return $( $dialogContent[ 0 ] );
+			} else {
+				for ( var i = 0; i < $dialogContent.length; i ++ ) {
+					var $fc = $( $dialogContent.get( i ) );
+					if ( $fc.is( className ) ) {
+						return $fc;
+					}
+				}
+			}
+		},
 
-        /**
-         * Opens a dialog if dialog content exists.
-         * @param $el
-         * @param className
-         * @returns {boolean}
-         */
-        showDialog : function ($el, className) {
-            if (this.hasDialog($el)) {
-                var $dialogContent = this.getDialogContent($el, className);
-                if ($dialogContent.length > 0) {
-                    this.show($dialogContent);
-                    return true;
-                }
-            }
-            return false ;
-        },
+		/**
+		 * Opens a dialog if dialog content exists.
+		 * @param $el
+		 * @param className
+		 * @returns {boolean}
+		 */
+		showDialog : function ( $el, className ) {
+			if ( this.hasDialog( $el ) ) {
+				var $dialogContent = this.getDialogContent( $el, "." + className );
+				if ( $dialogContent.length > 0 ) {
+					this.show( $dialogContent );
+					return true;
+				}
+			}
+			return false;
+		},
 
-        /**
-         * Displays a dialog window, moving the content contained in `$el` into the primary content of the dialog.
-         * This method will also copy any classes on `$el` over to the dialog itself.
-         * @param $el content for the dialog.
-         * @param title Accessible title of this dialog.
-         */
-        show : function ($el, title) {
-            if ('undefined' === $.type(_t.dialog)) {
-                Mustache.parse(_t.dialog);
-            }
-            this._instance = $(Mustache.render(_t.dialog, { label : title, content : $el.html() }));
-            var cl = $el[0].classList;
-            for (var i = 0; i < cl.length; i++) {
-                if (cl.item(i).indexOf('dialog') < 0) {
-                    this._instance.addClass(cl.item(i));
-                }
-            }
-            $('body').append(this._instance).addClass('dialog-open');
-            $(document).off('focusin.ali').on('focusin.ali', this._handleFocus.bind(this));
-            $('.dialog-window-actions-close', this._instance).off('click.ali').on('click.ali', this.hide.bind(this));
-            this._instance.trigger('focus');
-        },
+		/**
+		 * Displays a dialog window, moving the content contained in `$el` into the primary content of the dialog.
+		 * This method will also copy any classes on `$el` over to the dialog itself.
+		 * @param $el content for the dialog.
+		 * @param title Accessible title of this dialog.
+		 */
+		show : function ( $el, title ) {
+			if ( 'undefined' === $.type( _t.dialog ) ) {
+				Mustache.parse( _t.dialog );
+			}
+			this._instance = $( Mustache.render( _t.dialog, { label : title, content : $el.html() } ) );
+			var cl = $el[ 0 ].classList;
+			for ( var i = 0; i < cl.length; i ++ ) {
+				if ( cl.item( i ).indexOf( 'dialog' ) < 0 ) {
+					this._instance.addClass( cl.item( i ) );
+				}
+			}
+			$( 'body' ).append( this._instance ).addClass( 'dialog-open' );
+			$( document ).off( 'focusin.ali' ).on( 'focusin.ali', this._handleFocus.bind( this ) );
+			$( '.dialog-window-actions-close', this._instance ).off( 'click.ali' ).on( 'click.ali', this.hide.bind( this ) );
+			this._instance.trigger( 'focus' );
+		},
 
-        /**
-         * Hides the current dialog. Primarily intended as a callback method for the close button.
-         * @param e {Event}
-         */
-        hide : function (e) {
-            if ('object' === $.type(e)) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
+		/**
+		 * Hides the current dialog. Primarily intended as a callback method for the close button.
+		 * @param e {Event}
+		 */
+		hide         : function ( e ) {
+			if ( 'object' === $.type( e ) ) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
 
-            if ($.type(this._instance) !== 'undefined') {
-                $('.dialog-window-actions-close', this._instance).off('click.ali');
-                this._instance.remove();
-                this._instance = undefined;
-            }
-            $(document).off('focusin.ali');
-            $('body').removeClass('dialog-open');
-        },
-        /**
-         * Callback method used to keep focus on the dialog while it's open.
-         * @param e
-         * @private
-         */
-        _handleFocus : function (e) {
-            if (document !== e.target && this._instance[0] !== e.target && !this._instance.has(e.target).length) {
-                this._instance.trigger('focus');
-            }
-        }
+			if ( $.type( this._instance ) !== 'undefined' ) {
+				$( '.dialog-window-actions-close', this._instance ).off( 'click.ali' );
+				this._instance.remove();
+				this._instance = undefined;
+			}
+			$( document ).off( 'focusin.ali' );
+			$( 'body' ).removeClass( 'dialog-open' );
+		},
+		/**
+		 * Callback method used to keep focus on the dialog while it's open.
+		 * @param e
+		 * @private
+		 */
+		_handleFocus : function ( e ) {
+			if ( document !== e.target && this._instance[ 0 ] !== e.target && ! this._instance.has( e.target ).length ) {
+				this._instance.trigger( 'focus' );
+			}
+		}
 
-    };
+	};
 
-})(jQuery);
+})( jQuery );
 ;
 /*
  * --------------------------------------------------------------------------
@@ -1566,9 +1591,6 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
      * Initialization.
      */
     ali.AnswerSet.prototype.init = function () {
-        if (ali.Feedback.hasFeedback(this.$el)) {
-            ali.Feedback.initInteraction(this.$el);
-        }
         $(QUESTION, this.$el).each((function (i, el) {
             $(el).aria({
                            'live' : "assertive",
@@ -1602,7 +1624,6 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
         this.setCorrectResponses([$(SELECT + ' option', $target).eq(parseInt($target.attr(CORRECT_ATTR), 10)).val()]);
         this.setLearnerResponses([$(SELECT, $target).val()]);
         this.itemComplete(is_correct ? ali.STATUS.correct : ali.STATUS.incorrect, $target);
-
         this.allQuestionsComplete();
     };
 
@@ -1610,16 +1631,10 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
      * 
      */
     ali.AnswerSet.prototype.allQuestionsComplete = function () {
-        var num_questions = $(QUESTION).length;
-        var is_correct, result, className;
-
+        var num_questions = $(QUESTION).length, is_correct;
         if (num_questions === $(QUESTION + '[aria-disabled="true"]').length) {
             is_correct = num_questions === $(QUESTION + ' .correct').length;
-            result = is_correct ? ali.STATUS.correct : ali.STATUS.incorrect;
-            className = is_correct ? '.correct' : '.incorrect';
-            ali.Dialog.showDialog(this.$el, className);
-            ali.Feedback.showFeedback(this.$el, className);
-            this.complete(result);
+            this.complete(is_correct ? ali.STATUS.correct : ali.STATUS.incorrect);
         }
     };
 
@@ -1679,133 +1694,122 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 
 })(jQuery);
 ;
-(function ($) {
-    "use strict";
+(function ( $ ) {
+	"use strict";
 
-    // Make the global object available and abort if this file is used without it.
-    var ali = window.ali;
-    if ($.type(ali) !== 'object') {
-        return;
-    }
+	// Make the global object available and abort if this file is used without it.
+	var ali = window.ali;
+	if ( $.type( ali ) !== 'object' ) {
+		return;
+	}
 
-    var DESCRIPTION = 'A multiple choice interaction.';
-    var TYPE = ali.TYPE.choice;
+	var DESCRIPTION = 'A multiple choice interaction.';
+	var TYPE = ali.TYPE.choice;
 
-    /**
-     * Answer Set Interaction
-     * @param element DOMElement
-     * @constructor
-     */
-    ali.MultipleChoice = function (element) {
-        ali.Interaction.call(this, element, TYPE, DESCRIPTION);
-        this.init();
-    };
+	/**
+	 * Answer Set Interaction
+	 * @param element DOMElement
+	 * @constructor
+	 */
+	ali.MultipleChoice = function ( element ) {
+		ali.Interaction.call( this, element, TYPE, DESCRIPTION );
+		this.init();
+	};
 
-    // Inherits from ali.Interaction
-    ali.MultipleChoice.prototype = Object.create(ali.Interaction.prototype);
-    ali.MultipleChoice.prototype.constructor = ali.MultipleChoice;
+	// Inherits from ali.Interaction
+	ali.MultipleChoice.prototype = Object.create( ali.Interaction.prototype );
+	ali.MultipleChoice.prototype.constructor = ali.MultipleChoice;
 
-    /**
-     * Initialization.
-     */
-    ali.MultipleChoice.prototype.init = function () {
-        if (ali.Feedback.hasFeedback(this.$el)) {
-            ali.Feedback.initInteraction(this.$el);
-        }
-        this.$el.off('submit.ali').on('submit.ali', this.form_onSubmit.bind(this));
-        $('input', this.$el).off('change.ali').on('change.ali', this.input_onChange.bind(this));
-    };
+	/**
+	 * Initialization
+	 */
+	ali.MultipleChoice.prototype.init = function () {
+		this.$el.off( 'submit.ali' ).on( 'submit.ali', this.form_onSubmit.bind( this ) );
+		$( 'input', this.$el ).off( 'change.ali' ).on( 'change.ali', this.input_onChange.bind( this ) );
+	};
 
-    /**
-     *
-     * @param e
-     */
-    ali.MultipleChoice.prototype.input_onChange = function (e) {
-        this.itemSelected($(e.target));
-    };
+	/**
+	 *
+	 * @param e
+	 */
+	ali.MultipleChoice.prototype.input_onChange = function ( e ) {
+		this.itemSelected( $( e.target ) );
+	};
 
-    /**
-     * Submit Event Handler
-     * @param e
-     */
-    ali.MultipleChoice.prototype.form_onSubmit = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+	/**
+	 * Submit Event Handler
+	 * @param e
+	 */
+	ali.MultipleChoice.prototype.form_onSubmit = function ( e ) {
+		e.preventDefault();
+		e.stopPropagation();
 
-        var result, className, answeredCorrect = true;
-        var $inputs = $('input', this.$el);
+		var result, className, answeredCorrect = true;
+		var $inputs = $( 'input', this.$el );
 
-        for (var i = 0; i < $inputs.length; i++) {
-            var t = $($inputs[i]);
-            if (this.truthy(t.attr("data-correct")) !== this.truthy(t.is(':checked'))) {
-                answeredCorrect = false;
-                break;
-            }
-        }
+		for ( var i = 0; i < $inputs.length; i ++ ) {
+			var t = $( $inputs[ i ] );
+			if ( this.truthy( t.attr( "data-correct" ) ) !== this.truthy( t.is( ':checked' ) ) ) {
+				answeredCorrect = false;
+				break;
+			}
+		}
+		this.setResultData();
+		this.complete( answeredCorrect ? ali.STATUS.correct : ali.STATUS.incorrect );
+		this.disableInteraction();
+	};
 
-        result = answeredCorrect ? ali.STATUS.correct : ali.STATUS.incorrect;
-        className = answeredCorrect ? '.correct' : '.incorrect';
-        if (!ali.Dialog.showDialog(this.$el, className) && !ali.Feedback.showFeedback(this.$el, className)) {
-            this.showNotice(
-                answeredCorrect ? 'Correct' : 'Incorrect',
-                className.substr(1));
-        }
+	ali.MultipleChoice.prototype.disableInteraction = function () {
+		$( 'input', this.$el ).off( 'change.ali' ).aria( 'disabled', "true" );
+		$( 'button', this.$el ).aria( 'disabled', "true" );
+		this.$el.off( 'submit.ali' ).aria( 'disabled', 'true' );
+	};
 
-        this.setResultData();
-        this.complete(result);
-        this.disableInteraction();
-    };
+	/**
+	 * Sets the responses for complete events.
+	 */
+	ali.MultipleChoice.prototype.setResultData = function () {
+		var cr = [], ur = [];
+		$( 'input[data-correct="true"]', this.$el ).each( (function ( i, el ) {
+			cr.push( this.getResponseValue( $( el ) ) );
+		}).bind( this ) );
 
-    ali.MultipleChoice.prototype.disableInteraction = function () {
-        $('input', this.$el).off('change.ali').aria('disabled', "true");
-        $('button', this.$el).aria('disabled', "true");
-        this.$el.off('submit.ali').aria('disabled', 'true');
-    };
-    /**
-     * Sets the responses for complete events.
-     */
-    ali.MultipleChoice.prototype.setResultData = function () {
-        var cr = [], ur = [];
-        $('input[data-correct="true"]', this.$el).each((function (i, el) {
-            cr.push(this.getResponseValue($(el)));
-        }).bind(this));
+		$( 'input:checked', this.$el ).each( (function ( i, el ) {
+			ur.push( this.getResponseValue( $( el ) ) );
+		}).bind( this ) );
+		this.setCorrectResponses( cr );
+		this.setLearnerResponses( ur );
+	};
 
-        $('input:checked', this.$el).each((function (i, el) {
-            ur.push(this.getResponseValue($(el)));
-        }).bind(this));
-        this.setCorrectResponses(cr);
-        this.setLearnerResponses(ur);
-    };
+	/**
+	 * Returns the value of an option using the label's `for` value.
+	 * @param $input
+	 * @returns {XMLList|*}
+	 */
+	ali.MultipleChoice.prototype.getResponseValue = function ( $input ) {
+		var id = $input.attr( 'id' );
+		return $( 'label[for="' + id + '"]' ).text();
+	};
 
-    /**
-     * Returns the value of an option using the label's `for` value.
-     * @param $input
-     * @returns {XMLList|*}
-     */
-    ali.MultipleChoice.prototype.getResponseValue = function ($input) {
-        var id = $input.attr('id');
-        return $('label[for="' + id + '"]').text();
-    };
+	/*
+	 * jQuery Plugin
+	 */
+	function Plugin() {
+		return this.each( function () {
+			new ali.MultipleChoice( this );
+		} );
+	}
 
-    /*
-     * jQuery Plugin
-     */
-    function Plugin() {
-        return this.each(function () {
-            new ali.MultipleChoice(this);
-        });
-    }
+	var old = $.fn.answerset;
+	$.fn.multiplechoice = Plugin;
+	$.fn.multiplechoice.Constructor = ali.MultipleChoice;
 
-    var old = $.fn.answerset;
-    $.fn.multiplechoice = Plugin;
-    $.fn.multiplechoice.Constructor = ali.MultipleChoice;
+	$.fn.multiplechoice.noConflict = function () {
+		$.fn.multiplechoice = old;
+		return this;
+	};
 
-    $.fn.multiplechoice.noConflict = function () {
-        $.fn.multiplechoice = old;
-        return this;
-    };
-
-})(jQuery);
+})( jQuery );
 ;
 /*
  * --------------------------------------------------------------------------
@@ -1813,285 +1817,306 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
  * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-(function ($) {
-    "use strict";
+(function ( $ ) {
+	"use strict";
 
-    // Make the global object available and abort if this file is used without it.
-    var ali = window.ali;
-    if ($.type(ali) !== 'object') {
-        return;
-    }
+	// Make the global object available and abort if this file is used without it.
+	var ali = window.ali;
+	if ( $.type( ali ) !== 'object' ) {
+		return;
+	}
 
-    var DESCRIPTION = 'Sequenced elements interaction.';
-    var TYPE = ali.TYPE.sequencing;
+	var DESCRIPTION = 'Sequenced elements interaction.';
+	var TYPE = ali.TYPE.sequencing;
 
-    var TRANSITION_DURATION = 400;
+	var TRANSITION_DURATION = 400;
 
-    /**
-     * Ordered Items interaction class
-     * @param element DOMElement
-     * @constructor
-     */
-    ali.OrderedItems = function (element) {
-        ali.Interaction.call(this, element, TYPE, DESCRIPTION);
-        this.init();
-    };
+	/**
+	 * Ordered Items interaction class
+	 * @param element DOMElement
+	 * @constructor
+	 */
+	ali.OrderedItems = function ( element ) {
+		ali.Interaction.call( this, element, TYPE, DESCRIPTION );
+		this.init();
+	};
 
-    // Inherits from ali.Interaction
-    ali.OrderedItems.prototype = Object.create(ali.Interaction.prototype);
-    ali.OrderedItems.prototype.constructor = ali.OrderedItems;
-
-
-    /**
-     * Collection of items ( usually 'li' elements ).
-     * @type {undefined}
-     */
-    ali.OrderedItems.prototype.$items = undefined;
-
-    /**
-     * Collection of items ( usually 'select' elements ).
-     * @type {undefined}
-     */
-    ali.OrderedItems.prototype.$selects = undefined;
-
-    /**
-     * Flag used in rAF to debounce
-     * @type {boolean}
-     * @private
-     */
-    ali.OrderedItems.prototype._resizing = false;
-
-    /**
-     * Container for the currently moving item
-     * Required as some rAF uses lose their locals
-     * @type {jQuery}
-     */
-    ali.OrderedItems.prototype.$currentItem = undefined;
-
-    /**
-     * Initializes the Interaction. Called from constructor.
-     */
-    ali.OrderedItems.prototype.init = function () {
-        this.$items = $('li', this.el);
-        this.createElements();
-
-        this.$selects = $('select', this.el);
-        this.$el.off('submit.ali').on('submit.ali', this.form_onSubmit.bind(this));
-        $(window).on('resize', this.window_onResize.bind(this));
-        this.updateHeight();
-        this.updateClasses();
-    };
-
-    /**
-     * Adds the select dropdown and icon base HTML for each list item.
-     */
-    ali.OrderedItems.prototype.createElements = function () {
-        var num = this.$items.length;
-        // only create the select drop-down once
-        var $sel = $('<select></select>');
-        for (var i = 1; i <= num; i++) {
-            $sel.append('<option>' + i + '</option>');
-        }
-
-        this.$items.each(function (index, el) {
-            var $el = $(el);
-            var id = "el-" + index;
-            // clone the drop-down and attach the generated ID and index
-            var $selInstance = $sel.clone();
-            $selInstance.attr('id', id);
-            $selInstance[0].selectedIndex = index;
-            // Add the select and icon to the current element
-            var $sl = $('<span class="item-select"></span>').append($selInstance);
-            $el.append($sl).prepend('<i>' + (index + 1) + '</i>');
-            // link user created label to the created select drop-down
-            $('label', $el).attr('for', id);
-        });
-    };
-
-    /**
-     * Event Handler for the resize event. Handler de-bounces the events
-     * using rAF and a _resizing flag.
-     * @see updateHeight
-     */
-    ali.OrderedItems.prototype.window_onResize = function () {
-        if (!this._resizing) {
-            this._resizing = true;
-            window.requestAnimationFrame(this.updateHeight.bind(this));
-        }
-    };
-
-    /**
-     *  Equalizes the height of all items and updates the height of the list element itself
-     *  Only called by rAF and on init
-     */
-    ali.OrderedItems.prototype.updateHeight = function () {
-        // Equalize the elements height based on the height of the label with padding
-        var h = 0;
-        this.$items.each(function (i, el) {
-            h = Math.max(h, $('label', el).outerHeight());
-        });
-        this.$items.height(h);
-
-        // Using the first item to find the outerHeight "withMargin"
-        // now that they've been equalized
-        var oH = $(this.$items[0]).outerHeight(true);
-        $('.list-elements', this.$el).height(( oH * this.$items.length));
-        // reset the flag
-        this._resizing = false;
-    };
-
-    /**
-     * Adds the focus and change events to the select drop-downs
-     */
-    ali.OrderedItems.prototype.addSelectEvents = function () {
-        this.$selects
-            .off('change.ali').on('change.ali', this.select_onChange.bind(this))
-            .off('focus.ali').on('focus.ali', this.select_onFocus.bind(this));
-    };
-
-    /**
-     * Removes the focus and change events from the select drop-downs so we can
-     * manipulate them without generating too events
-     */
-    ali.OrderedItems.prototype.removeSelectEvents = function () {
-        this.$selects.off('change.ali').off('focus.ali');
-    };
-
-    /**
-     * Very simple event handler that assigns a data value to the
-     * element containing the current value.
-     * @param e {Event}
-     */
-    ali.OrderedItems.prototype.select_onFocus = function (e) {
-        $(e.target).attr('data-prev-value', e.target.selectedIndex);
-    };
-
-    /**
-     * Event handler for the change event
-     * @param e
-     */
-    ali.OrderedItems.prototype.select_onChange = function (e) {
-        // remove the events on the drop-downs so we don't create
-        // pointless events while manipulating the selects
-        this.removeSelectEvents();
-        this.$currentItem = $(e.target);
-        // add the 'moving' class to the current item
-        // in the base style this adds the shadow and a z-index
-        $(this.$currentItem.parents('li'))
-            .addClass('moving')
-            // also add the transitionEnd event
-            .one(ali.transitionEnd, function (e) {
-                $(e.target).removeClass('moving');
-            })
-            .emulateTransitionEnd(TRANSITION_DURATION);
-        // reordering is a little time-consuming so I'm deferring it
-        // until before the next paint
-        window.requestAnimationFrame(this.reorderValues.bind(this));
-    };
-
-    /**
-     *
-     * @param e
-     */
-    ali.OrderedItems.prototype.form_onSubmit = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        var correct = true;
-
-        this.$items.each(function () {
-            var $el = $(this);
-            var $sel = $('select', $el);
-            var cIndex = parseInt($el.attr('data-correct'), 10);
-            var sIndex = parseInt($sel[0].selectedIndex + 1);
-            if (cIndex !== sIndex) {
-                correct = false;
-            }
-        });
+	// Inherits from ali.Interaction
+	ali.OrderedItems.prototype = Object.create( ali.Interaction.prototype );
+	ali.OrderedItems.prototype.constructor = ali.OrderedItems;
 
 
-    };
+	/**
+	 * Collection of items ( usually 'li' elements ).
+	 * @type {undefined}
+	 */
+	ali.OrderedItems.prototype.$items = undefined;
 
-    /**
-     * Re-orders the elements based off of the current select element.
-     *
-     * There has to be a less complex way of handling this, But I'm tired
-     * and have not had enough caffeine.
-     */
-    ali.OrderedItems.prototype.reorderValues = function () {
-        var newValue = this.$currentItem[0].selectedIndex;
-        var previousValue = this.previousValue(this.$currentItem);
+	/**
+	 * Collection of items ( usually 'select' elements ).
+	 * @type {undefined}
+	 */
+	ali.OrderedItems.prototype.$selects = undefined;
 
-        // Remove this item from the order
-        this.$selects.each((function (i, el) {
-            var $el = $(el);
-            if (!$el.is(this.$currentItem)) {
-                var localVal = $el[0].selectedIndex;
-                if (localVal >= previousValue) {
-                    $el[0].selectedIndex = localVal - 1;
-                }
-            }
-        }).bind(this));
+	/**
+	 * Flag used in rAF to debounce
+	 * @type {boolean}
+	 * @private
+	 */
+	ali.OrderedItems.prototype._resizing = false;
 
-        // Insert the changed element at it's new location,
-        // moving the others up.
-        this.$selects.each((function (i, el) {
-            var $el = $(el);
-            if (!$el.is(this.$currentItem)) {
-                var localVal = $el[0].selectedIndex;
-                if (localVal >= newValue) {
-                    $el[0].selectedIndex = localVal + 1;
-                }
-            }
-        }).bind(this));
-        // Altering the UI should wait until the next paint
-        window.requestAnimationFrame(this.updateClasses.bind(this));
-    };
+	/**
+	 * Container for the currently moving item
+	 * Required as some rAF uses lose their locals
+	 * @type {jQuery}
+	 */
+	ali.OrderedItems.prototype.$currentItem = undefined;
 
-    /**
-     * Adds classes to the list elements, causing the elements to animate into
-     * their new position.
-     */
-    ali.OrderedItems.prototype.updateClasses = function () {
-        this.$items.each(function (i, el) {
-            var $el = $(el);
-            var $select = $('select', $el);
-            $el.removeClass(function (index, css) {
-                return (css.match(/(^|\s)item-\S+/g) || []).join(' ');
-            }).addClass('item-' + $select.val());
-            $('i', $el).text($select.val());
-        });
+	/**
+	 * Initializes the Interaction. Called from constructor.
+	 */
+	ali.OrderedItems.prototype.init = function () {
+		this.$items = $( 'li', this.el );
+		this.createElements();
 
-        // add the events back
-        this.addSelectEvents();
+		this.$selects = $( 'select', this.el );
+		this.$el.off( 'submit.ali' ).on( 'submit.ali', this.form_onSubmit.bind( this ) );
+		$( window ).on( 'resize', this.window_onResize.bind( this ) );
+		this.updateHeight();
+		this.updateClasses();
+	};
 
-        if (this.$currentItem && this.$currentItem.length > 0) {
-            // trigger the focus event on the current item so that the
-            // current value is populated
-            this.$currentItem.trigger('focus');
-        }
-    };
+	/**
+	 * Adds the select dropdown and icon base HTML for each list item.
+	 */
+	ali.OrderedItems.prototype.createElements = function () {
+		var num = this.$items.length;
+		// only create the select drop-down once
+		var $sel = $( '<select></select>' );
+		for ( var i = 1; i <= num; i ++ ) {
+			$sel.append( '<option>' + i + '</option>' );
+		}
 
-    ali.OrderedItems.prototype.previousValue = function ($el) {
-        return parseInt($el.attr('data-prev-value'), 10);
-    };
+		this.$items.each( function ( index, el ) {
+			var $el = $( el );
+			var id = "el-" + index;
 
-    /*
-     * jQuery Plugin
-     */
-    function Plugin() {
-        return this.each(function () {
-            new ali.OrderedItems(this);
-        });
-    }
+			// clone the drop-down and attach the generated ID and index
+			var $selInstance = $sel.clone();
+			$selInstance.attr( 'id', id );
+			$selInstance[ 0 ].selectedIndex = index;
 
-    var old = $.fn.ordereditems;
-    $.fn.ordereditems = Plugin;
-    $.fn.ordereditems.Constructor = ali.OrderedItems;
+			// Add the select and icon to the current element
+			var $sl = $( '<span class="item-select"></span>' ).append( $selInstance );
+			$el.append( $sl ).prepend( '<i>' + (index + 1) + '</i>' );
 
-    $.fn.ordereditems.noConflict = function () {
-        $.fn.ordereditems = old;
-        return this;
-    };
+			// link user-created label to the code-created select drop-down
+			$( 'label', $el ).attr( 'for', id );
+		} );
+	};
+
+	/**
+	 * Event Handler for the resize event. Handler de-bounces the events
+	 * using rAF and a _resizing flag.
+	 * @see updateHeight
+	 */
+	ali.OrderedItems.prototype.window_onResize = function () {
+		if ( ! this._resizing ) {
+			this._resizing = true;
+			window.requestAnimationFrame( this.updateHeight.bind( this ) );
+		}
+	};
+
+	/**
+	 *  Equalizes the height of all items and updates the height of the list element itself
+	 *  Only called by rAF and on init
+	 */
+	ali.OrderedItems.prototype.updateHeight = function () {
+		// Equalize the elements height based on the height of the label with padding
+		var h = 0;
+		this.$items.each( function ( i, el ) {
+			h = Math.max( h, $( 'label', el ).outerHeight() );
+		} );
+		this.$items.height( h );
+
+		// Using the first item to find the outerHeight "withMargin"
+		// now that they've been equalized
+		var oH = $( this.$items[ 0 ] ).outerHeight( true );
+		$( '.list-elements', this.$el ).height( ( oH * this.$items.length) );
+
+		// reset the flag
+		this._resizing = false;
+	};
+
+	/**
+	 * Adds the focus and change events to the select drop-downs
+	 */
+	ali.OrderedItems.prototype.addSelectEvents = function () {
+		this.$selects
+		    .off( 'change.ali' ).on( 'change.ali', this.select_onChange.bind( this ) )
+		    .off( 'focus.ali' ).on( 'focus.ali', this.select_onFocus.bind( this ) );
+	};
+
+	/**
+	 * Removes the focus and change events from the select drop-downs so we can
+	 * manipulate them without generating too events
+	 */
+	ali.OrderedItems.prototype.removeSelectEvents = function () {
+		this.$selects.off( 'change.ali' ).off( 'focus.ali' );
+	};
+
+	/**
+	 * Very simple event handler that assigns a data value to the
+	 * element containing the current value.
+	 * @param e {Event}
+	 */
+	ali.OrderedItems.prototype.select_onFocus = function ( e ) {
+		$( e.target ).attr( 'data-prev-value', e.target.selectedIndex );
+	};
+
+	/**
+	 * Event handler for the change event
+	 * @param e
+	 */
+	ali.OrderedItems.prototype.select_onChange = function ( e ) {
+		// remove the events on the drop-downs so we don't create
+		// pointless events while manipulating the selects
+		this.removeSelectEvents();
+		this.$currentItem = $( e.target );
+
+		// add the 'moving' class to the current item
+		// in the base style this adds the shadow and a z-index
+		$( this.$currentItem.parents( 'li' ) )
+			.addClass( 'moving' )
+			// Remove the class on transition end
+			// Much love to the Bootstrap crew for the
+			// emulation pattern
+			.one( ali.transitionEnd, function ( e ) {
+				$( e.target ).removeClass( 'moving' );
+			} )
+			.emulateTransitionEnd( TRANSITION_DURATION );
+
+		this.itemSelected( this.$currentItem );
+		// reordering is a little time-consuming so defer it
+		// until before the next paint
+		window.requestAnimationFrame( this.reorderValues.bind( this ) );
+	};
+
+	/**
+	 *
+	 * @param e
+	 */
+	ali.OrderedItems.prototype.form_onSubmit = function ( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		var correct = true;
+		var selectedOrder = [];
+		var correctOrder = [];
+
+		this.$items.each( function () {
+			var $el = $( this );
+			var $sel = $( 'select', $el );
+			// get the correct and selected index
+			var cIndex = parseInt( $el.attr( 'data-correct' ), 10 );
+			var sIndex = parseInt( $sel[ 0 ].selectedIndex + 1 );
+
+			//create SCORM/xAPI arrays for correct & selected
+			var label = $( 'label', $el ).text();
+			selectedOrder[ sIndex ] = label;
+			correctOrder[ cIndex ] = label;
+
+			// If one step is out of order, this was answered incorrectly.
+			if ( cIndex !== sIndex ) {
+				correct = false;
+			}
+		} );
+
+		this.setCorrectResponses( correctOrder );
+		this.setLearnerResponses( selectedOrder );
+		this.complete( correct ? ali.STATUS.correct : ali.STATUS.incorrect );
+	};
+
+	/**
+	 * Re-orders the elements based off of the current select element.
+	 *
+	 * There has to be a less complex way of handling this, But I'm tired
+	 * and have not had enough caffeine.
+	 */
+	ali.OrderedItems.prototype.reorderValues = function () {
+		var newValue = this.$currentItem[ 0 ].selectedIndex;
+		var previousValue = this.previousValue( this.$currentItem );
+
+		// Remove this item from the order
+		this.$selects.each( (function ( i, el ) {
+			var $el = $( el );
+			if ( ! $el.is( this.$currentItem ) ) {
+				var localVal = $el[ 0 ].selectedIndex;
+				if ( localVal >= previousValue ) {
+					$el[ 0 ].selectedIndex = localVal - 1;
+				}
+			}
+		}).bind( this ) );
+
+		// Insert the changed element at it's new location,
+		// moving the others up.
+		this.$selects.each( (function ( i, el ) {
+			var $el = $( el );
+			if ( ! $el.is( this.$currentItem ) ) {
+				var localVal = $el[ 0 ].selectedIndex;
+				if ( localVal >= newValue ) {
+					$el[ 0 ].selectedIndex = localVal + 1;
+				}
+			}
+		}).bind( this ) );
+		// Altering the UI should wait until the next paint
+		window.requestAnimationFrame( this.updateClasses.bind( this ) );
+	};
+
+	/**
+	 * Adds classes to the list elements, causing the elements to animate into
+	 * their new position.
+	 */
+	ali.OrderedItems.prototype.updateClasses = function () {
+		this.$items.each( function ( i, el ) {
+			var $el = $( el );
+			var $select = $( 'select', $el );
+			$el.removeClass( function ( index, css ) {
+				return (css.match( /(^|\s)item-\S+/g ) || []).join( ' ' );
+			} ).addClass( 'item-' + $select.val() );
+			$( 'i', $el ).text( $select.val() );
+		} );
+
+		// add the events back
+		this.addSelectEvents();
+
+		if ( this.$currentItem && this.$currentItem.length > 0 ) {
+			// trigger the focus event on the current item so that the
+			// current value is populated
+			this.$currentItem.trigger( 'focus' );
+		}
+	};
+
+	ali.OrderedItems.prototype.previousValue = function ( $el ) {
+		return parseInt( $el.attr( 'data-prev-value' ), 10 );
+	};
+
+	/*
+	 * jQuery Plugin
+	 */
+	function Plugin() {
+		return this.each( function () {
+			new ali.OrderedItems( this );
+		} );
+	}
+
+	var old = $.fn.ordereditems;
+	$.fn.ordereditems = Plugin;
+	$.fn.ordereditems.Constructor = ali.OrderedItems;
+
+	$.fn.ordereditems.noConflict = function () {
+		$.fn.ordereditems = old;
+		return this;
+	};
 })
-(jQuery);
+( jQuery );

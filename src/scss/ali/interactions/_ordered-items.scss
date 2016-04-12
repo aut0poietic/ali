@@ -1,68 +1,70 @@
 .ordered-items {
-  .list-elements {
 	position : relative;
-	margin   : 0;
-	padding  : 0;
 
-	li {
-	  position         : absolute;
-	  top              : 0;
-	  left             : 0;
-	  width            : 100%;
-	  overflow         : hidden;
-	  margin           : 0 0 $base-line-height;
-	  border           : 1px solid $border-color;
-	  display          : flex;
-	  flex-direction   : row;
-	  flex-wrap        : nowrap;
-	  justify-content  : space-between;
-	  align-items      : center;
-	  text-align       : left;
-	  background-color : #f6f6f6;
-	  box-shadow       : 0 0 transparent;
-	  transition       : transform .4s ease-in-out, box-shadow .4s ease-out;
+	.list-elements {
+		position : relative;
+		margin   : 0;
+		padding  : 0;
 
-	  @for $i from 0 through 9 {
-		&.item-#{$i + 1} {
-		  transform : translate(0, calc(#{100% * $i} + #{$base-line-height * $i}) );
+		li {
+			position         : absolute;
+			top              : 0;
+			left             : 0;
+			width            : 100%;
+			overflow         : hidden;
+			margin           : 0 0 $base-line-height;
+			border           : 1px solid $border-color;
+			display          : flex;
+			flex-direction   : row;
+			flex-wrap        : nowrap;
+			justify-content  : space-between;
+			align-items      : center;
+			text-align       : left;
+			background-color : #f6f6f6;
+			box-shadow       : 0 0 transparent;
+			transition       : transform .4s ease-in-out, box-shadow .4s ease-out;
+
+			@for $i from 0 through 9 {
+				&.item-#{$i + 1} {
+					transform : translate(0, calc(#{100% * $i} + #{$base-line-height * $i}));
+				}
+			}
+
+			&.moving {
+
+				box-shadow : 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+				z-index    : 1;
+			}
+
+			label,
+			i,
+			.item-select {
+				display     : block;
+				line-height : $base-line-height;
+				padding     : $base-line-height / 2;
+				font-style  : normal;
+			}
+
+			i {
+				font-weight      : 700;
+				background-color : rgba(#000, .1);
+				@media(max-width : 420px) {
+					display : none;
+				}
+			}
+
+			label {
+				flex       : 1;
+				align-self : center;
+			}
+
+			.item-select {
+				display        : flex;
+				align-items    : center;
+				align-content  : center;
+				padding-top    : 0;
+				padding-bottom : 0;
+			}
 		}
-	  }
-
-	  &.moving {
-
-		box-shadow : 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
-		z-index    : 1;
-	  }
-
-	  label,
-	  i,
-	  .item-select {
-		display     : block;
-		line-height : $base-line-height;
-		padding     : $base-line-height / 2;
-		font-style  : normal;
-	  }
-
-	  i {
-		font-weight      : 700;
-		background-color : rgba(#000, .1);
-		@media(max-width : 420px) {
-		  display : none;
-		}
-	  }
-
-	  label {
-		flex       : 1;
-		align-self : center;
-	  }
-
-	  .item-select {
-		display        : flex;
-		align-items    : center;
-		align-content  : center;
-		padding-top    : 0;
-		padding-bottom : 0;
-	  }
 	}
-  }
 }
