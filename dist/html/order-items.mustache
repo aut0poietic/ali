@@ -1,13 +1,10 @@
-<form id="{{id}}" class="multiple-choice" data-ali="multiple-choice">
-	{{stem}}
-	{{#responses}}
-	<div class="input-group">
-		<input type="{{type}}" id="response_{{value}}" name="mc" value="{{value}}" data-correct="{{correct}}">
-		<label for="response_{{value}}">{{{text}}}</label>
-	</div>
-	{{/responses}}
+<form id="{{id}}" class="ordered-items" data-ali="ordered-items"{{#incorrectNotice}} data-ali-notice-incorrect="{{incorrectNotice}}" {{/incorrectNotice}}{{#correctNotice}} data-ali-notice-correct="{{correctNotice}}"{{/correctNotice}}>
+	<p>Place Erikson's stages of psychosocial crisis in their correct order, from birth (1) to maturity (8).</p>
+	<ul class="list-elements">
+		<li data-correct="{{correctIndex}}"><label>{{{label}}}</label></li>
+	</ul>
 	<div class="submit-row">
-		<button class="submit">Submit</button>
+		<button class="submit" aria-label="Submit">Submit</button>
 	</div>
 	{{#incorrectFeedback}}
 		<div class="feedback-content incorrect">

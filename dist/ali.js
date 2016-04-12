@@ -1914,9 +1914,9 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
             $sel.append('<option>' + i + '</option>');
         }
 
-        this.$items.each(function (index, el) {
+        this.$items.each((function (index, el) {
             var $el = $(el);
-            var id = "el-" + index;
+            var id = this.$el.attr('id') + "-item-" + index;
 
             // clone the drop-down and attach the generated ID and index
             var $selInstance = $sel.clone();
@@ -1929,7 +1929,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 
             // link user-created label to the code-created select drop-down
             $('label', $el).attr('for', id);
-        });
+        }).bind(this));
     };
 
     /**
@@ -2054,21 +2054,16 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
         this.complete(correct ? ali.STATUS.correct : ali.STATUS.incorrect);
     };
 
-
-    ali.OrderedItems.prototype.doFeedback = function () {
-        //noop
-    };
     /**
      * Re-orders the elements based off of the current select element.
-     *
-     * There has to be a less complex way of handling this, But I'm tired
-     * and have not had enough caffeine.
+     * @todo There has to be a less complex way of handling this -- future
      */
     ali.OrderedItems.prototype.reorderValues = function () {
         var newValue = this.$currentItem[0].selectedIndex;
         var previousValue = this.previousValue(this.$currentItem);
 
         // Remove this item from the order
+        // moving the others up
         this.$selects.each((function (i, el) {
             var $el = $(el);
             if (!$el.is(this.$currentItem)) {
@@ -2080,7 +2075,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
         }).bind(this));
 
         // Insert the changed element at it's new location,
-        // moving the others up.
+        // moving the others down.
         this.$selects.each((function (i, el) {
             var $el = $(el);
             if (!$el.is(this.$currentItem)) {

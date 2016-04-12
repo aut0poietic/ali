@@ -15,4 +15,25 @@
 			</div>
 		</form>
 	{{/questions}}
+	{{#incorrectFeedback}}
+		<div class="feedback-content incorrect">
+			{{{incorrectFeedback}}}
+		</div>
+	{{/incorrectFeedback}}
+	{{#correctFeedback}}
+		<div class="feedback-content incorrect">
+			{{{correctFeedback}}}
+		</div>
+	{{/correctFeedback}}
+
+	{{#incorrectDialog}}
+		<div class="feedback-content incorrect">
+			{{{incorrectDialog}}}
+		</div>
+	{{/incorrectDialog}}
+	{{#correctDialog}}
+		<div class="feedback-content incorrect">
+			{{{correctDialog}}}
+		</div>
+	{{/correctDialog}}
 </div>

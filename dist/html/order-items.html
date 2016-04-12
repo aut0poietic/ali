@@ -1,0 +1,68 @@
+<!doctype html>
+<html class="no-js" lang="en-US">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Order Items</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="normalize.css">
+	<link rel="stylesheet" href="ali.css">
+	<style>
+		.container {
+			max-width : 960px;
+			margin    : 64px auto;
+		}
+
+		@media ( max-width : 959px ) {
+			.container {
+				margin : 64px 32px;
+			}
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<h1>Ali Ordered Items</h1>
+	<p>Taken from the Wikipedia article: <a href="https://en.wikipedia.org/wiki/Erikson%27s_stages_of_psychosocial_development" target="_blank">Erikson's Stages of Psychosocial Development</a></p>
+	<p>Erikson's stages of psychosocial development, as articulated by Erik Erikson, in collaboration with Joan Erikson,[1] is a comprehensive psychoanalytic theory that identifies a series of eight stages, in which a healthy developing individual should pass through from infancy to late adulthood.</p>
+	<form id="oi-1" class="ordered-items" data-ali="ordered-items"  data-ali-notice-incorrect="Incorrect" data-ali-notice-correct="Correct">
+		<p>Place Erikson's stages of psychosocial crisis in their correct order, from birth (1) to maturity (8).</p>
+		<ul class="list-elements">
+			<li data-correct="1"><label>Basic Trust vs. Mistrust</label></li>
+			<li data-correct="2"><label>Autonomy vs. Shame &amp; Doubt</label></li>
+			<li data-correct="3"><label>Initiative vs. Guilt</label></li>
+			<li data-correct="4"><label>Industry vs. Inferiority</label></li>
+			<li data-correct="5"><label>Identity vs. Role Confusion</label></li>
+			<li data-correct="6"><label>Intimacy vs. Isolation</label></li>
+			<li data-correct="7"><label>Generativity vs. Stagnation</label></li>
+			<li data-correct="8"><label>Ego Integrity vs. Despair</label></li>
+		</ul>
+		<div class="submit-row">
+			<button class="submit" aria-label="Submit">Submit</button>
+		</div>
+	</form>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+<script src="ali.js"></script>
+<script>
+	jQuery(function ($) {
+		$(document)
+				.on('ali:complete', function (e, data) {
+					// e: Object, the original event object
+					// data: Object interaction event object
+					console.log(e, data);
+				})
+				.on('ali:itemSelected', function (e, data, $item) {
+					// e: Object, the original event object
+					// data: Object interaction event object
+					// $item : the source of the event
+					console.log(e, data, $item);
+				})
+		;
+	});
+</script>
+</body>
+</html>
+
