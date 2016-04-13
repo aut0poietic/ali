@@ -24,6 +24,8 @@ window.ali = {
         performance : 'performance',
         sequencing : 'sequencing',
         numeric : 'numeric',
+        shortAnswer : 'fill-in',
+        longAnswer : 'long-fill-in',
         other : 'other'
     },
     Interaction : null,
@@ -38,5 +40,6 @@ jQuery(function ($) {
         $('[data-ali="answer-set"]').answerset();
         $('[data-ali="multiple-choice"]').multiplechoice();
         $('[data-ali="ordered-items"]').ordereditems();
+        $('[data-ali="thinking-question"]').thinkingquestion();
     }
 });

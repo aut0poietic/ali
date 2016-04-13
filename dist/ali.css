@@ -642,3 +642,16 @@ body.dialog-open {
   padding-top: 0;
   padding-bottom: 0;
 }
+
+.thinking-question {
+  position: relative;
+}
+.thinking-question textarea {
+  padding: 12px;
+  width: 100%;
+  line-height: 24px;
+}
+.thinking-question textarea:focus {
+  outline: 1px dashed #FF9800;
+  outline-offset: 2px;
+}
