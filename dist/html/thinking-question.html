@@ -1,0 +1,72 @@
+<!doctype html>
+<html class="no-js" lang="en-US">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Ali Development</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../normalize.css">
+	<link rel="stylesheet" href="../ali.css">
+	<style>
+
+		.container {
+			max-width : 960px;
+			margin    : 64px auto;
+		}
+
+		@media ( max-width : 959px ) {
+			.container {
+				margin : 64px 32px;
+			}
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<h1>Ali Thinking Question</h1>
+	<p>Information used in this example is from the Wikipedia article
+		<a href="https://en.wikipedia.org/wiki/List_of_cognitive_biases" target="blank" rel="external">"List of cognitive biases"</a>.</p>
+	<form id="tq-1" class="thinking-question" data-ali="thinking-question">
+		<div class="question-wrapper">
+			<div class="question">
+				<p>An individual's construction of social reality, not the objective input, may dictate their behaviour in the social world.</p>
+				<p>Take a moment and consider how your biases affect your social interactions and then explain in a paragraph or two how you believe you might manage the bias you experience &mdash; or eliminate them entirely.</p>
+			</div>
+			<textarea></textarea>
+			<div class="submit-row">
+				<button class="submit" aria-label="Submit">Submit</button>
+			</div>
+
+		</div>
+		<div class="feedback-content">
+			<h3>Cognitive Bias Modification</h3>
+			<p>Cognitive bias modification refers to the process of modifying cognitive biases in healthy people and also
+				refers to a growing area of psychological (non-pharmaceutical) therapies for anxiety, depression and
+				addiction called cognitive bias modification therapy (CBMT).</p>
+			<p>CBMT is sub-group of therapies within a growing area of psychological therapies based on modifying
+				cognitive processes with or without accompanying medication and talk therapy, sometimes referred to as
+				applied cognitive processing therapies (ACPT). Although cognitive bias modification can refer to modifying
+				cognitive processes in healthy individuals, CBMT is a growing area of evidence-based psychological therapy,
+				in which cognitive processes are modified to relieve suffering from serious depression,anxiety, and addiction.</p>
+			<p>CBMT techniques are technology assisted therapies that are delivered via a computer with or without
+				clinician support. CBM combines evidence and theory from the cognitive model of anxiety, cognitive
+				neuroscience, and attentional models.</p>
+		</div>
+	</form>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+<script src="../ali.js"></script>
+<script>
+	jQuery( function ( $ ) {
+		$( document ).on( 'ali:complete', function ( e, data ) {
+			// e: Object, the original event object
+			// data: Object interaction event object
+			console.log( e, data );
+		} );
+	} );
+</script>
+</body>
+</html>
+

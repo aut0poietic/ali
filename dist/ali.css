@@ -142,7 +142,7 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
 .feedback {
   position: relative;
   background: #f6f6f6;
-  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 .feedback:focus {
   outline: 1px dashed #FF9800;
@@ -649,6 +649,7 @@ body.dialog-open {
 .thinking-question textarea {
   padding: 12px;
   width: 100%;
+  max-width: 100%;
   line-height: 24px;
 }
 .thinking-question textarea:focus {

@@ -1,14 +1,15 @@
 .thinking-question {
-  position : relative;
+	position : relative;
 
-  textarea {
-	padding     : $base-line-height / 2;
-	width       : 100%;
-	line-height : $base-line-height;
+	textarea {
+		padding     : $base-line-height / 2;
+		width       : 100%;
+		max-width   : 100%;
+		line-height : $base-line-height;
 
-	&:focus {
-	  outline        : 1px dashed $accent-color;
-	  outline-offset : 2px;
+		&:focus {
+			outline        : 1px dashed $accent-color;
+			outline-offset : 2px;
+		}
 	}
-  }
 }
