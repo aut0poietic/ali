@@ -1,0 +1,98 @@
+.card-container {
+  &.grid {
+	display         : flex;
+	flex-direction  : row;
+	flex-wrap       : wrap;
+	justify-content : flex-start;
+	align-items     : flex-start;
+  }
+}
+
+.card {
+  perspective     : 1000;
+  transform-style : preserve-3d;
+  width           : 320px;
+  height          : 480px;
+
+  .card-inner {
+	position        : relative;
+	width           : 100%;
+	height          : 100%;
+	transition      : 0.6s;
+	transform-style : preserve-3d;
+  }
+
+  .card-front,
+  .card-back {
+	position            : absolute;
+	top                 : 0;
+	left                : 0;
+	width               : 100%;
+	height              : 100%;
+	border              : 1px solid rgba(#000, .1);
+	border-radius       : $card-border-radius;
+	backface-visibility : hidden;
+	transition          : 0.6s;
+	transform-style     : preserve-3d;
+	box-shadow          : 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  }
+
+  .card-front {
+	z-index   : 2;
+	transform : rotateY(0deg);
+  }
+
+  .card-back {
+	transform : rotateY(-180deg);
+  }
+
+  &.hover,
+  &:hover {
+	.card-back {
+	  transform : rotateY(0deg);
+	}
+	.card-front {
+	  transform : rotateY(180deg);
+	}
+  }
+}
+
+// testing theme
+.card {
+
+  .card-back,
+  .card-front {
+	display        : flex;
+	flex-direction : column;
+	flex-wrap      : nowrap;
+  }
+
+  header {
+	flex             : 1;
+	background-color : #666;
+  }
+
+  .card-body {
+	flex                    : 1;
+	background-color        : #999;
+	border-top-left-radius  : $card-border-radius;
+	border-top-right-radius : $card-border-radius;
+  }
+
+  footer {
+	display                    : flex;
+	flex-direction             : row;
+	flex-wrap                  : nowrap;
+	justify-content            : space-between flex-end;
+	align-items                : stretch;
+	background-color           : #ccc;
+	border-bottom-left-radius  : $card-border-radius;
+	border-bottom-right-radius : $card-border-radius;
+
+	a {
+	  display : block;
+	  flex    : 1;
+	}
+  }
+}
+
