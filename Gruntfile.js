@@ -8,9 +8,10 @@ module.exports = function (grunt) {
 
     var jsFiles = [
         'src/js/ali.js',
+        'src/js/vendor/mustache.min.js',
         'src/js/core/transition.js',
         'src/js/core/aria.js',
-        'src/js/vendor/mustache.min.js',
+        'src/js/core/card.js',
         'src/html/templates.js',
         'src/js/core/feedback.js',
         'src/js/core/interaction.js',

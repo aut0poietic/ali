@@ -195,9 +195,9 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
-  -webkit-justify-content: flex-start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
   -webkit-align-items: flex-start;
       -ms-flex-align: start;
           align-items: flex-start;
@@ -210,6 +210,12 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
           transform-style: preserve-3d;
   width: 320px;
   height: 480px;
+  margin: 12px;
+}
+@media (max-width: 344px) {
+  .card {
+    margin: 12px 0;
+  }
 }
 .card .card-inner {
   position: relative;
@@ -224,37 +230,6 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-  transition: 0.6s;
-  -webkit-transform-style: preserve-3d;
-          transform-style: preserve-3d;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
-.card .card-front {
-  z-index: 2;
-  -webkit-transform: rotateY(0deg);
-          transform: rotateY(0deg);
-}
-.card .card-back {
-  -webkit-transform: rotateY(-180deg);
-          transform: rotateY(-180deg);
-}
-.card.hover .card-back, .card:hover .card-back {
-  -webkit-transform: rotateY(0deg);
-          transform: rotateY(0deg);
-}
-.card.hover .card-front, .card:hover .card-front {
-  -webkit-transform: rotateY(180deg);
-          transform: rotateY(180deg);
-}
-
-.card .card-back,
-.card .card-front {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -264,20 +239,38 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
   -webkit-flex-wrap: nowrap;
       -ms-flex-wrap: nowrap;
           flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  transition: 0.6s;
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
 }
-.card header {
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  background-color: #666;
+.card .card-front {
+  z-index: 2;
+  -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
 }
+.card .card-front[aria-hidden="true"] {
+  -webkit-transform: rotateY(180deg);
+          transform: rotateY(180deg);
+}
+.card .card-back,
+.card .card-back[aria-hidden="true"] {
+  -webkit-transform: rotateY(-180deg);
+          transform: rotateY(-180deg);
+}
+.card .card-back[aria-hidden="false"],
+.card .card-back[aria-hidden="true"][aria-hidden="false"] {
+  -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+}
+.card header,
 .card .card-body {
   -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1;
-  background-color: #999;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
 }
 .card footer {
   display: -webkit-flex;
@@ -295,15 +288,49 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
   -webkit-align-items: stretch;
       -ms-flex-align: stretch;
           align-items: stretch;
+}
+.card footer > * {
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+.card footer .left-action {
+  text-align: left;
+}
+.card footer .right-action {
+  text-align: right;
+}
+
+.card .card-front,
+.card .card-back {
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.card .card-front header:first-child,
+.card .card-front .card-body:first-child,
+.card .card-back header:first-child,
+.card .card-back .card-body:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.card header {
+  background-color: #666;
+}
+.card .card-body {
+  background-color: #999;
+}
+.card footer {
   background-color: #ccc;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }
-.card footer a {
-  display: block;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+.card footer .left-action,
+.card footer .left-action > button {
+  border-bottom-left-radius: 4px;
+}
+.card footer .right-action,
+.card footer .right-action > button {
+  border-bottom-right-radius: 4px;
 }
 
 body.dialog-open {

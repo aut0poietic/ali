@@ -1,98 +1,128 @@
 .card-container {
-  &.grid {
-	display         : flex;
-	flex-direction  : row;
-	flex-wrap       : wrap;
-	justify-content : flex-start;
-	align-items     : flex-start;
-  }
+	&.grid {
+		display         : flex;
+		flex-direction  : row;
+		flex-wrap       : wrap;
+		justify-content : space-around;
+		align-items     : flex-start;
+	}
 }
 
 .card {
-  perspective     : 1000;
-  transform-style : preserve-3d;
-  width           : 320px;
-  height          : 480px;
-
-  .card-inner {
-	position        : relative;
-	width           : 100%;
-	height          : 100%;
-	transition      : 0.6s;
+	perspective     : 1000;
 	transform-style : preserve-3d;
-  }
+	width           : 320px;
+	height          : 480px;
+	margin          : $base-line-height / 2;
 
-  .card-front,
-  .card-back {
-	position            : absolute;
-	top                 : 0;
-	left                : 0;
-	width               : 100%;
-	height              : 100%;
-	border              : 1px solid rgba(#000, .1);
-	border-radius       : $card-border-radius;
-	backface-visibility : hidden;
-	transition          : 0.6s;
-	transform-style     : preserve-3d;
-	box-shadow          : 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  }
+	@media(max-width: 320px + $base-line-height ){
+		margin: $base-line-height / 2 0;
+	} 
 
-  .card-front {
-	z-index   : 2;
-	transform : rotateY(0deg);
-  }
+	.card-inner {
+		position        : relative;
+		width           : 100%;
+		height          : 100%;
+		transition      : 0.6s;
+		transform-style : preserve-3d;
+	}
 
-  .card-back {
-	transform : rotateY(-180deg);
-  }
-
-  &.hover,
-  &:hover {
+	.card-front,
 	.card-back {
-	  transform : rotateY(0deg);
+		position            : absolute;
+		top                 : 0;
+		left                : 0;
+		display             : flex;
+		flex-direction      : column;
+		flex-wrap           : nowrap;
+		width               : 100%;
+		height              : 100%;
+		backface-visibility : hidden;
+		transition          : 0.6s;
+		transform-style     : preserve-3d;
+
 	}
+
 	.card-front {
-	  transform : rotateY(180deg);
+		z-index   : 2;
+		transform : rotateY(0deg);
+
+		&[aria-hidden="true"] {
+			transform : rotateY(180deg);
+		}
 	}
-  }
+
+	.card-back,
+	.card-back[aria-hidden="true"] {
+		transform : rotateY(-180deg);
+
+		&[aria-hidden="false"] {
+			transform : rotateY(0deg);
+		}
+	}
+
+	header,
+	.card-body {
+		flex : 1;
+	}
+	footer {
+		display         : flex;
+		flex-direction  : row;
+		flex-wrap       : nowrap;
+		justify-content : space-between flex-end;
+		align-items     : stretch;
+
+		& > * {
+			flex : 1;
+		}
+		.left-action {
+			text-align : left;
+		}
+
+		.right-action {
+			text-align : right;
+		}
+
+	}
 }
 
 // testing theme
 .card {
+	.card-front,
+	.card-back {
+		border-radius : $card-border-radius;
+		box-shadow    : 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
-  .card-back,
-  .card-front {
-	display        : flex;
-	flex-direction : column;
-	flex-wrap      : nowrap;
-  }
-
-  header {
-	flex             : 1;
-	background-color : #666;
-  }
-
-  .card-body {
-	flex                    : 1;
-	background-color        : #999;
-	border-top-left-radius  : $card-border-radius;
-	border-top-right-radius : $card-border-radius;
-  }
-
-  footer {
-	display                    : flex;
-	flex-direction             : row;
-	flex-wrap                  : nowrap;
-	justify-content            : space-between flex-end;
-	align-items                : stretch;
-	background-color           : #ccc;
-	border-bottom-left-radius  : $card-border-radius;
-	border-bottom-right-radius : $card-border-radius;
-
-	a {
-	  display : block;
-	  flex    : 1;
+		header:first-child,
+		.card-body:first-child {
+			border-top-left-radius  : $card-border-radius;
+			border-top-right-radius : $card-border-radius;
+		}
 	}
-  }
+
+	header {
+		background-color : #666;
+	}
+
+	.card-body {
+		background-color : #999;
+	}
+
+	footer {
+		background-color           : #ccc;
+		border-bottom-left-radius  : $card-border-radius;
+		border-bottom-right-radius : $card-border-radius;
+
+		.left-action,
+		.left-action > button {
+			border-bottom-left-radius : $card-border-radius;
+		}
+
+		.right-action,
+		.right-action > button {
+			border-bottom-right-radius : $card-border-radius;
+		}
+
+	}
 }
 
