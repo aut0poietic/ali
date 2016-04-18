@@ -11,17 +11,18 @@ module.exports = function (grunt) {
         'src/js/vendor/mustache.min.js',
         'src/js/core/transition.js',
         'src/js/core/aria.js',
-        'src/js/core/card.js',
         'src/html/templates.js',
         'src/js/core/feedback.js',
         'src/js/core/interaction.js',
+        'src/js/core/card.js',
         'src/js/core/dialog.js',
         'src/js/interactions/accordion.js',
         'src/js/interactions/tab-control.js',
         'src/js/interactions/answer-set.js',
         'src/js/interactions/multiple-choice.js',
         'src/js/interactions/ordered-items.js',
-        'src/js/interactions/thinking-question.js'
+        'src/js/interactions/thinking-question.js',
+        'src/js/interactions/card-carousel.js'
     ];
 
 

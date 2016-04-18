@@ -1,0 +1,126 @@
+<!doctype html>
+<html class="no-js" lang="en-US">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Ali Development</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../normalize.css">
+	<link rel="stylesheet" href="../ali.css">
+	<style>
+		.container {
+			max-width : 960px;
+			margin    : 64px auto;
+		}
+
+		.text-center {
+			text-align : center;
+		}
+
+		small {
+			display   : block;
+			font-size : 10px;
+			color     : #999;
+		}
+
+		@media ( max-width : 959px ) {
+			.container {
+				margin : 64px 32px;
+			}
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<h1>Cards</h1>
+	<div class="card-container grid">
+
+		<div id="card1" class="card" data-ali="card">
+			<div class="card-inner">
+				<div class="card-front">
+					<header>
+						<p class="text-center">Standard Card</p>
+						<small class="text-center">(image goes here)</small>
+					</header>
+					<div class="card-body">
+						<p>Card content</p>
+					</div>
+					<footer>
+						<div class="left-action">&nbsp;</div>
+						<div class="right-action">
+							<button class="show-back">Back</button>
+						</div>
+					</footer>
+				</div>
+				<div class="card-back">
+					<div class="card-body">
+						<p>Back content</p>
+					</div>
+					<footer>
+						<div class="left-action">
+							<button class="show-front">Front</button>
+						</div>
+						<div class="right-action"></div>
+					</footer>
+				</div>
+			</div>
+		</div>
+
+
+		<div id="card2" class="card" data-ali="card">
+			<div class="card-inner">
+				<form class="card-front">
+					<header>
+						<p class="text-center">Question Card</p>
+						<small class="text-center">(image goes here)</small>
+					</header>
+					<div class="card-body">
+						<p><label for="card-question-2">Question</label></p>
+						<div class="text-center">
+							<select id="card-question-2" data-ali-correct="3">
+								<option> </option>
+								<option>This is not correct</option>
+								<option>Yup, here's the right one</option>
+								<option>No, I'm not right either</option>
+							</select>
+						</div>
+					</div>
+					<footer>
+						<div class="left-action">&nbsp;</div>
+						<div class="right-action">
+							<button class="evaluate-card">Submit</button>
+						</div>
+					</footer>
+				</form>
+				<div class="card-back">
+					<div class="card-body">
+						<p>Result</p>
+					</div>
+					<footer>
+						<div class="left-action">
+							<button class="show-front">Front</button>
+						</div>
+						<div class="right-action"></div>
+					</footer>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+<script src="../ali.js"></script>
+<script>
+	jQuery(function ($) {
+		$(document).on('ali:complete', function (e, data) {
+			// e: Object, the original event object
+			// data: Object interaction event object
+			console.log(e, data);
+		});
+	});
+</script>
+</body>
+</html>
+

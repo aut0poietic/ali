@@ -6,44 +6,45 @@
  * --------------------------------------------------------------------------
  */
 window.ali = {
-	EVENT : {
-		ready    : 'ali:ready',
-		complete : 'ali:complete'
-	},
+    EVENT : {
+        ready : 'ali:ready',
+        complete : 'ali:complete'
+    },
 
-	STATUS : {
-		complete      : 'complete',
-		correct       : 'correct',
-		incorrect     : 'incorrect',
-		unanticipated : 'unanticipated',
-		incomplete    : 'incomplete'
-	},
+    STATUS : {
+        complete : 'complete',
+        correct : 'correct',
+        incorrect : 'incorrect',
+        unanticipated : 'unanticipated',
+        incomplete : 'incomplete'
+    },
 
-	TYPE          : {
-		choice      : 'choice',
-		performance : 'performance',
-		sequencing  : 'sequencing',
-		numeric     : 'numeric',
-		shortAnswer : 'fill-in',
-		longAnswer  : 'long-fill-in',
-		other       : 'other'
-	},
-	Interaction   : null,
-	transitionEnd : 'bsTransitionEnd aliTransitionEnd'
+    TYPE : {
+        choice : 'choice',
+        performance : 'performance',
+        sequencing : 'sequencing',
+        numeric : 'numeric',
+        shortAnswer : 'fill-in',
+        longAnswer : 'long-fill-in',
+        other : 'other'
+    },
+    Interaction : null,
+    transitionEnd : 'bsTransitionEnd aliTransitionEnd'
 };
 
-jQuery( function ( $ ) {
-	"use strict";
-	if ( window.ali_AutolInit !== false ) {
-		$( '[data-ali="card"]' ).card();
-		$( '[data-ali="accordion"]' ).accordion();
-		$( '[data-ali="tab-control"]' ).tabcontrol();
-		$( '[data-ali="answer-set"]' ).answerset();
-		$( '[data-ali="multiple-choice"]' ).multiplechoice();
-		$( '[data-ali="ordered-items"]' ).ordereditems();
-		$( '[data-ali="thinking-question"]' ).thinkingquestion();
-	}
-} );
+jQuery(function ($) {
+    "use strict";
+    if (window.ali_AutolInit !== false) {
+        $('[data-ali="card"]').card();
+        $('[data-ali="accordion"]').accordion();
+        $('[data-ali="tab-control"]').tabcontrol();
+        $('[data-ali="answer-set"]').answerset();
+        $('[data-ali="multiple-choice"]').multiplechoice();
+        $('[data-ali="ordered-items"]').ordereditems();
+        $('[data-ali="thinking-question"]').thinkingquestion();
+        $('[data-ali="card-carousel"]').cardcarousel();
+    } 
+});
 ;
 
 /*!
@@ -230,63 +231,6 @@ jQuery( function ( $ ) {
 		}
 		return this;
 	};
-})( jQuery );
-;
-/*
- * --------------------------------------------------------------------------
- * Ali: card.js
- * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
- * --------------------------------------------------------------------------
- */
-
-(function ( $ ) {
-	"use strict";
-
-	// Make the global object available and abort if this file is used without it.
-	var ali = window.ali;
-	if ( $.type( ali ) !== 'object' ) {
-		return;
-	}
-
-	ali.Card = function ( element ) {
-		this.$el = $( element );
-		this.$el.aria( 'tabindex', - 1 );
-
-		// initialize the turn-to-back functionality
-		$( '.show-back' , this.$el ).off( 'click.ali' ).on( 'click.ali', this.showBack.bind( this ) );
-
-		// initialize the turn-to-front functionality
-		$( '.show-front' , this.$el  ).off( 'click.ali' ).on( 'click.ali', this.showFront.bind( this ) );
-	};
-
-	ali.Card.prototype.showBack = function( e ){
-		$( '.card-back', this.$el ).aria( 'hidden', 'false' );
-		$( '.card-front', this.$el ).aria( 'hidden', 'true' );
-	};
-
-	ali.Card.prototype.showFront = function( e ){
-		$( '.card-back', this.$el ).aria( 'hidden', 'true' );
-		$( '.card-front', this.$el ).aria( 'hidden', 'false' );
-	};
-
-	/*
-	 * jQuery Plugin
-	 */
-	function Plugin() {
-		return this.each( function () {
-			new ali.Card( this );
-		} );
-	}
-
-	var old = $.fn.card;
-	$.fn.card = Plugin;
-	$.fn.card.Constructor = ali.Card;
-
-	$.fn.card.noConflict = function () {
-		$.fn.card = old;
-		return this;
-	};
-
 })( jQuery );
 ;
 var htmlTemplates = {};
@@ -653,6 +597,105 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
             }, 100);
         }
     };
+})(jQuery);
+;
+/*
+ * --------------------------------------------------------------------------
+ * Ali: card.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+(function ($) {
+    "use strict";
+
+    // Make the global object available and abort if this file is used without it.
+    var ali = window.ali;
+    if ($.type(ali) !== 'object') {
+        return;
+    }
+
+    var DESCRIPTION = 'A multiple choice interaction.';
+    var TYPE = ali.TYPE.choice;
+
+    ali.Card = function (element) {
+        this.$el = $(element);
+        if ($('.card-front select', this.$el).length > 0) {
+            ali.Interaction.call(this, element, TYPE, DESCRIPTION);
+        }
+
+        // initialize the turn-to-back functionality
+        $('.show-back', this.$el)
+            .aria('controls', this.$el.attr('id'))
+            .off('click.ali').on('click.ali', this.showBack.bind(this));
+
+        // initialize the turn-to-front functionality
+        $('.show-front', this.$el)
+            .aria('controls', this.$el.attr('id'))
+            .off('click.ali').on('click.ali', this.showFront.bind(this));
+
+        $('.evaluate-card', this.$el)
+            .aria('controls', this.$el.attr('id'))
+            .off('click.ali').on('click.ali', this.evaluate.bind(this));
+
+        this.showFront();
+    };
+
+    // Inherits from ali.Interaction
+    ali.Card.prototype = Object.create(ali.Interaction.prototype);
+    ali.Card.prototype.constructor = ali.Card;
+
+
+    ali.Card.prototype.showBack = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $('.card-back', this.$el).aria('hidden', 'false');
+        $('.card-front', this.$el).aria('hidden', 'true');
+    };
+
+    ali.Card.prototype.showFront = function (e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        $('.card-back', this.$el).aria('hidden', 'true');
+        $('.card-front', this.$el).aria('hidden', 'false');
+    };
+
+    ali.Card.prototype.evaluate = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $select = $('.card-front select', this.$el);
+        var selected = parseInt($select[0].selectedIndex, 10);
+        var correct = parseInt($select.attr('data-ali-correct'), 10) - 1;
+        var is_correct = selected == correct;
+
+        this.$el.removeClass('correct incorrect').addClass(is_correct ? 'correct' : 'incorrect');
+
+        this.setCorrectResponses([$select.val()]);
+        this.setLearnerResponses([$('option:selected', $select).val()]);
+        this.complete(is_correct ? ali.STATUS.correct : ali.STATUS.incorrect);
+        $('.card-back', this.$el).aria('hidden', 'false');
+        $('.card-front', this.$el).aria('hidden', 'true');
+    };
+    /*
+     * jQuery Plugin
+     */
+    function Plugin() {
+        return this.each(function () {
+            new ali.Card(this);
+        });
+    }
+
+    var old = $.fn.card;
+    $.fn.card = Plugin;
+    $.fn.card.Constructor = ali.Card;
+
+    $.fn.card.noConflict = function () {
+        $.fn.card = old;
+        return this;
+    };
+
 })(jQuery);
 ;
 /*
@@ -2299,3 +2342,105 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 	};
 
 })( jQuery );
+;
+/*
+ * --------------------------------------------------------------------------
+ * Ali: card.js
+ * Licensed GPL (https://github.com/aut0poietic/ali/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+(function ($) {
+    "use strict";
+
+    // Make the global object available and abort if this file is used without it.
+    var ali = window.ali;
+    if ($.type(ali) !== 'object') {
+        return;
+    }
+
+    var DESCRIPTION = 'A collection of ordered cards.';
+    var TYPE = ali.TYPE.other;
+
+
+    ali.CardCarousel = function (element) {
+        ali.Interaction.call(this, element, TYPE, DESCRIPTION);
+        this.init();
+    };
+    // Inherits from ali.Interaction
+    ali.CardCarousel.prototype = Object.create(ali.Interaction.prototype);
+    ali.CardCarousel.prototype.constructor = ali.CardCarousel;
+
+    ali.CardCarousel.prototype.activeElement = 0;
+
+    ali.CardCarousel.prototype.init = function () {
+        $('.card', this.$el).wrap('<div class="card-wrapper"></div>');
+        var maxHeight = Math.max.apply(
+            null,
+            $('.card', this.$el).map(function () {
+                return $(this).outerHeight(true);
+            }).get()
+        );
+        this.$el.height(maxHeight);
+        this.updateClasses();
+
+        $('.show-next', this.$el).off('click.ali').on('click.ali', this.onShowNext.bind(this));
+        $('.show-first', this.$el).off('click.ali').on('click.ali', this.onShowFirst.bind(this));
+    };
+
+    ali.CardCarousel.prototype.onShowNext = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.activeElement++;
+        this.updateClasses();
+    };
+
+    ali.CardCarousel.prototype.onShowFirst = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.activeElement = 0;
+        this.updateClasses();
+    };
+
+    ali.CardCarousel.prototype.updateClasses = function () {
+        var classString;
+        $('.card-wrapper', this.$el).each((function (i, el) {
+            classString = 'card-wrapper ';
+            if (i !== this.activeElement) {
+                if (i < this.activeElement) {
+                    classString += "before ";
+                    if (i === this.activeElement - 1) {
+                        classString += "hinted ";
+                    }
+                } else {
+                    classString += "after ";
+                    if (i === this.activeElement + 1) {
+                        classString += "hinted ";
+                    }
+                }
+            }
+            $(el).attr('class', classString)
+                .aria('hidden', i === this.activeElement ? 'false' : 'true');
+        }).bind(this));
+    };
+
+
+    /*
+     * jQuery Plugin
+     */
+    function Plugin() {
+        return this.each(function () {
+            new ali.CardCarousel(this);
+        });
+    }
+
+    var old = $.fn.cardcarousel;
+    $.fn.cardcarousel = Plugin;
+    $.fn.cardcarousel.Constructor = ali.CardCarousel;
+
+    $.fn.cardcarousel.noConflict = function () {
+        $.fn.cardcarousel = old;
+        return this;
+    };
+
+})(jQuery);

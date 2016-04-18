@@ -1,0 +1,44 @@
+.card-carousel {
+  position : relative;
+  height   : 460px + ($base-line-height *2);
+  border   : 1px solid rgba(#000, .3);
+  overflow : hidden;
+
+  & > .card-wrapper {
+	position        : absolute;
+	top             : 0;
+	display         : flex;
+	width           : 100%;
+	height          : 100%;
+	flex-direction  : row;
+	flex-wrap       : nowrap;
+	justify-content : center;
+	align-items     : center;
+	transition      : all .6s ease-in-out;
+
+	&[aria-hidden="false"] {
+	  left    : 0;
+	  z-index : 1;
+	}
+
+	&.after,
+	&.before {
+	  transform : scale(.9);
+	}
+
+	&.after {
+	  left : 200%;
+	  &.hinted {
+		left : 100%;
+	  }
+	}
+
+	&.before {
+	  left : -200%;
+	  &.hinted {
+		left : -100%;
+	  }
+	}
+  }
+}
+

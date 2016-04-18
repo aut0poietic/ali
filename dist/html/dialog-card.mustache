@@ -1,0 +1,41 @@
+<div id="card1" class="card" data-ali="card">
+	<div class="card-inner">
+		<div class="card-front">
+			{{#front.header}}
+			<header>{{front.header}}</header>
+			{{/front.header}}
+			<div class="card-body">{{front.body}}</div>
+			<footer>
+				<div class="left-action">
+					{{#front.leftAction}}
+						<button class="{{front.leftAction.action}}">{{front.leftAction.label}}</button>
+					{{/front.leftAction}}
+				</div>
+				<div class="right-action">
+					{{#front.rightAction}}
+						<button class="{{front.rightAction.action}}">{{front.rightAction.label}}</button>
+					{{/front.rightAction}}
+				</div>
+			</footer>
+		</div>
+		<div class="card-back">
+			{{#back.header}}
+				<header>{{back.header}}</header>
+			{{/back.header}}
+			<div class="card-body">{{back.body}}</div>
+			<footer>
+				<div class="left-action">
+					{{#back.leftAction}}
+						<button class="{{back.leftAction.action}}">{{back.leftAction.label}}</button>
+					{{/back.leftAction}}
+				</div>
+				<div class="right-action">
+					{{#back.rightAction}}
+						<button class="{{back.rightAction.action}}">{{back.rightAction.label}}</button>
+					{{/back.rightAction}}
+				</div>
+			</footer>
+		</div>
+	</div>
+</div>
+
