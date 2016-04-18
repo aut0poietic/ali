@@ -14,16 +14,6 @@
 			margin    : 64px auto;
 		}
 
-		.text-center {
-			text-align : center;
-		}
-
-		small {
-			display   : block;
-			font-size : 10px;
-			color     : #999;
-		}
-
 		@media ( max-width : 959px ) {
 			.container {
 				margin : 64px 32px;
@@ -40,8 +30,8 @@
 			<div class="card-inner">
 				<div class="card-front">
 					<header>
-						<p class="text-center">Standard Card</p>
-						<small class="text-center">(image goes here)</small>
+						<p>Standard Card</p>
+						<small>(image goes here)</small>
 					</header>
 					<div class="card-body">
 						<p>Card content</p>
@@ -72,12 +62,12 @@
 			<div class="card-inner">
 				<form class="card-front">
 					<header>
-						<p class="text-center">Question Card</p>
-						<small class="text-center">(image goes here)</small>
+						<p>Question Card</p>
+						<small>(image goes here)</small>
 					</header>
 					<div class="card-body">
 						<p><label for="card-question-2">Question</label></p>
-						<div class="text-center">
+						<div>
 							<select id="card-question-2" data-ali-correct="3">
 								<option> </option>
 								<option>This is not correct</option>
