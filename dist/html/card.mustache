@@ -2,9 +2,9 @@
 	<div class="card-inner">
 		<div class="card-front">
 			{{#front.header}}
-			<header>{{front.header}}</header>
+			<header>{{{front.header}}}</header>
 			{{/front.header}}
-			<div class="card-body">{{front.body}}</div>
+			<div class="card-body">{{{front.body}}}</div>
 			<footer>
 				<div class="left-action">
 					{{#front.leftAction}}
@@ -20,9 +20,9 @@
 		</div>
 		<div class="card-back">
 			{{#back.header}}
-				<header>{{back.header}}</header>
+				<header>{{{back.header}}}</header>
 			{{/back.header}}
-			<div class="card-body">{{back.body}}</div>
+			<div class="card-body">{{{back.body}}}</div>
 			<footer>
 				<div class="left-action">
 					{{#back.leftAction}}
