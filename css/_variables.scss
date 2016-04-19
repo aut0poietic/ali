@@ -1,0 +1,22 @@
+$brand-primary : #012643;
+$brand-success : #1c461c;
+$brand-info : #5bc0de;
+$brand-warning : #f0ad4e;
+$brand-danger : #441212;
+
+$body-bg : #fff;
+$link-color : $brand-primary;
+$link-hover-color : lighten($link-color, 10%);
+$focus-rect-size : 1px;
+$focus-rect-type : dotted;
+$focus-rect-color : $brand-primary;
+
+$text-color : #333;
+$text-muted : #555;
+$font-size-base : 16px;
+$font-family-base : 'Lato', sans-serif;
+$headings-font-family : 'Lato', sans-serif;
+$headings-small-color : #555;
+$blockquote-border-color : #ddd;
+$content-min-height : 360px;
+$grid-gutter-width : 48px;
