@@ -1,8 +1,53 @@
-.page-header {
-	padding-top   : 20vh;
-	margin-top    : 0;
-	margin-bottom : -120px;
-	.container {
+.header-container {
+  padding-top   : 80px;
+  margin-top    : 0;
+  margin-bottom : -120px;
 
+  h1 {
+	position : relative;
+	z-index  : 100;
+	color    : #fff;
+  }
+  h2 {
+	color : #fff;
+  }
+
+  .section-head {
+
+
+	margin-top       : 100px;
+	height           : 200px;
+	background-color : lighten($brand-primary, 15%);
+	text-align       : center;
+
+	.logo-container {
+	  @include shadow-depth-5();
+
+	  margin-top       : -100px;
+	  position         : relative;
+	  display          : inline-block;
+	  width            : 200px;
+	  height           : 200px;
+	  border-radius    : 50%;
+	  background-color : $brand-primary;
+
+	  span {
+		position         : absolute;
+		top              : 20px;
+		left             : 20px;
+		display          : block;
+		width            : 160px;
+		height           : 160px;
+		border-radius    : 50%;
+		background-color : #fff;
+	  }
+
+	  img {
+		position : absolute;
+		left     : -14px;
+		top      : -83px;
+		width    : 180px;
+	  }
 	}
+  }
 }
