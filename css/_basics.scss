@@ -38,4 +38,22 @@ html, body {
 		margin-right : auto;
 		height       : auto;
 	}
+	.more-info {
+		border-top : 1px solid rgba(#000, .3);
+		padding    : 4px 2px;
+		text-align : right;
+		a {
+			& > svg.icon {
+				position : relative;
+				top      : 2px;
+				width    : 16px;
+				height   : 16px;
+			}
+		}
+	}
+}
+
+.underline {
+	text-decoration : underline;
+	color           : $brand-primary;
 }
