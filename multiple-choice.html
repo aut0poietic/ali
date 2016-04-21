@@ -8,6 +8,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href='https://fonts.googleapis.com/css?family=Oxygen:400,700|Source+Sans+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="ali.min.css">
+	<link rel="stylesheet" href="css/prism.css">
 </head>
 <body>
 <!--[if lte IE 9 ]>
@@ -44,10 +46,198 @@
 			</div>
 		</section>
 
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Format (mustache.js)</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template.  Consider <code>responses</code> to be a list of <code>response</code> elements that contain the <code>type</code> ( checkbox or radio ), visible <code>text</code>, <code>value</code> as a lower-case letter a-z, and true or false value for <code>correct</code>.</p>
+					<p>Note that this example does not contain feedback. The four different feedback and how to use each type is outlined in the section on <a href="feedback.html">feedback types</a>.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-markup"><code class="language-markup">
+						&lt;form id=&quot;{{id}}&quot; class=&quot;multiple-choice&quot; data-ali=&quot;multiple-choice&quot;&gt;
+							{{{stem}}}
+							{{#responses}}
+								&lt;div class=&quot;input-group&quot;&gt;
+									&lt;input type=&quot;{{type}}&quot; id=&quot;response_{{value}}&quot; value=&quot;{{value}}&quot; data-correct=&quot;{{correct}}&quot;&gt;
+									&lt;label for=&quot;response_{{value}}&quot;&gt;{{{text}}}&lt;/label&gt;
+								&lt;/div&gt;
+							{{/responses}}
+							&lt;div class=&quot;submit-row&quot;&gt;
+								&lt;button class=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+							&lt;/div&gt;
+						&lt;/form&gt;
+					</code></pre>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/multiple-choice.mustache">Download Template</a>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/multiple-choice.html">Download HTML</a></p>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Example</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Note that this example uses the <code><a href="feedback.html#notice">notice</a></code> feedback type.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well example-container">
+						<form id="mc-1" class="multiple-choice" data-ali="multiple-choice" data-ali-notice-incorrect="Incorrect" data-ali-notice-correct="Correct">
+							<p>Confirmation Bias is an example of what type of bias?</p>
+							<div class="input-group">
+								<input type="checkbox" id="response_a"  value="a" data-correct="true">
+								<label for="response_a">Behavioral Bias</label>
+							</div>
+							<div class="input-group">
+								<input type="checkbox" id="response_b" value="b" data-correct="false">
+								<label for="response_b">Social Bias</label>
+							</div>
+							<div class="input-group">
+								<input type="checkbox" id="response_c" value="c" data-correct="false">
+								<label for="response_c">Memory Bias</label>
+							</div>
+							<div class="input-group">
+								<input type="checkbox" id="response_d" value="d" data-correct="false">
+								<label for="response_d">Not a valid bias</label>
+							</div>
+							<div class="submit-row">
+								<button class="submit" aria-label="Submit">Submit</button>
+							</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p><a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/multiple-choice.html">View Source</a></p>
+				</div>
+			</div>
+		</section>
+
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Style Bindings</h3>
+				<div class="col-xs-12">
+					<pre class="language-css"><code class="language-css">
+						.multiple-choice {
+							/* The exterior container */
+						}
+
+						.multiple-choice .input-group {
+							/* Element that surrounds the label and input */
+						}
+
+						.multiple-choice label {
+							/* This is a label. */
+						}
+
+						.multiple-choice label:before {
+							/* This is the "box" that stands in for the checkbox/radio button. */
+						}
+
+						.multiple-choice label:after {
+							/* This is the "check"  and is hidden by default*/
+							/* The graphic is encoded into the content property */
+						}
+
+						.multiple-choice label:hover:before,
+						.multiple-choice label:focus:before {
+							/* Hover/focus appearance of the "check" */
+						}
+
+
+						.multiple-choice input[type="checkbox"],
+						.multiple-choice input[type="radio"] {
+							/* The inputs are positioned *behind* the label */
+							/* but MUST be both visible and displayed       */
+						}
+
+						.multiple-choice input[type="checkbox"]:checked + label:after,
+						.multiple-choice input[type="radio"]:checked + label:after {
+							/* Styles applied to the label if the adjacent input element is checked  */
+						}
+
+						.multiple-choice input[type="checkbox"]:focus + label,
+						.multiple-choice input[type="radio"]:focus + label {
+							/* Styles applied to the label if the adjacent input element is focused  */
+						}
+
+						.multiple-choice input[type="checkbox"][aria-disabled="true"] + label:hover,
+						.multiple-choice input[type="checkbox"][aria-disabled="true"] + label:focus,
+						.multiple-choice input[type="checkbox"][aria-disabled="true"] + label,
+						.multiple-choice input[type="radio"][aria-disabled="true"] + label:hover,
+						.multiple-choice input[type="radio"][aria-disabled="true"] + label:focus,
+						.multiple-choice input[type="radio"][aria-disabled="true"] + label {
+							/* Disabled appearance  */
+						}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Event Model</h3>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Event: <code>ali:complete</code></h4>
+					<p>Dispatched when all tabs have been viewed.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:complete', $( 'dl.accordion' ),
+							function ( e, data ) {
+								// e: Object, the original event object
+								// data: Object interaction event objec
+								console.log( e, data );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4>Event: <code>ali:itemSelected</code></h4>
+					<p>Dispatched when a tab is selected. The <code>$item</code> parameter contains a jQuery reference to the item.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:itemSelected', $( 'dl.accordion' ),
+						function ( e, data, $item ) {
+							// e: Object, the original event object
+							// data: Object interaction event object
+							// $item : the source of the event -- in this case the input element
+							console.log( e, data, $item );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4><code>Data</code> Object</h4>
+					<p>Passed with the event. Note the not all items will be populated for all events.</p>
+					<p>For example: <code>latency</code> has no meaning for an <code>ali:itemSelected</code> event unless the interaction was completed previously.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						data = {
+							description       : {string}     // The description of the current interaction
+							id                : {string ID)  // The id of the interactions main element
+							latency           : {int}        // Milliseconds the user spent viewing the interaction
+							result            : {string}     // Status of the element, either "correct" or "incorrect"
+							start             : {int}        // Time the user was first shown the interaction, in milliseconds
+							type              : {string}     // SCORM/xAPI interaction type
+							correct_responses : {array}      // An array of the correct responses as text
+						    learner_response  : {array}      // An array of the responses chosen by the user as text
+						};
+					</code></pre>
+				</div>
+			</div>
+		</section>
 	</article>
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-<!--<script src="js/main.js"></script>-->
+<script src="ali.min.js"></script>
+<script src="js/vendor/prism.min.js"></script>
 </body>
 </html>

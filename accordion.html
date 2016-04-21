@@ -163,6 +163,56 @@
 			</div>
 		</section>
 
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Event Model</h3>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Event: <code>ali:complete</code></h4>
+					<p>Dispatched when all items have been viewed.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:complete', $( 'dl.accordion' ),
+							function ( e, data ) {
+								// e: Object, the original event object
+								// data: Object interaction event objec
+								console.log( e, data );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4>Event: <code>ali:itemSelected</code></h4>
+					<p>Dispatched when a item is selected. The <code>$item</code> parameter contains a jQuery reference to the item.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:itemSelected', $( 'dl.accordion' ),
+							function ( e, data, $item ) {
+								// e: Object, the original event object
+								// data: Object interaction event object
+								// $item : the source of the event
+								console.log( e, data, $item );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4><code>Data</code> Object</h4>
+					<p>Passed with the event. Note the not all items will be populated for all events.</p>
+					<p>For example: <code>latency</code> has no meaning for an
+						<code>ali:itemSelected</code> event unless the interaction was completed previously.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						data = {
+							description : {string}    // The description of the current interaction
+							id          : {string ID) // The id of the interactions main element
+							latency     : {int}       // Milliseconds the user spent viewing the interaction
+							result      : {string}    // Status of the element, either "complete" or "incomplete"
+							start       : {int}       // Time the user was first shown the interaction, in miliseconds
+							type        : {string}    // SCORM/xAPI interaction type
+						};
+					</code></pre>
+				</div>
+			</div>
+		</section>
 
 		<section class="container-fluid">
 			<div class="row">

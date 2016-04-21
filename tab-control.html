@@ -168,6 +168,9 @@
 						.tab-control ul[role="tablist"] li:hover { }
 
 						/* Tab, selected */
+						.tab-control ul[role="tablist"] li[aria-selected="true"] { }
+
+						/* Tab, Expanded */
 						.tab-control ul[role="tablist"] li[aria-expanded="true"] { }
 
 						/* Panel, open */
@@ -223,12 +226,12 @@
 						<code>ali:itemSelected</code> event unless the interaction was completed previously.</p>
 					<pre class="language-javascript"><code class="language-javascript">
 						data = {
-							description : {string} // The description of the current interaction
+							description : {string}    // The description of the current interaction
 							id          : {string ID) // The id of the interactions main element
-							latency     : {int} // Milliseconds the user spent viewing the interaction
-							result      : {string} // Status of the element, either "complete" or "incomplete"
-							start       : {int} // Time the user was first shown the interaction, in miliseconds
-							type        : {string} // SCORM/xAPI interaction type
+							latency     : {int}       // Milliseconds the user spent viewing the interaction
+							result      : {string}    // Status of the element, either "complete" or "incomplete"
+							start       : {int}       // Time the user was first shown the interaction, in milliseconds
+							type        : {string}    // SCORM/xAPI interaction type
 						};
 					</code></pre>
 				</div>
