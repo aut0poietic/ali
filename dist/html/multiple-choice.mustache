@@ -1,8 +1,8 @@
 <form id="{{id}}" class="multiple-choice" data-ali="multiple-choice">
-	{{stem}}
+	{{{stem}}}
 	{{#responses}}
 	<div class="input-group">
-		<input type="{{type}}" id="response_{{value}}" name="mc" value="{{value}}" data-correct="{{correct}}">
+		<input type="{{type}}" id="response_{{value}}" value="{{value}}" data-correct="{{correct}}">
 		<label for="response_{{value}}">{{{text}}}</label>
 	</div>
 	{{/responses}}

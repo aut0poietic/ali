@@ -30,7 +30,7 @@
 		@include focusRect();
 
 		position         : relative;
-		padding          : 0 $base-line-height;
+		padding          : 1px $base-line-height 0;
 		border-bottom    : 2px solid rgba($key-color, .3);
 		margin           : 0;
 		overflow         : hidden;

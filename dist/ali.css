@@ -344,7 +344,7 @@ body.dialog-open {
 }
 .accordion .accordion-panel {
   position: relative;
-  padding: 0 24px;
+  padding: 1px 24px 0;
   border-bottom: 2px solid rgba(40, 53, 147, 0.3);
   margin: 0;
   overflow: hidden;
@@ -424,7 +424,7 @@ body.dialog-open {
 }
 .tab-control .tab-control-panel {
   position: relative;
-  padding: 0 24px;
+  padding: 1px 24px 0;
   border-bottom: 2px solid rgba(40, 53, 147, 0.3);
   margin: 0;
   background-color: #fcfcfc;
