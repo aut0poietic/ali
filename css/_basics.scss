@@ -1,59 +1,61 @@
 body {
-	background            : $brand-primary url(../images/bg.jpg) center center no-repeat;
-	background-size       : cover;
-	background-attachment : fixed;
+  background            : $brand-primary url(../images/bg.jpg) center center no-repeat;
+  background-size       : cover;
+  background-attachment : fixed;
 }
 
 html, body {
-	height    : 100%;
-	min-width : 320px !important;
+  height    : 100%;
+  min-width : 320px !important;
 }
 
 .wrap {
-	height     : auto;
-	min-height : 100%;
+  height        : auto;
+  min-height    : 100%;
+  margin-bottom : 80px;
 
-	.main-content,
-	.section-header {
-		padding : 32px;
-	}
+  .main-content,
+  .section-header {
+	padding : 32px;
+  }
 
 }
 
 .main-content {
-	@include shadow-depth-5();
+  @include shadow-depth-5();
 
-	background-color : #fff;
+  background-color : #fff;
 }
 
 .interaction-grid {
-	.row {
-		padding-top    : 24px;
-		padding-bottom : 24px;
+  .row {
+	padding-top    : 24px;
+	padding-bottom : 24px;
+  }
+  img {
+	display      : block;
+	max-width    : 40%;
+	margin-left  : auto;
+	margin-right : auto;
+	height       : auto;
+  }
+  .more-info {
+	border-top : 1px solid rgba(#000, .3);
+	padding    : 4px 2px;
+	text-align : right;
+
+	a {
+	  & > svg.icon {
+		position : relative;
+		top      : 2px;
+		width    : 16px;
+		height   : 16px;
+	  }
 	}
-	img {
-		display      : block;
-		max-width    : 40%;
-		margin-left  : auto;
-		margin-right : auto;
-		height       : auto;
-	}
-	.more-info {
-		border-top : 1px solid rgba(#000, .3);
-		padding    : 4px 2px;
-		text-align : right;
-		a {
-			& > svg.icon {
-				position : relative;
-				top      : 2px;
-				width    : 16px;
-				height   : 16px;
-			}
-		}
-	}
+  }
 }
 
 .underline {
-	text-decoration : underline;
-	color           : $brand-primary;
+  text-decoration : underline;
+  color           : $brand-primary;
 }
