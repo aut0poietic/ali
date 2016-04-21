@@ -51,9 +51,12 @@
 		</section>
 		<section class="container-fluid">
 			<div class="row">
-				<h3 class="col-xs-12">Format (mustache.js)</h3>
+				<h3 class="col-xs-12">Basic HTML Structure</h3>
 			</div>
 			<div class="row">
+				<div class="col-xs-12">
+					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template.  Consider <code>elements</code> to be a list of <code>term</code>/<code>definition</code> pairs.</p>
+				</div>
 				<div class="col-xs-12">
 					<pre class="language-markup"><code class="language-markup">
 						&lt;div id=&quot;{{id}}&quot; class=&quot;tab-control&quot; data-ali=&quot;tab-control&quot;&gt;
@@ -71,52 +74,71 @@
 						&lt;/div&gt;
 					</code></pre>
 				</div>
+				<div class="col-xs-12 text-right">
+					<p>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/tab-control.mustache">Download Template</a>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/tab-control.html">Download HTML</a></p>
+				</div>
 			</div>
+
 			<div class="row">
 				<h3 class="col-xs-12">Example</h3>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<div id="tc-1" class="tab-control" data-ali="tab-control">
-						<ul class="tab-control-tablist">
-							<li>Confirmation Bias</li>
-							<li>Choice-supportive bias</li>
-							<li>Dunning–Kruger effect</li>
-						</ul>
-						<div class="tab-control-panel">
-							<h2>Confirmation Bias</h2>
-							<p>Confirmation bias, also called myside bias, is the tendency to search for, interpret, or recall information in a way that confirms one's beliefs or hypotheses. It is a type of cognitive bias and a systematic error of inductive reasoning. People
-								display this bias when they gather or remember information selectively, or when they interpret it in a biased way. The effect is stronger for emotionally charged issues and for deeply entrenched beliefs. People also tend to interpret ambiguous
-								evidence as supporting their existing position. Biased search, interpretation and memory have been invoked to explain attitude polarization (when a disagreement becomes more extreme even though the different parties are exposed to the same evidence),
-								belief perseverance (when beliefs persist after the evidence for them is shown to be false), the irrational primacy effect (a greater reliance on information encountered early in a series) and illusory correlation (when people falsely perceive
-								an association between two events or situations).</p>
-							<p>Original article: <cite><a href="https://en.wikipedia.org/wiki/Confirmation_bias" target="_blank" rel="external">Wikipedia: Confirmation Bias</a></cite></p>
-						</div>
+					<div class="well example-container">
+						<div id="tc-1" class="tab-control" data-ali="tab-control">
+							<ul class="tab-control-tablist">
+								<li>Confirmation Bias</li>
+								<li>Choice-supportive bias</li>
+								<li>Dunning–Kruger effect</li>
+							</ul>
+							<div class="tab-control-panel">
+								<h2>Confirmation Bias</h2>
+								<p>Confirmation bias, also called myside bias, is the tendency to search for, interpret, or recall information in a way that confirms one's beliefs or hypotheses. It is a type of cognitive bias and a systematic error of inductive reasoning. People
+									display this bias when they gather or remember information selectively, or when they interpret it in a biased way. The effect is stronger for emotionally charged issues and for deeply entrenched beliefs. People also tend to interpret ambiguous
+									evidence as supporting their existing position. Biased search, interpretation and memory have been invoked to explain attitude polarization (when a disagreement becomes more extreme even though the different parties are exposed to the same evidence),
+									belief perseverance (when beliefs persist after the evidence for them is shown to be false), the irrational primacy effect (a greater reliance on information encountered early in a series) and illusory correlation (when people falsely perceive
+									an association between two events or situations).</p>
+								<p>Original article: <cite><a href="https://en.wikipedia.org/wiki/Confirmation_bias" target="_blank" rel="external">Wikipedia: Confirmation Bias</a></cite>
+								</p>
+							</div>
 
-						<div class="tab-control-panel">
-							<h2>Choice-supportive bias </h2>
-							<p>In cognitive science, choice-supportive bias is the tendency to retroactively ascribe positive attributes to an option one has selected. It is a cognitive bias. For example, if a person buys a computer from Apple instead of a computer (PC) running
-								Windows, they are likely to ignore or downplay the faults of Apple computers while amplifying those of Windows computers. Conversely, they are also likely to notice and amplify advantages of Apple computers and not notice or de-emphasize those
-								of Windows computers.</p>
+							<div class="tab-control-panel">
+								<h2>Choice-supportive bias </h2>
+								<p>In cognitive science, choice-supportive bias is the tendency to retroactively ascribe positive attributes to an option one has selected. It is a cognitive bias. For example, if a person buys a computer from Apple instead of a computer (PC) running
+									Windows, they are likely to ignore or downplay the faults of Apple computers while amplifying those of Windows computers. Conversely, they are also likely to notice and amplify advantages of Apple computers and not notice or de-emphasize those
+									of Windows computers.</p>
 
-							<p>What is remembered about a decision can be as important as the decision itself, especially in determining how much regret or satisfaction one experiences. Research indicates that the process of making and remembering choices yields memories that
-								tend to be distorted in predictable ways. In cognitive science, one predictable way that memories of choice options are distorted is that positive aspects tend to be remembered as part of the chosen option, whether or not they originally were
-								part of that option, and negative aspects tend to be remembered as part of rejected options. Once an action has been taken, the ways in which we evaluate the effectiveness of what we did may be biased. It is believed this may influence our future
-								decision-making. These biases may be stored as memories, which are attributions that we make about our mental experiences based on their subjective qualities, our prior knowledge and beliefs, our motives and goals, and the social context. True
-								and false memories arise by the same mechanism because when the brain processes and stores information, it cannot tell the difference from where they came from.</p>
-							<p>Original article: <cite><a href="https://en.wikipedia.org/wiki/Choice-supportive_bias" target="_blank" rel="external">Wikipedia: Choice-supportive bias</a></cite></p>
-						</div>
+								<p>What is remembered about a decision can be as important as the decision itself, especially in determining how much regret or satisfaction one experiences. Research indicates that the process of making and remembering choices yields memories that
+									tend to be distorted in predictable ways. In cognitive science, one predictable way that memories of choice options are distorted is that positive aspects tend to be remembered as part of the chosen option, whether or not they originally were
+									part of that option, and negative aspects tend to be remembered as part of rejected options. Once an action has been taken, the ways in which we evaluate the effectiveness of what we did may be biased. It is believed this may influence our future
+									decision-making. These biases may be stored as memories, which are attributions that we make about our mental experiences based on their subjective qualities, our prior knowledge and beliefs, our motives and goals, and the social context. True
+									and false memories arise by the same mechanism because when the brain processes and stores information, it cannot tell the difference from where they came from.</p>
+								<p>Original article:
+									<cite><a href="https://en.wikipedia.org/wiki/Choice-supportive_bias" target="_blank" rel="external">Wikipedia: Choice-supportive bias</a></cite>
+								</p>
+							</div>
 
-						<div class="tab-control-panel">
-							<h2>Dunning–Kruger effect</h2>
-							<p>The Dunning–Kruger effect is a cognitive bias wherein unskilled individuals suffer from illusory superiority, mistakenly assessing their ability to be much higher than is accurate. This bias is attributed to a metacognitive inability of the unskilled
-								to recognize their ineptitude. Conversely, highly skilled individuals tend to underestimate their relative competence, erroneously assuming that tasks which are easy for them are also easy for others.</p>
-							<p>As David Dunning and Justin Kruger of Cornell University conclude: <q>The miscalibration of the incompetent stems from an error about the self, whereas the miscalibration of the highly competent stems from an error about others.</q></p>
-							<p>Original article: <cite><a href="https://en.wikipedia.org/wiki/Dunning-Kruger_effect" target="_blank" rel="external">Wikipedia: Dunning–Kruger effect</a></cite></p>
+							<div class="tab-control-panel">
+								<h2>Dunning–Kruger effect</h2>
+								<p>The Dunning–Kruger effect is a cognitive bias wherein unskilled individuals suffer from illusory superiority, mistakenly assessing their ability to be much higher than is accurate. This bias is attributed to a metacognitive inability of the unskilled
+									to recognize their ineptitude. Conversely, highly skilled individuals tend to underestimate their relative competence, erroneously assuming that tasks which are easy for them are also easy for others.</p>
+								<p>As David Dunning and Justin Kruger of Cornell University conclude:
+									<q>The miscalibration of the incompetent stems from an error about the self, whereas the miscalibration of the highly competent stems from an error about others.</q>
+								</p>
+								<p>Original article:
+									<cite><a href="https://en.wikipedia.org/wiki/Dunning-Kruger_effect" target="_blank" rel="external">Wikipedia: Dunning–Kruger effect</a></cite>
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
+				<div class="col-xs-12 text-right">
+					<p><a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/tab-control.html">View Source</a></p>
+				</div>
 			</div>
+
 		</section>
 
 		<section class="container-fluid">
@@ -142,6 +164,12 @@
 						/* Tab, focused */
 						.tab-control ul[role="tablist"] li:focus { }
 
+						/* Tab, hover */
+						.tab-control ul[role="tablist"] li:hover { }
+
+						/* Tab, selected */
+						.tab-control ul[role="tablist"] li[aria-expanded="true"] { }
+
 						/* Panel, open */
 						.tab-control .tab-control-panel { }
 
@@ -162,7 +190,8 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<p><strong>ali:complete</strong></p>
+					<h4>Event: <code>ali:complete</code></h4>
+					<p>Dispatched when all tabs have been viewed.</p>
 					<pre class="language-javascript"><code class="language-javascript">
 						$( document ).on( 'ali:complete', $( 'dl.accordion' ),
 							function ( e, data ) {
@@ -174,7 +203,8 @@
 					</code></pre>
 				</div>
 				<div class="col-md-12">
-					<p><strong>ali:complete</strong></p>
+					<h4>Event: <code>ali:itemSelected</code></h4>
+					<p>Dispatched when a tab is selected. The <code>$item</code> parameter contains a jQuery reference to the item.</p>
 					<pre class="language-javascript"><code class="language-javascript">
 						$( document ).on( 'ali:itemSelected', $( 'dl.accordion' ),
 							function ( e, data, $item ) {
@@ -187,15 +217,18 @@
 					</code></pre>
 				</div>
 				<div class="col-md-12">
-					<p><strong>Contents of the data object</strong></p>
+					<h4><code>Data</code> Object</h4>
+					<p>Passed with the event. Note the not all items will be populated for all events.</p>
+					<p>For example: <code>latency</code> has no meaning for an
+						<code>ali:itemSelected</code> event unless the interaction was completed previously.</p>
 					<pre class="language-javascript"><code class="language-javascript">
 						data = {
-							description : ~description~
-							id          : ~id of element~
-							latency     : ~duration in miliseconds~
-							result      : "complete" | "incomplete"
-							start       : ~timestamp~
-							type        : ~scorm interaction type~
+							description : {string} // The description of the current interaction
+							id          : {string ID) // The id of the interactions main element
+							latency     : {int} // Milliseconds the user spent viewing the interaction
+							result      : {string} // Status of the element, either "complete" or "incomplete"
+							start       : {int} // Time the user was first shown the interaction, in miliseconds
+							type        : {string} // SCORM/xAPI interaction type
 						};
 					</code></pre>
 				</div>
