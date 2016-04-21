@@ -41,14 +41,14 @@
      * Saved jQuery reference to the tabs in this interaction.
      * @type {jQuery}
      */
-    ali.Accordion.prototype.$tabs = undefined;
+    ali.TabControl.prototype.$tabs = undefined;
 
     /**
      * Saved jQuery reference to the visual indicator for this interaction.
      * @type {jQuery}
      */
-    ali.Accordion.prototype.$vi = undefined;
-    ali.Accordion.prototype.__activeTab = undefined;
+    ali.TabControl.prototype.$vi = undefined;
+    ali.TabControl.prototype.__activeTab = undefined;
 
     /**
      * Initializes the Interaction. Called from constructor.
