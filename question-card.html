@@ -108,7 +108,9 @@
 						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/question-card.html">Download HTML</a></p>
 				</div>
 				<div class="col-xs-12">
-					<p>However, the <code>front.body</code> of the card <strong>must</strong> contain a <code>select</code> element with the attribute <code>data-ali-correct</code> with the supplied value of the numerical index of the correct <code>option</code>.</p>
+					<p>However, the <code>front.body</code> of the card <strong>must</strong> contain a
+						<code>select</code> element with the attribute <code>data-ali-correct</code> containing the
+						numerical index of the correct <code>option</code>.</p>
 					<pre  class="language-markup"><code class="language-markup">
 						&lt;select id=&quot;card-question-2&quot; data-ali-correct=&quot;3&quot;&gt;
 							&lt;option&gt;Select...&lt;/option&gt;
@@ -278,8 +280,7 @@
 
 				<div class="col-md-12">
 					<h4><code>Data</code> Object</h4>
-					<p>Passed with the event. Note the not all items will be populated for all events.</p>
-					<p>For example: <code>latency</code> has no meaning for an <code>ali:itemSelected</code> event unless the interaction was completed previously.</p>
+					<p>Passed with the event.</p>
 					<pre class="language-javascript"><code class="language-javascript">
 						data = {
 							description       : {string}     // The description of the current interaction
@@ -301,7 +302,7 @@
 				<div class="col-xs-12">
 					<h4>Special Buttons</h4>
 					<p>The Question Card can utilize the same buttons as a standard <a href="card.html#specialbuttons">Card</a>, and adds an additional button for evaluation.</p>
-					<p>A button with the class of <code>.evaluate-card</code> evaluate the card and flip the card from front-to-back.</p>
+					<p>A button with the class of <code>.evaluate-card</code> should be created to evaluate the card and flip the card from front-to-back.</p>
 				</div>
 				<div class="col-xs-12">
 					<h4>JavaScript Control</h4>

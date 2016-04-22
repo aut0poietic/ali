@@ -8,6 +8,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href='https://fonts.googleapis.com/css?family=Oxygen:400,700|Source+Sans+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="ali.min.css">
+	<link rel="stylesheet" href="css/prism.css">
 </head>
 <body>
 <!--[if lte IE 9 ]>
@@ -40,16 +42,471 @@
 					<ul>
 						<li>You have more than 10 concepts or questions</li>
 						<li>You need over-arching feedback for these concepts or questions.</li>
-						<li>You would like to score the questions or provide a final score.</li>
+						<li>You would like to score the questions and/or provide a final score.</li>
 					</ul>
+				</div>
+				<div class="col-xs-12">
+					<p>See <a href="card.html">Cards</a> or <a href="question-card.html">Question Cards</a> for additional limitations.</p>
 				</div>
 			</div>
 		</section>
 
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Format (mustache.js)</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a>, but is essentially a wrapper around a set of cards, with each card itself wrapped in a <code>.card-wrapper</code> to maintain the layout.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-markup"><code class="language-markup">
+						&lt;div class=&quot;card-carousel&quot; data-ali=&quot;card-carousel&quot;&gt;
+							{{#cards}}
+								&lt;div class=&quot;card-wrapper&quot;&gt;
+									{{{card}}}
+								&lt;/div&gt;
+							{{/cards}}
+						&lt;/div&gt;
+					</code></pre>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p><a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/card-carousel.html">Download HTML</a></p>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Example</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well example-container">
+						<div class="card-carousel" data-ali="card-carousel">
+							<div class="card-wrapper">
+								<div id="card1" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 1</p>
+												<div>
+													<select id="card-question-2" data-ali-correct="3">
+														<option> </option>
+														<option>This is not correct</option>
+														<option>Yup, here's the right one</option>
+														<option>No, I'm not right either</option>
+													</select>
+												</div>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="evaluate-card">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+												<p>Card 1</p>
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-next">Next</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-wrapper">
+								<div id="card2" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 2</p>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="show-back">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+												<p>Card 2</p>
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-next">Next</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-wrapper">
+								<div id="card3" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 3</p>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="show-back">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+												<p>Card 3</p>
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-next">Next</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-wrapper">
+								<div id="card4" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 4</p>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="show-back">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-next">Next</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-wrapper">
+								<div id="card5" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 5</p>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="show-back">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-next">Next</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-wrapper">
+								<div id="card6" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 6</p>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="show-back">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-next">Next</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-wrapper">
+								<div id="card7" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 7</p>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="show-back">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-next">Next</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-wrapper">
+								<div id="card8" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 8</p>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="show-back">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-next">Next</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-wrapper">
+								<div id="card9" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 9</p>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="show-back">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-next">Next</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-wrapper">
+								<div id="card10" class="card" data-ali="card">
+									<div class="card-inner">
+										<div class="card-front">
+											<header>&nbsp;</header>
+											<div class="card-body">
+												<p>Card 10</p>
+											</div>
+											<footer>
+												<div class="left-action">&nbsp;</div>
+												<div class="right-action">
+													<button class="show-back">Back</button>
+												</div>
+											</footer>
+										</div>
+										<div class="card-back">
+											<div class="card-body">
+
+											</div>
+											<footer>
+												<div class="left-action">
+													<button class="show-front">Front</button>
+												</div>
+												<div class="right-action">
+													<button class="show-first">Start Over</button>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p><a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/card-carousel.html">View Source</a></p>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Style Bindings</h3>
+				<div class="col-xs-12">
+					<pre class="language-css"><code class="language-css">
+						.card-carousel {
+							/*  Carousel container */
+							/*  Height is set via JavaScript to the offsetHeight
+								of the tallest card */
+						}
+						.card-carousel > .card-wrapper {
+							/*  The offset wrapper for each card that keeps
+								The card in the center of the carousel */
+						}
+						.card-carousel > .card-wrapper[aria-hidden="false"] {
+							/*  The wrapper for the currently active card */
+						}
+						.card-carousel > .card-wrapper.after,
+						.card-carousel > .card-wrapper.before {
+							/*  All other cards are either
+								.before or .after the active card */
+						}
+						.card-carousel > .card-wrapper.after {
+							/*  After cards are hidden just off-screen to the right... */
+						}
+						.card-carousel > .card-wrapper.after.hinted {
+							/*  ...except for the .hinted card which is
+								just out of view but can be moved slightly to
+								'hint' that there are more cards. */
+						}
+						.card-carousel > .card-wrapper.before {
+							/*  Before cards are hidden just off-screen to the left... */
+						}
+						.card-carousel > .card-wrapper.before.hinted {
+							/*  ...except for the .hinted card which is
+							just out of view but can be moved slightly to
+							'hint' that there are more cards. */
+						}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Event Model</h3>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Event: <code>ali:complete</code></h4>
+					<p>The complete event is fired for any Question Card that is a part of the carousel <em>and</em> an event for the Card Carousel itself when the last card is viewed.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:complete', $( 'dl.accordion' ),
+							function ( e, data ) {
+								// e: Object, the original event object
+								// data: Object interaction event object
+								console.log( e, data );
+								// Be sure to check e.target for the source of the event
+							}
+						);
+					</code></pre>
+				</div>
+
+				<div class="col-md-12">
+					<h4><code>Data</code> Object</h4>
+					<p>Passed with the event.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						data = {
+							description       : {string}     // The description of the current interaction
+							id                : {string ID)  // The id of the interactions main element
+							latency           : {int}        // Milliseconds the user spent viewing the interaction
+							result            : {string}     // Status of the element, either "correct" or "incorrect"
+							start             : {int}        // Time the user was first shown the interaction, in milliseconds
+							type              : {string}     // SCORM/xAPI interaction type
+							correct_responses : {array}      // An array of the correct responses as text
+							learner_response  : {array}      // An array of the responses chosen by the user as text
+						};
+					</code></pre>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Additional Features</h3>
+				<div class="col-xs-12">
+					<h4>Special Buttons</h4>
+					<p>The Card Carousel itself has no controls, and instead adds additional capabilities to cards it contains.</p>
+					<p>A card-button with the class of <code>.show-next</code> will navigate to the next card in the carousel.</p>
+					<p>A card-button with the class of <code>.show-first</code> will navigate to the first card in the carousel and flips all cards to their front face.</p>
+				</div>
+			</div>
+		</section>
 	</article>
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-<!--<script src="js/main.js"></script>-->
+<script src="ali.min.js"></script>
+<script src="js/vendor/prism.min.js"></script>
 </body>
 </html>
