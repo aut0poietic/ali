@@ -8,6 +8,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href='https://fonts.googleapis.com/css?family=Oxygen:400,700|Source+Sans+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="ali.min.css">
+	<link rel="stylesheet" href="css/prism.css">
 </head>
 <body>
 <!--[if lte IE 9 ]>
@@ -37,9 +39,9 @@
 					</ul>
 				</div>
 				<div class="col-md-6">
-					<h3>Why <span class="underline">not</span> a Multiple Choice?</h3>
+					<h3>Why <span class="underline">not</span> a Question Card?</h3>
 					<ul>
-						<li>You have more than 4 possible responses (or enough that they scroll off-screen).</li>
+						<li>You have more than 4 or 5 possible responses.</li>
 						<li>Your responses are longer than a few words.</li>
 						<li>Your feedback is longer than a sentence or two or should be different for correct or incorrect.</li>
 					</ul>
@@ -52,60 +54,265 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template. Cards are structured as having front and back content elements that contain the same possible elements on both side. </p>
-					<p>Those elements include the required <code>body</code> element as well as the optional <code>header</code>, <code>leftAction</code> and <code>rightAction</code> that correspond to the two possible buttons on the right and left of the card faces. </p>
-					<p>Both <code>leftAction</code> and <code>rightAction</code> elements contain the required sub-elements <code>action</code> and <code>label</code> that correspond to the button's class name and visible text.</p>
+					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template and is virtually identical to that of a normal card.</p>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
 					<pre class="language-markup"><code class="language-markup">
 						&lt;div id=&quot;card1&quot; class=&quot;card&quot; data-ali=&quot;card&quot;&gt;
-						&lt;div class=&quot;card-inner&quot;&gt;
-						&lt;div class=&quot;card-front&quot;&gt;
-						{{#front.header}}
-						&lt;header&gt;{{{front.header}}}&lt;/header&gt;
-						{{/front.header}}
-						&lt;div class=&quot;card-body&quot;&gt;{{{front.body}}}&lt;/div&gt;
-						&lt;footer&gt;
-						&lt;div class=&quot;left-action&quot;&gt;
-						{{#front.leftAction}}
-						&lt;button class=&quot;{{front.leftAction.action}}&quot;&gt;{{front.leftAction.label}}&lt;/button&gt;
-						{{/front.leftAction}}
-						&lt;/div&gt;
-						&lt;div class=&quot;right-action&quot;&gt;
-						{{#front.rightAction}}
-						&lt;button class=&quot;{{front.rightAction.action}}&quot;&gt;{{front.rightAction.label}}&lt;/button&gt;
-						{{/front.rightAction}}
-						&lt;/div&gt;
-						&lt;/footer&gt;
-						&lt;/div&gt;
-						&lt;div class=&quot;card-back&quot;&gt;
-						{{#back.header}}
-						&lt;header&gt;{{{back.header}}}&lt;/header&gt;
-						{{/back.header}}
-						&lt;div class=&quot;card-body&quot;&gt;{{{back.body}}}&lt;/div&gt;
-						&lt;footer&gt;
-						&lt;div class=&quot;left-action&quot;&gt;
-						{{#back.leftAction}}
-						&lt;button class=&quot;{{back.leftAction.action}}&quot;&gt;{{back.leftAction.label}}&lt;/button&gt;
-						{{/back.leftAction}}
-						&lt;/div&gt;
-						&lt;div class=&quot;right-action&quot;&gt;
-						{{#back.rightAction}}
-						&lt;button class=&quot;{{back.rightAction.action}}&quot;&gt;{{back.rightAction.label}}&lt;/button&gt;
-						{{/back.rightAction}}
-						&lt;/div&gt;
-						&lt;/footer&gt;
-						&lt;/div&gt;
-						&lt;/div&gt;
+							&lt;div class=&quot;card-inner&quot;&gt;
+								&lt;div class=&quot;card-front&quot;&gt;
+									{{#front.header}}
+										&lt;header&gt;{{{front.header}}}&lt;/header&gt;
+									{{/front.header}}
+									&lt;div class=&quot;card-body&quot;&gt;{{{front.body}}}&lt;/div&gt;
+									&lt;footer&gt;
+										&lt;div class=&quot;left-action&quot;&gt;
+											{{#front.leftAction}}
+												&lt;button class=&quot;{{front.leftAction.action}}&quot;&gt;{{front.leftAction.label}}&lt;/button&gt;
+											{{/front.leftAction}}
+										&lt;/div&gt;
+										&lt;div class=&quot;right-action&quot;&gt;
+											{{#front.rightAction}}
+												&lt;button class=&quot;{{front.rightAction.action}}&quot;&gt;{{front.rightAction.label}}&lt;/button&gt;
+											{{/front.rightAction}}
+										&lt;/div&gt;
+									&lt;/footer&gt;
+								&lt;/div&gt;
+								&lt;div class=&quot;card-back&quot;&gt;
+									{{#back.header}}
+										&lt;header&gt;{{{back.header}}}&lt;/header&gt;
+									{{/back.header}}
+									&lt;div class=&quot;card-body&quot;&gt;{{{back.body}}}&lt;/div&gt;
+									&lt;footer&gt;
+										&lt;div class=&quot;left-action&quot;&gt;
+											{{#back.leftAction}}
+												&lt;button class=&quot;{{back.leftAction.action}}&quot;&gt;{{back.leftAction.label}}&lt;/button&gt;
+											{{/back.leftAction}}
+										&lt;/div&gt;
+										&lt;div class=&quot;right-action&quot;&gt;
+											{{#back.rightAction}}
+												&lt;button class=&quot;{{back.rightAction.action}}&quot;&gt;{{back.rightAction.label}}&lt;/button&gt;
+											{{/back.rightAction}}
+										&lt;/div&gt;
+									&lt;/footer&gt;
+								&lt;/div&gt;
+							&lt;/div&gt;
 						&lt;/div&gt;
 					</code></pre>
 				</div>
 				<div class="col-xs-12 text-right">
 					<p>
 						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/card.mustache">Download Template</a>
-						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/card.html">Download HTML</a></p>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/question-card.html">Download HTML</a></p>
+				</div>
+				<div class="col-xs-12">
+					<p>However, the <code>front.body</code> of the card <strong>must</strong> contain a <code>select</code> element with the attribute <code>data-ali-correct</code> with the supplied value of the numerical index of the correct <code>option</code>.</p>
+					<pre  class="language-markup"><code class="language-markup">
+						&lt;select id=&quot;card-question-2&quot; data-ali-correct=&quot;3&quot;&gt;
+							&lt;option&gt;Select...&lt;/option&gt;
+							&lt;option&gt;Incorrect&lt;/option&gt;
+							&lt;option&gt;Correct&lt;/option&gt;
+							&lt;option&gt;Also Incorrect&lt;/option&gt;
+						&lt;/select&gt;
+					</code></pre>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Example</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well example-container">
+						<div class="card-container">
+							<div id="card1" class="card" data-ali="card">
+								<div class="card-inner">
+									<form class="card-front">
+										<header>
+											<p class="text-center">Question Card</p>
+											<p class="text-center"><small>(image goes here)</small></p>
+										</header>
+										<div class="card-body">
+											<p class="text-center"><label for="card-question-2">Question</label></p>
+											<div class="text-center">
+												<select id="card-question-2" data-ali-correct="3">
+													<option>Select...</option>
+													<option>Incorrect</option>
+													<option>Correct</option>
+													<option>Also Incorrect</option>
+												</select>
+											</div>
+										</div>
+										<footer>
+											<div class="left-action">&nbsp;</div>
+											<div class="right-action">
+												<button class="evaluate-card">Evaluate</button>
+											</div>
+										</footer>
+									</form>
+									<div class="card-back">
+										<div class="card-body">
+											<p class="text-center">Result</p>
+										</div>
+										<footer>
+											<div class="left-action">
+												<button class="show-front">Front</button>
+											</div>
+											<div class="right-action"></div>
+										</footer>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p><a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/question-card.html">View Source</a></p>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Style Bindings</h3>
+				<div class="col-xs-12">
+					<pre class="language-css"><code class="language-css">
+						.card {
+							/* Contains perspective and 3D information */
+							/* WARNING: styling this is may break the effect */
+						}
+
+						.card .card-inner {
+							/* Contains perspective and 3D information */
+							/* WARNING: styling this is may break the effect */
+						}
+						.card .card-front,
+						.card .card-back {
+							/* Common card visuals including background shadows, etc. */
+						}
+						.card .card-front {
+							/* Front of card appearance, visible */
+							/* Use caution editing transform and z-index */
+						}
+						.card .card-front[aria-hidden="true"] {
+							/* Front of card appearance, hidden */
+							/* Use caution editing transform */
+						}
+						.card .card-back,
+						.card .card-back[aria-hidden="true"] {
+							/* Back of card appearance, hidden */
+							/* Use caution editing transform */
+						}
+						.card .card-back[aria-hidden="false"] {
+							/* Back of card appearance, visible */
+							/* Use caution editing transform */
+						}
+						.card .card-front header {
+							/* Header for front of card */
+						}
+						.card .card-back header {
+							/* Header for back of card */
+						}
+
+						.card .card-front footer {
+							/* Footer for front of card */
+						}
+
+						.card .card-back footer {
+							/* Footer for back of card */
+						}
+
+						/* The footer is divided into left and right actions */
+						.card footer .left-action {
+
+						}
+						.card footer .right-action {
+
+						}
+
+						/* Special buttons ( see below ) */
+						.card footer .show-back {
+
+						}
+						.card footer .show-front {
+
+						}
+
+						.card footer .evaluate-card {
+
+						}
+
+						/* After Evaluation correct or incorrect classes
+						   are added to the base card. */
+						.card.incorrect {
+
+						}
+						.card.correct {
+
+						}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Event Model</h3>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Event: <code>ali:complete</code></h4>
+					<p>Dispatched when the question is evaluated.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:complete', $( 'dl.accordion' ),
+							function ( e, data ) {
+								// e: Object, the original event object
+								// data: Object interaction event objec
+								console.log( e, data );
+							}
+						);
+					</code></pre>
+				</div>
+
+				<div class="col-md-12">
+					<h4><code>Data</code> Object</h4>
+					<p>Passed with the event. Note the not all items will be populated for all events.</p>
+					<p>For example: <code>latency</code> has no meaning for an <code>ali:itemSelected</code> event unless the interaction was completed previously.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						data = {
+							description       : {string}     // The description of the current interaction
+							id                : {string ID)  // The id of the interactions main element
+							latency           : {int}        // Milliseconds the user spent viewing the interaction
+							result            : {string}     // Status of the element, either "correct" or "incorrect"
+							start             : {int}        // Time the user was first shown the interaction, in milliseconds
+							type              : {string}     // SCORM/xAPI interaction type
+							correct_responses : {array}      // An array of the correct responses as text
+							learner_response  : {array}      // An array of the responses chosen by the user as text
+						};
+					</code></pre>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Additional Features</h3>
+				<div class="col-xs-12">
+					<h4>Special Buttons</h4>
+					<p>The Question Card can utilize the same buttons as a standard <a href="card.html#specialbuttons">Card</a>, and adds an additional button for evaluation.</p>
+					<p>A button with the class of <code>.evaluate-card</code> evaluate the card and flip the card from front-to-back.</p>
+				</div>
+				<div class="col-xs-12">
+					<h4>JavaScript Control</h4>
+					<p>The Question Card can utilize the same JavaScript actions as a standard <a href="card.html#javascript">Card</a>, and adds an additional method for evaluation.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						// Show the front of the card with the id 'my_card'...
+						$('#my_card').card('evaluate');
+					</code></pre>
+					<p>Keep in mind that the <code>evaluate</code> buttons is the preferred method of evaluating the card.</p>
+					<p>If you need to use this technique, be sure to use a button to trigger the action and ensure that
+						the button has the <code>aria-controls</code> attribute set to the id of the card.</p>
 				</div>
 			</div>
 		</section>
@@ -113,6 +320,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-<!--<script src="js/main.js"></script>-->
+<script src="ali.min.js"></script>
+<script src="js/vendor/prism.min.js"></script>
 </body>
 </html>

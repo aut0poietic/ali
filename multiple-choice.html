@@ -190,7 +190,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<h4>Event: <code>ali:complete</code></h4>
-					<p>Dispatched when all tabs have been viewed.</p>
+					<p>Dispatched when the question is evaluated.</p>
 					<pre class="language-javascript"><code class="language-javascript">
 						$( document ).on( 'ali:complete', $( 'dl.accordion' ),
 							function ( e, data ) {
@@ -203,7 +203,7 @@
 				</div>
 				<div class="col-md-12">
 					<h4>Event: <code>ali:itemSelected</code></h4>
-					<p>Dispatched when a tab is selected. The <code>$item</code> parameter contains a jQuery reference to the item.</p>
+					<p>Dispatched when an input is selected. The <code>$item</code> parameter contains a jQuery reference to the input element.</p>
 					<pre class="language-javascript"><code class="language-javascript">
 						$( document ).on( 'ali:itemSelected', $( 'dl.accordion' ),
 						function ( e, data, $item ) {
