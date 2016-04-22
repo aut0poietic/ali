@@ -185,7 +185,7 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
           transform: translate(100%);
 }
 
-.card-container.grid {
+.card-container {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -204,8 +204,8 @@ button[aria-disabled="true"], button[aria-disabled="true"]:hover, button[aria-di
 }
 
 .card {
-  -webkit-perspective: 1000;
-          perspective: 1000;
+  -webkit-perspective: 1000px;
+          perspective: 1000px;
   -webkit-transform-style: preserve-3d;
           transform-style: preserve-3d;
   width: 300px;
