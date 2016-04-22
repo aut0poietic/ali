@@ -46,7 +46,69 @@
 				</div>
 			</div>
 		</section>
-
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Format (mustache.js)</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template. Cards are structured as having front and back content elements that contain the same possible elements on both side. </p>
+					<p>Those elements include the required <code>body</code> element as well as the optional <code>header</code>, <code>leftAction</code> and <code>rightAction</code> that correspond to the two possible buttons on the right and left of the card faces. </p>
+					<p>Both <code>leftAction</code> and <code>rightAction</code> elements contain the required sub-elements <code>action</code> and <code>label</code> that correspond to the button's class name and visible text.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-markup"><code class="language-markup">
+						&lt;div id=&quot;card1&quot; class=&quot;card&quot; data-ali=&quot;card&quot;&gt;
+						&lt;div class=&quot;card-inner&quot;&gt;
+						&lt;div class=&quot;card-front&quot;&gt;
+						{{#front.header}}
+						&lt;header&gt;{{{front.header}}}&lt;/header&gt;
+						{{/front.header}}
+						&lt;div class=&quot;card-body&quot;&gt;{{{front.body}}}&lt;/div&gt;
+						&lt;footer&gt;
+						&lt;div class=&quot;left-action&quot;&gt;
+						{{#front.leftAction}}
+						&lt;button class=&quot;{{front.leftAction.action}}&quot;&gt;{{front.leftAction.label}}&lt;/button&gt;
+						{{/front.leftAction}}
+						&lt;/div&gt;
+						&lt;div class=&quot;right-action&quot;&gt;
+						{{#front.rightAction}}
+						&lt;button class=&quot;{{front.rightAction.action}}&quot;&gt;{{front.rightAction.label}}&lt;/button&gt;
+						{{/front.rightAction}}
+						&lt;/div&gt;
+						&lt;/footer&gt;
+						&lt;/div&gt;
+						&lt;div class=&quot;card-back&quot;&gt;
+						{{#back.header}}
+						&lt;header&gt;{{{back.header}}}&lt;/header&gt;
+						{{/back.header}}
+						&lt;div class=&quot;card-body&quot;&gt;{{{back.body}}}&lt;/div&gt;
+						&lt;footer&gt;
+						&lt;div class=&quot;left-action&quot;&gt;
+						{{#back.leftAction}}
+						&lt;button class=&quot;{{back.leftAction.action}}&quot;&gt;{{back.leftAction.label}}&lt;/button&gt;
+						{{/back.leftAction}}
+						&lt;/div&gt;
+						&lt;div class=&quot;right-action&quot;&gt;
+						{{#back.rightAction}}
+						&lt;button class=&quot;{{back.rightAction.action}}&quot;&gt;{{back.rightAction.label}}&lt;/button&gt;
+						{{/back.rightAction}}
+						&lt;/div&gt;
+						&lt;/footer&gt;
+						&lt;/div&gt;
+						&lt;/div&gt;
+						&lt;/div&gt;
+					</code></pre>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/card.mustache">Download Template</a>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/card.html">Download HTML</a></p>
+				</div>
+			</div>
+		</section>
 	</article>
 </div>
 
