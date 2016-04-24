@@ -8,6 +8,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href='https://fonts.googleapis.com/css?family=Oxygen:400,700|Source+Sans+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="ali.min.css">
+	<link rel="stylesheet" href="css/prism.css">
 </head>
 <body>
 <!--[if lte IE 9 ]>
@@ -27,6 +29,7 @@
 	</div>
 
 	<article id="content" class="main-content">
+
 		<section class="container-fluid">
 			<div class="row">
 				<div class="col-md-6">
@@ -46,10 +49,254 @@
 			</div>
 		</section>
 
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Format (mustache.js)</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-markup"><code class="language-markup">
+						&lt;div id=&quot;{{id}}&quot; class=&quot;answer-set&quot; data-ali=&quot;answer-set&quot;&gt;
+							{{#questions}}
+								&lt;form data-ali-correct=&quot;1&quot; data-ali-correct-message=&quot;{{correct}}&quot; data-ali-incorrect-message=&quot;{{incorrect}}&quot;&gt;
+									&lt;label for=&quot;q-1&quot;&gt;{{stem}}&lt;/label&gt;
+									&lt;div class=&quot;answer-set-select&quot;&gt;
+										&lt;select id=&quot;q-1&quot;&gt;
+											&lt;option&gt;Select...&lt;/option&gt;
+											{{#options}}
+												&lt;option&gt;{{name}}&lt;/option&gt;
+											{{/options}}
+										&lt;/select&gt;
+									&lt;/div&gt;
+									&lt;div class=&quot;answer-set-submit&quot;&gt;
+										&lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+									&lt;/div&gt;
+								&lt;/form&gt;
+							{{/questions}}
+						&lt;/div&gt;
+					</code></pre>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/order-items.mustache">Download Template</a>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/order-items.html">Download HTML</a></p>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Example</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Note that this example uses the <code><a href="feedback.html#dialog">dialog</a></code> feedback type.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well example-container">
+						<div id="as-1" class="answer-set" data-ali="answer-set">
+
+							<form data-ali-correct="1" data-ali-correct-message="That's Right!" data-ali-incorrect-message="Incorrect">
+								<label for="q-1">Confirmation Bias</label>
+								<div class="answer-set-select">
+									<select id="q-1">
+										<option>Select...</option>
+										<option>Behavioral Bias</option>
+										<option>Social Bias</option>
+										<option>Memory Bias</option>
+										<option>Not Valid</option>
+									</select>
+								</div>
+								<div class="answer-set-submit">
+									<button type="submit">Submit</button>
+								</div>
+							</form>
+
+							<form data-ali-correct="3" data-ali-correct-message="That's Right!" data-ali-incorrect-message="Incorrect">
+								<label for="q-2">Choice-supportive bias</label>
+								<div class="answer-set-select">
+									<select id="q-2">
+										<option>Select...</option>
+										<option>Behavioral Bias</option>
+										<option>Social Bias</option>
+										<option>Memory Bias</option>
+										<option>Not Valid</option>
+									</select>
+								</div>
+								<div class="answer-set-submit">
+									<button type="submit">Submit</button>
+								</div>
+							</form>
+
+							<form data-ali-correct="4" data-ali-correct-message="That's Right!" data-ali-incorrect-message="Incorrect">
+								<label for="q-3">Prefix Illusion</label>
+								<div class="answer-set-select">
+									<select id="q-3">
+										<option>Select...</option>
+										<option>Behavioral Bias</option>
+										<option>Social Bias</option>
+										<option>Memory Bias</option>
+										<option>Not Valid</option>
+									</select>
+								</div>
+								<div class="answer-set-submit">
+									<button type="submit">Submit</button>
+								</div>
+							</form>
+
+							<form data-ali-correct="3" data-ali-correct-message="That's Right!" data-ali-incorrect-message="Incorrect">
+								<label for="q-4">Just-world hypothesis</label>
+								<div class="answer-set-select">
+									<select id="q-4">
+										<option>Select...</option>
+										<option>Behavioral Bias</option>
+										<option>Social Bias</option>
+										<option>Memory Bias</option>
+										<option>Not Valid</option>
+									</select>
+								</div>
+								<div class="answer-set-submit">
+									<button type="submit">Submit</button>
+								</div>
+							</form>
+
+							<div class="dialog-content correct">
+								<h3>Answered All Correct</h3>
+								<p>At least some of these answers were incorrect.</p>
+							</div>
+							<div class="dialog-content incorrect">
+								<h3>Some Answers were incorrect</h3>
+								<p>That's Right you got them all correct.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p><a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/answer-set.html">View Source</a></p>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Style Bindings</h3>
+				<div class="col-xs-12">
+					<pre class="language-css"><code class="language-css">
+						.answer-set {
+							/* Container */
+						}
+						.answer-set form {
+							/* each question is wrapped in a form */
+						}
+						.answer-set form label {
+							/* each question is wrapped in a form */
+						}
+						.answer-set form .answer-set-select {
+							/* Wrapped around the select dropdown */
+						}
+						.answer-set form .answer-set-submit {
+							/* Wrapped around the submit button */
+						}
+						.answer-set form .flag {
+							/* The flag that appears above each question
+							   This is the visible state. */
+						}
+						.answer-set form .flag[aria-hidden="true"] {
+							/* Hidden state of the flag */
+						}
+						.answer-set form .flag span {
+							/* interior span that gives
+						       the flag it's dimensions */
+						}
+						.answer-set form .flag.correct {
+							/* flag's correct appearance */
+						}
+						.answer-set form .flag.incorrect {
+							/* flag's incorrect appearance */
+						}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Event Model</h3>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Event: <code>ali:complete</code></h4>
+					<p>Dispatched when all items have been completed.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:complete', $( 'dl.accordion' ),
+							function ( e, data ) {
+								// e: Object, the original event object
+								// data: Object interaction event objec
+								console.log( e, data );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4>Event: <code>ali:itemComplete</code></h4>
+					<p>Dispatched when one of the questions are submitted. The <code>$item</code> parameter contains a jQuery reference to the form that was submitted.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:itemComplete', $( 'dl.accordion' ),
+							function ( e, data, $item ) {
+								// e: Object, the original event object
+								// data: Object interaction event object
+								// $item : the source of the event -- in this case the input element
+								console.log( e, data, $item );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4>Event: <code>ali:itemSelected</code></h4>
+					<p>Dispatched when a select element's value is changed. The <code>$item</code> parameter contains a jQuery reference to the select element.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:itemSelected', $( 'dl.accordion' ),
+							function ( e, data, $item ) {
+								// e: Object, the original event object
+								// data: Object interaction event object
+								// $item : the source of the event -- in this case the input element
+								console.log( e, data, $item );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4><code>Data</code> Object</h4>
+					<p>Passed with the event. Note the not all items will be populated for all events.</p>
+					<p>For example: <code>latency</code> has no meaning for an <code>ali:itemSelected</code> event unless the interaction was completed previously.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						data = {
+							description       : {string}     // The description of the current interaction
+							id                : {string ID)  // The id of the interactions main element
+							latency           : {int}        // Milliseconds the user spent viewing the interaction
+							result            : {string}     // Status of the element, either "correct" or "incorrect"
+							start             : {int}        // Time the user was first shown the interaction, in milliseconds
+							type              : {string}     // SCORM/xAPI interaction type
+							correct_responses : {array}      // An array of the responses in the correct order as text
+							learner_response  : {array}      // An array of the responses in the order chosen by the user as text
+						};
+					</code></pre>
+				</div>
+			</div>
+		</section>
+
 	</article>
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-<!--<script src="js/main.js"></script>-->
+<script src="ali.min.js"></script>
+<script src="js/vendor/prism.min.js"></script>
 </body>
 </html>

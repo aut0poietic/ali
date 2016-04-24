@@ -8,6 +8,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href='https://fonts.googleapis.com/css?family=Oxygen:400,700|Source+Sans+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="ali.min.css">
+	<link rel="stylesheet" href="css/prism.css">
 </head>
 <body>
 <!--[if lte IE 9 ]>
@@ -27,6 +29,7 @@
 	</div>
 	
 	<article id="content" class="main-content">
+
 		<section class="container-fluid">
 			<div class="row">
 				<div class="col-md-6">
@@ -34,7 +37,6 @@
 					<ul>
 						<li>You have a question or scenario you want the user to compose a long-form answer in order to consider the concepts involved.</li>
 						<li>You do not actually want to save the user's response.</li>
-						<li>Honestly, we're not real sure why you'd want this, but Instructional Designers maintain these are very useful.</li>
 					</ul>
 				</div>
 				<div class="col-md-6">
@@ -47,10 +49,154 @@
 			</div>
 		</section>
 
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Format (mustache.js)</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-markup"><code class="language-markup">
+						&lt;form id=&quot;{{id}}&quot; class=&quot;thinking-question&quot; data-ali=&quot;thinking-question&quot;&gt;
+							&lt;div class=&quot;question-wrapper&quot;&gt;
+								&lt;div class=&quot;question&quot;&gt;{{{stem}}}&lt;/div&gt;
+								&lt;textarea&gt;&lt;/textarea&gt;
+								&lt;div class=&quot;submit-row&quot;&gt;
+									&lt;button class=&quot;submit&quot; aria-label=&quot;Submit&quot;&gt;Submit&lt;/button&gt;
+								&lt;/div&gt;
+							&lt;/div&gt;
+							&lt;div class=&quot;feedback-content&quot;&gt;
+								{{{feedback}}}
+							&lt;/div&gt;
+						&lt;/form&gt;
+					</code></pre>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/order-items.mustache">Download Template</a>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/order-items.html">Download HTML</a></p>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Example</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well example-container">
+						<form id="tq-1" class="thinking-question" data-ali="thinking-question">
+							<div class="question-wrapper">
+								<div class="question">
+									<p>An individual's construction of social reality, not the objective input, may dictate their behaviour in the social world.</p>
+									<p>Take a moment and consider how your biases affect your social interactions and then explain in a paragraph or two how you believe you might manage the bias you experience &mdash; or eliminate them entirely.</p>
+								</div>
+								<textarea></textarea>
+								<div class="submit-row">
+									<button class="submit" aria-label="Submit">Submit</button>
+								</div>
+
+							</div>
+							<div class="feedback-content">
+								<h3>Cognitive Bias Modification</h3>
+								<p>Cognitive bias modification refers to the process of modifying cognitive biases in healthy people and also
+									refers to a growing area of psychological (non-pharmaceutical) therapies for anxiety, depression and
+									addiction called cognitive bias modification therapy (CBMT).</p>
+								<p>CBMT is sub-group of therapies within a growing area of psychological therapies based on modifying
+									cognitive processes with or without accompanying medication and talk therapy, sometimes referred to as
+									applied cognitive processing therapies (ACPT). Although cognitive bias modification can refer to modifying
+									cognitive processes in healthy individuals, CBMT is a growing area of evidence-based psychological therapy,
+									in which cognitive processes are modified to relieve suffering from serious depression,anxiety, and addiction.</p>
+								<p>CBMT techniques are technology assisted therapies that are delivered via a computer with or without
+									clinician support. CBM combines evidence and theory from the cognitive model of anxiety, cognitive
+									neuroscience, and attentional models.</p>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p><a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/answer-set.html">View Source</a></p>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Style Bindings</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Note that this example uses the <code><a href="feedback.html#feedback">feedback</a></code> feedback type.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-css"><code class="language-css">
+						.thinking-question {
+							/* Container */
+						}
+						.thinking-question textarea {
+							/* The primary text area */
+						}
+						.thinking-question textarea:focus {
+							/* Textarea focused */
+						}
+						.thinking-question textarea[aria-disabled="true"] {
+							/* Textarea disabled */
+						}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Event Model</h3>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Event: <code>ali:complete</code></h4>
+					<p>Dispatched when all items have been completed.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:complete', $( 'dl.accordion' ),
+							function ( e, data ) {
+								// e: Object, the original event object
+								// data: Object interaction event objec
+								console.log( e, data );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4><code>Data</code> Object</h4>
+					<p>Passed with the event. Note the not all items will be populated for all events.</p>
+					<p>For example: <code>latency</code> has no meaning for an <code>ali:itemSelected</code> event unless the interaction was completed previously.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						data = {
+							description       : {string}     // The description of the current interaction
+							id                : {string ID)  // The id of the interactions main element
+							latency           : {int}        // Milliseconds the user spent viewing the interaction
+							result            : {string}     // Status of the element, either "correct" or "incorrect"
+							start             : {int}        // Time the user was first shown the interaction, in milliseconds
+							type              : {string}     // SCORM/xAPI interaction type
+							correct_responses : {array}      // An array of the responses in the correct order as text
+							learner_response  : {array}      // An array of the responses in the order chosen by the user as text
+						};
+					</code></pre>
+				</div>
+			</div>
+		</section>
+
 	</article>
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-<!--<script src="js/main.js"></script>-->
+<script src="ali.min.js"></script>
+<script src="js/vendor/prism.min.js"></script>
 </body>
 </html>

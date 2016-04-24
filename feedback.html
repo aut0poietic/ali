@@ -1,0 +1,346 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Ali - Thinking Question</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href='https://fonts.googleapis.com/css?family=Oxygen:400,700|Source+Sans+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="ali.min.css">
+	<link rel="stylesheet" href="css/prism.css">
+</head>
+<body>
+<!--[if lte IE 9 ]>
+<p class="browserupgrade">You are using an
+	<strong>outdated</strong> browser that is incompatible with Ali products. Please
+	<a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+<div class="wrap container">
+	<header class="page-header">
+		<h1 class="text-center">Ali</h1>
+	</header>
+	<div class="section-header clearfix">
+		<div class="logo-container">
+			<span><img src="images/happy-box.svg" alt="illustration of a box exploding with confetti"></span>
+		</div>
+		<h2>Feedback Types</h2>
+	</div>
+
+	<article id="content" class="main-content">
+		<section class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Any of these patters can be added to any of controls that are submitted.
+						If more than one pattern is applied to a single control, the feedback
+						used will be evaluated in the order below. </p>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12">
+					<h3>Dialogs</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Dialogs small windows positioned in the center of the window, with a overlay covering the screen. They completely block all window interaction until they are dismissed.</p>
+				</div>
+			</div>
+			<div class="row">
+				<h4 class="col-xs-12">Format (mustache.js)</h4>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-markup"><code class="language-markup">
+						{{#correct}}
+							&lt;div class=&quot;dialog-content correct&quot;&gt;
+								&lt;h3&gt;{{correct.title}}&lt;/h3&gt;
+								{{{correct.body}}}
+							&lt;/div&gt;
+						{{/correct}}
+						{{#incorrect}}
+							&lt;div class=&quot;dialog-content incorrect&quot;&gt;
+								&lt;h3&gt;{{incorrect.title}}&lt;/h3&gt;
+								{{{incorrect.body}}}
+							&lt;/div&gt;
+						{{/incorrect}}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h4 class="col-xs-12">Dialog Example</h4>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well example-container">
+						<form id="mc-1" class="multiple-choice" data-ali="multiple-choice">
+							<p>Display a Dialog?</p>
+							<div class="input-group">
+								<input type="checkbox" id="response_a"  value="a" data-correct="true">
+								<label for="response_a">True</label>
+							</div>
+							<div class="input-group">
+								<input type="checkbox" id="response_b" value="b" data-correct="false">
+								<label for="response_b">False</label>
+							</div>
+							<div class="submit-row">
+								<button class="submit" aria-label="Submit">Submit</button>
+							</div>
+							<div class="dialog-content incorrect">
+								<h3>Incorrect</h3>
+								<p>Incorrect Content</p>
+							</div>
+							<div class="dialog-content correct">
+								<h3>Correct</h3>
+								<p>Correct Content</p>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h4 class="col-xs-12">Dialog Style Bindings</h4>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-css"><code class="language-css">
+						.dialog {
+							/* Fixed outer container for the dialog
+						       as well as the backdrop */
+						}
+						.dialog .dialog-window {
+							/* Centered dialog window */
+						}
+						.dialog:focus .dialog-window {
+							/* The dialog window when focused */
+							/* Technically the *outer* window gets focus,
+							   and applies the visual focus to the inner window */
+						}
+						.dialog .dialog-window-inner {
+							/* Interior wrapper element */
+						}
+						.dialog .dialog-window-inner h2,
+						.dialog .dialog-window-inner h3,
+						.dialog .dialog-window-inner h4,
+						.dialog .dialog-window-inner h5,
+						.dialog .dialog-window-inner h6 {
+							/* primary heading for dialog */
+						}
+						.dialog .dialog-window-actions {
+							/* Button row at bottom of window */
+						}
+						.dialog[aria-hidden="true"] {
+							/* Hidden; Must use display:none */
+						}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12">
+					<h3>Inline Feedback</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Inline Feedback are content blocks positioned beneath the control.
+						They do not block user interaction when opened. After a short animation delay,
+						the control is given input focus.</p>
+				</div>
+			</div>
+			<div class="row">
+				<h4 class="col-xs-12">Format (mustache.js)</h4>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>The basic structure of the inline feedback is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template.</p>
+					<p>Note that the &quot;correct&quot; or &quot;incorrect&quot; classes are optional and are used by the system to display a "correct" or "incorrect" response. If the classes aren't used, the first element with the class <code>.feedback-content</code> is used.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-markup"><code class="language-markup">
+						{{#correct}}
+							&lt;div class=&quot;feedback-content correct&quot;&gt;
+								&lt;h3&gt;{{correct.title}}&lt;/h3&gt;
+								{{{correct.body}}}
+							&lt;/div&gt;
+						{{/correct}}
+						{{#incorrect}}
+							&lt;div class=&quot;feedback-content incorrect&quot;&gt;
+								&lt;h3&gt;{{incorrect.title}}&lt;/h3&gt;
+								{{{incorrect.body}}}
+							&lt;/div&gt;
+						{{/incorrect}}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h4 class="col-xs-12">Feedback Example</h4>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well example-container">
+						<form id="mc-12" class="multiple-choice" data-ali="multiple-choice">
+							<p>Display inline feedback?</p>
+							<div class="input-group">
+								<input type="checkbox" id="response_a2"  value="a" data-correct="true">
+								<label for="response_a2">True</label>
+							</div>
+							<div class="input-group">
+								<input type="checkbox" id="response_b2" value="b" data-correct="false">
+								<label for="response_b2">False</label>
+							</div>
+							<div class="submit-row">
+								<button class="submit" aria-label="Submit">Submit</button>
+							</div>
+							<div class="feedback-content incorrect">
+								<h3>Incorrect</h3>
+								<p>Incorrect Content</p>
+							</div>
+							<div class="feedback-content correct">
+								<h3>Correct</h3>
+								<p>Correct Content</p>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h4 class="col-xs-12">Feedback Style Bindings</h4>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-css"><code class="language-css">
+						.feedback {
+							/* feedback container element */
+						}
+						.feedback:focus {
+							/* feedback container element with input focus */
+						}
+						.feedback .feedback-inner {
+							/* a wrapper element for padding and alignment */
+						}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12">
+					<h3>Notices</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Notices are very small notifications &mdash; typically only a word or two &mdash; that by default are animated out from the submit button.</p>
+				</div>
+			</div>
+			<div class="row">
+				<h4 class="col-xs-12">Format</h4>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Notices are displayed if they there are no other feedback types in use and if the proper attributes are created on the main container.</p>
+					<p>The components add a hidden element to the control that will cause the contents of the noitce to be read by assitive technology.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-markup"><code class="language-markup">
+						&lt;div data-ali-notice-correct=&quot;Correct&quot; data-ali-notice-incorrect=&quot;Incorrect&quot;&gt;
+						...
+						&lt;/div&gt;
+					</code></pre>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h4 class="col-xs-12">Notice Example</h4>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well example-container">
+						<form id="mc-13" class="multiple-choice" data-ali="multiple-choice" data-ali-notice-correct="Correct" data-ali-notice-incorrect="Incorrect">
+							<p>Display notices?</p>
+							<div class="input-group">
+								<input type="checkbox" id="response_a3"  value="a" data-correct="true">
+								<label for="response_a3">True</label>
+							</div>
+							<div class="input-group">
+								<input type="checkbox" id="response_b3" value="b" data-correct="false">
+								<label for="response_b3">False</label>
+							</div>
+							<div class="submit-row">
+								<button class="submit" aria-label="Submit">Submit</button>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="container-fluid">
+			<div class="row">
+				<h4 class="col-xs-12">Notice Style Bindings</h4>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-css"><code class="language-css">
+
+						.notice-container {
+							/* the hidden container */
+							/* positioned at bottom left by default */
+						}
+
+						.notice-container .notice {
+							/* The notice element */
+						}
+
+						.notice-container .notice.correct {
+							/* correct appearance */
+						}
+
+						.notice-container .notice.incorrect {
+							/* incorrect appearance */
+						}
+
+						.notice-container .notice[aria-hidden="true"] {
+							/* notice hidden */
+						}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+
+	</article>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+<script src="ali.min.js"></script>
+<script src="js/vendor/prism.min.js"></script>
+</body>
+</html>

@@ -8,6 +8,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href='https://fonts.googleapis.com/css?family=Oxygen:400,700|Source+Sans+Pro:400,400italic,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="ali.min.css">
+	<link rel="stylesheet" href="css/prism.css">
 </head>
 <body>
 <!--[if lte IE 9 ]>
@@ -26,6 +28,7 @@
 		<h2>Order Items</h2>
 	</div>
 	<article id="content" class="main-content">
+
 		<section class="container-fluid">
 			<div class="row">
 				<div class="col-md-6">
@@ -46,10 +49,185 @@
 			</div>
 		</section>
 
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Format (mustache.js)</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>The basic structure of the control is represented as a <a href="https://github.com/janl/mustache.js/" target="_blank">mustache.js</a> template.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<pre class="language-markup"><code class="language-markup">
+						&lt;form id=&quot;{{id}}&quot; class=&quot;ordered-items&quot; data-ali=&quot;ordered-items&quot;&gt;
+							&lt;p&gt;{{{stem}}}&lt;/p&gt;
+							&lt;ul class=&quot;list-elements&quot;&gt;
+								{{#elements}}
+									&lt;li data-correct=&quot;{{index}}&quot;&gt;&lt;label&gt;{{{label}}}&lt;/label&gt;&lt;/li&gt;
+								{{/elements}}
+							&lt;/ul&gt;
+							&lt;div class=&quot;submit-row&quot;&gt;
+								&lt;button class=&quot;submit&quot; aria-label=&quot;Submit&quot;&gt;Submit&lt;/button&gt;
+							&lt;/div&gt;
+						&lt;/form&gt;
+					</code></pre>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/order-items.mustache">Download Template</a>
+						<a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/order-items.html">Download HTML</a></p>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Example</h3>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Note that this example uses the <code><a href="feedback.html#notice">notice</a></code> feedback type.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well example-container">
+						<form id="oi-1" class="ordered-items" data-ali="ordered-items"  data-ali-notice-incorrect="Incorrect" data-ali-notice-correct="Correct">
+							<p>Place Erikson's stages of psychosocial crisis in their correct order, from birth (1) to maturity (8).</p>
+							<ul class="list-elements">
+								<li data-correct="4"><label>Industry vs. Inferiority</label></li>
+								<li data-correct="2"><label>Autonomy vs. Shame &amp; Doubt</label></li>
+								<li data-correct="1"><label>Basic Trust vs. Mistrust</label></li>
+								<li data-correct="3"><label>Initiative vs. Guilt</label></li>
+								<li data-correct="7"><label>Generativity vs. Stagnation</label></li>
+								<li data-correct="8"><label>Ego Integrity vs. Despair</label></li>
+								<li data-correct="5"><label>Identity vs. Role Confusion</label></li>
+								<li data-correct="6"><label>Intimacy vs. Isolation</label></li>
+							</ul>
+							<div class="submit-row">
+								<button class="submit" aria-label="Submit">Submit</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p><a class="btn" target="_blank" href="https://raw.githubusercontent.com/aut0poietic/ali/master/dist/html/order-items.html">View Source</a></p>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Style Bindings</h3>
+				<div class="col-xs-12">
+					<pre class="language-css"><code class="language-css">
+						.ordered-items {
+							/* Container form */
+						}
+
+						.ordered-items .list-elements {
+							/* The UL container */
+						}
+
+						.ordered-items .list-elements li {
+							/* Basis styles applied to items */
+						}
+
+						// Each item gets it's own position
+						// via transform: translate
+						.ordered-items .list-elements li.item-1 { }
+							/* ... */
+						.ordered-items .list-elements li.item-10 { }
+
+						.ordered-items .list-elements li.moving {
+							/*  Shadow and z-index for any items that
+								are currently in motion */
+						}
+
+						.ordered-items .list-elements li label,
+						.ordered-items .list-elements li i,
+						.ordered-items .list-elements li .item-select {
+							/*  Common styles for all direct children of the li
+						        to allow for FlexBox layouts*/
+						}
+
+						.ordered-items .list-elements li i {
+							/* styles for the visual number */
+						}
+
+						.ordered-items .list-elements li label {
+							/* The label for each item */
+						}
+
+						.ordered-items .list-elements li .item-select {
+							/* wrapper around the select element */
+						}
+					</code></pre>
+				</div>
+			</div>
+		</section>
+
+		<section class="container-fluid">
+			<div class="row">
+				<h3 class="col-xs-12">Event Model</h3>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Event: <code>ali:complete</code></h4>
+					<p>Dispatched when the order is evaluated.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:complete', $( 'dl.accordion' ),
+							function ( e, data ) {
+								// e: Object, the original event object
+								// data: Object interaction event objec
+								console.log( e, data );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4>Event: <code>ali:itemSelected</code></h4>
+					<p>Dispatched when a select element's value is changed. The <code>$item</code> parameter contains a jQuery reference to the select element.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						$( document ).on( 'ali:itemSelected', $( 'dl.accordion' ),
+							function ( e, data, $item ) {
+								// e: Object, the original event object
+								// data: Object interaction event object
+								// $item : the source of the event -- in this case the input element
+								console.log( e, data, $item );
+							}
+						);
+					</code></pre>
+				</div>
+				<div class="col-md-12">
+					<h4><code>Data</code> Object</h4>
+					<p>Passed with the event. Note the not all items will be populated for all events.</p>
+					<p>For example: <code>latency</code> has no meaning for an <code>ali:itemSelected</code> event unless the interaction was completed previously.</p>
+					<pre class="language-javascript"><code class="language-javascript">
+						data = {
+							description       : {string}     // The description of the current interaction
+							id                : {string ID)  // The id of the interactions main element
+							latency           : {int}        // Milliseconds the user spent viewing the interaction
+							result            : {string}     // Status of the element, either "correct" or "incorrect"
+							start             : {int}        // Time the user was first shown the interaction, in milliseconds
+							type              : {string}     // SCORM/xAPI interaction type
+							correct_responses : {array}      // An array of the responses in the correct order as text
+							learner_response  : {array}      // An array of the responses in the order chosen by the user as text
+						};
+					</code></pre>
+				</div>
+			</div>
+		</section>
+
 	</article>
+
+
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-<!--<script src="js/main.js"></script>-->
+<script src="ali.min.js"></script>
+<script src="js/vendor/prism.min.js"></script>
 </body>
 </html>
