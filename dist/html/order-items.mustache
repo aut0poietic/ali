@@ -1,7 +1,9 @@
-<form id="{{id}}" class="ordered-items" data-ali="ordered-items"{{#incorrectNotice}} data-ali-notice-incorrect="{{incorrectNotice}}" {{/incorrectNotice}}{{#correctNotice}} data-ali-notice-correct="{{correctNotice}}"{{/correctNotice}}>
+<form id="{{id}}" class="ordered-items" data-ali="ordered-items">
 	<p>{{{stem}}}</p>
 	<ul class="list-elements">
-		<li data-correct="{{correctIndex}}"><label>{{{label}}}</label></li>
+		{{#elements}}
+			<li data-correct="{{index}}"><label>{{{label}}}</label></li>
+		{{/elements}}
 	</ul>
 	<div class="submit-row">
 		<button class="submit" aria-label="Submit">Submit</button>

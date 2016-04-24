@@ -33,7 +33,7 @@
 			.aria( 'controls', this.$el.attr( 'id' ) )
 			.off( 'click.ali' ).on( 'click.ali', this.showFront.bind( this ) );
 
-		$( '.evaluate-card', this.$el )
+		$( '.evaluate-card', this.$el ) 
 			.aria( 'controls', this.$el.attr( 'id' ) )
 			.off( 'click.ali' ).on( 'click.ali', this.evaluate.bind( this ) );
 

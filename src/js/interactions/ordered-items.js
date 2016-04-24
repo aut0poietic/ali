@@ -63,7 +63,7 @@
      * Initializes the Interaction. Called from constructor.
      */
     ali.OrderedItems.prototype.init = function () {
-        this.$items = $('li', this.el);
+        this.$items = $('li', this.$el);
         this.createElements();
 
         this.$selects = $('select', this.el);
