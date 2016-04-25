@@ -161,7 +161,7 @@
 	 * @param $item : jQuery object for the element selected.
 	 */
 	ali.Interaction.prototype.itemSelected = function ( $item ) {
-		var clonedData = Object.assign( {}, this.data );
+		var clonedData = jQuery.extend( true, {}, this.data );
 		clonedData.id = $item.attr( 'id' );
 		var e = new jQuery.Event( 'ali:itemSelected' );
 		this.$el.trigger( e, [ clonedData, $item ] );
@@ -181,7 +181,7 @@
 			$item = this.$el;
 		}
 
-		var clonedData = Object.assign( {}, this.data );
+		var clonedData = jQuery.extend( true, {}, this.data );
 		clonedData.id = $item.attr( 'id' );
 		var d = new Date();
 		var e = new jQuery.Event( 'ali:itemComplete' );
