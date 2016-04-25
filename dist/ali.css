@@ -575,19 +575,19 @@ body.dialog-open {
   transition: all 0.35s ease-in-out;
 }
 .multiple-choice label:after {
-  content: "";
+  content: "\2713 ";
   position: absolute;
-  top: -4px;
+  top: -9px;
   left: 1px;
   z-index: 10;
   display: block;
   width: 30px;
   height: 30px;
   transition: all 0.2s ease-in-out;
-  background: transparent center center no-repeat;
-  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><path fill="#388E3C" d="M26 8.8q0 .7-.3 1L12.2 23.4q-.4.5-1 .5t-1-.8l-8-7.7q-.3-.5-.3-1t0-1.2l2.2-2q.4-.5 1-.5t1 .2l4.8 5L21.5 5.5q.5-.5 1-.5t1 .6l2.3 2q.4.5.4 1z"/></svg>');
   background-size: contain;
   pointer-events: none;
+  color: #388E3C;
+  font-size: 32px;
   -webkit-transform: scale(2);
       -ms-transform: scale(2);
           transform: scale(2);
@@ -603,14 +603,16 @@ body.dialog-open {
   left: 1px;
   z-index: 1;
 }
-.multiple-choice input[type="checkbox"]:checked + label:after,
+.multiple-choice input[type="checkbox"]:checked ~ label:after, .multiple-choice input[type="checkbox"]:checked + label:after,
+.multiple-choice input[type="radio"]:checked ~ label:after,
 .multiple-choice input[type="radio"]:checked + label:after {
   -webkit-transform: scale(1);
       -ms-transform: scale(1);
           transform: scale(1);
   opacity: 1;
 }
-.multiple-choice input[type="checkbox"]:focus + label,
+.multiple-choice input[type="checkbox"]:focus ~ label, .multiple-choice input[type="checkbox"]:focus + label,
+.multiple-choice input[type="radio"]:focus ~ label,
 .multiple-choice input[type="radio"]:focus + label {
   outline: 1px dashed #ff9800;
   outline-offset: -2px;
