@@ -79,7 +79,21 @@
 		if ( this.activeElement === $( '.card', this.$el ).length - 1 ) {
 			this.complete( ali.STATUS.complete );
 		}
+
+		setTimeout( this.focusNextCard.bind( this ), 400 );
 	};
+
+	ali.CardCarousel.prototype.focusNextCard = function () {
+		var $buttons = $( '.card-wrapper[aria-hidden="false"] .card-front button', this.$el );
+
+		if ( $buttons.length > 0 ) {
+			setTimeout( function () {
+				console.log( $buttons );
+				$( $buttons[ 0 ] ).focus();
+			}, 100 );
+		}
+	};
+
 
 	/**
 	 * Event handler for the 'show-first' button. Additionally, resets all cards.

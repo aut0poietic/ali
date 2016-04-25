@@ -33,11 +33,12 @@
 			.aria( 'controls', this.$el.attr( 'id' ) )
 			.off( 'click.ali' ).on( 'click.ali', this.showFront.bind( this ) );
 
-		$( '.evaluate-card', this.$el ) 
+		$( '.evaluate-card', this.$el )
 			.aria( 'controls', this.$el.attr( 'id' ) )
 			.off( 'click.ali' ).on( 'click.ali', this.evaluate.bind( this ) );
 
-		this.showFront();
+		$( '.card-back', this.$el ).aria( 'hidden', 'true' );
+		$( '.card-front', this.$el ).aria( 'hidden', 'false' );
 	};
 
 	// Inherits from ali.Interaction
@@ -50,8 +51,15 @@
 			e.preventDefault();
 			e.stopPropagation();
 		}
-		$( '.card-back', this.$el ).aria( 'hidden', 'false' );
 		$( '.card-front', this.$el ).aria( 'hidden', 'true' );
+		$( '.card-back', this.$el ).aria( 'hidden', 'false' );
+
+		var $buttons = $( '.card-back button', this.$el );
+		if ( $buttons.length > 0 ) {
+			setTimeout( function () {
+				$( $buttons[ 0 ] ).focus();
+			}, 100 );
+		}
 	};
 
 	ali.Card.prototype.showFront = function ( e ) {
@@ -61,6 +69,13 @@
 		}
 		$( '.card-back', this.$el ).aria( 'hidden', 'true' );
 		$( '.card-front', this.$el ).aria( 'hidden', 'false' );
+
+		var $buttons = $( '.card-front button', this.$el );
+		if ( $buttons.length > 0 ) {
+			setTimeout( function () {
+				$( $buttons[ 0 ] ).focus();
+			}, 100 );
+		}
 	};
 
 	ali.Card.prototype.evaluate = function ( e ) {
@@ -78,8 +93,7 @@
 		this.setCorrectResponses( [ $select.val() ] );
 		this.setLearnerResponses( [ $( 'option:selected', $select ).val() ] );
 		this.complete( is_correct ? ali.STATUS.correct : ali.STATUS.incorrect );
-		$( '.card-back', this.$el ).aria( 'hidden', 'false' );
-		$( '.card-front', this.$el ).aria( 'hidden', 'true' );
+		this.showBack();
 	};
 
 	/*
