@@ -63,8 +63,8 @@
 					<pre class="language-markup"><code class="language-markup">
 						&lt;form id=&quot;{{id}}&quot; class=&quot;thinking-question&quot; data-ali=&quot;thinking-question&quot;&gt;
 							&lt;div class=&quot;question-wrapper&quot;&gt;
-								&lt;div class=&quot;question&quot;&gt;{{{stem}}}&lt;/div&gt;
-								&lt;textarea&gt;&lt;/textarea&gt;
+								&lt;label class=&quot;question&quot; for=&quot;{{id}}-textarea&quot;&gt;{{{stem}}}&lt;/label&gt;
+								&lt;textarea id=&quot;{{id}}-textarea&quot;&gt;&lt;/textarea&gt;
 								&lt;div class=&quot;submit-row&quot;&gt;
 									&lt;button class=&quot;submit&quot; aria-label=&quot;Submit&quot;&gt;Submit&lt;/button&gt;
 								&lt;/div&gt;
@@ -92,11 +92,11 @@
 					<div class="well example-container">
 						<form id="tq-1" class="thinking-question" data-ali="thinking-question">
 							<div class="question-wrapper">
-								<div class="question">
+								<label class="question" for="tq-1-textarea">
 									<p>An individual's construction of social reality, not the objective input, may dictate their behaviour in the social world.</p>
 									<p>Take a moment and consider how your biases affect your social interactions and then explain in a paragraph or two how you believe you might manage the bias you experience &mdash; or eliminate them entirely.</p>
-								</div>
-								<textarea></textarea>
+								</label>
+								<textarea id="tq-1-textarea"></textarea>
 								<div class="submit-row">
 									<button class="submit" aria-label="Submit">Submit</button>
 								</div>
