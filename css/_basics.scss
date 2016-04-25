@@ -76,3 +76,22 @@ html, body {
 		content        : "Example";
 	}
 }
+
+.photo-credit {
+	text-align     : right;
+	letter-spacing : 2px;
+	font-size      : 11px;
+	padding        : 8px 16px;
+
+	a {
+		color      : #fff;
+		opacity    : .6;
+		transition : opacity .4s;
+
+		&:focus,
+		&:hover {
+			opacity         : 1;
+			text-decoration : none;
+		}
+	}
+}
