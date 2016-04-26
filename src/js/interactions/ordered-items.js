@@ -126,10 +126,11 @@
         });
         this.$items.height(h);
 
-        // Using the first item to find the outerHeight "withMargin"
-        // now that they've been equalized
-        var oH = $(this.$items[0]).outerHeight(true);
-        $('.list-elements', this.$el).height(( oH * this.$items.length));
+        //UPDATED: IE10 can't use calc with translate, so we
+        // figure height by the outerHeight * 124%,
+        // the 24% being the margin used in the CSS file.
+        var oH = $(this.$items[0]).outerHeight();
+        $('.list-elements', this.$el).height(( oH * this.$items.length * 1.24));
 
         // reset the flag
         this._resizing = false;

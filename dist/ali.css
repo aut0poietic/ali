@@ -687,49 +687,49 @@ body.dialog-open {
           transform: translate(0, 0%);
 }
 .ordered-items .list-elements li.item-2 {
-  -webkit-transform: translate(0, 120%);
-      -ms-transform: translate(0, 120%);
-          transform: translate(0, 120%);
+  -webkit-transform: translate(0, 124%);
+      -ms-transform: translate(0, 124%);
+          transform: translate(0, 124%);
 }
 .ordered-items .list-elements li.item-3 {
-  -webkit-transform: translate(0, 240%);
-      -ms-transform: translate(0, 240%);
-          transform: translate(0, 240%);
+  -webkit-transform: translate(0, 248%);
+      -ms-transform: translate(0, 248%);
+          transform: translate(0, 248%);
 }
 .ordered-items .list-elements li.item-4 {
-  -webkit-transform: translate(0, 360%);
-      -ms-transform: translate(0, 360%);
-          transform: translate(0, 360%);
+  -webkit-transform: translate(0, 372%);
+      -ms-transform: translate(0, 372%);
+          transform: translate(0, 372%);
 }
 .ordered-items .list-elements li.item-5 {
-  -webkit-transform: translate(0, 480%);
-      -ms-transform: translate(0, 480%);
-          transform: translate(0, 480%);
+  -webkit-transform: translate(0, 496%);
+      -ms-transform: translate(0, 496%);
+          transform: translate(0, 496%);
 }
 .ordered-items .list-elements li.item-6 {
-  -webkit-transform: translate(0, 600%);
-      -ms-transform: translate(0, 600%);
-          transform: translate(0, 600%);
+  -webkit-transform: translate(0, 620%);
+      -ms-transform: translate(0, 620%);
+          transform: translate(0, 620%);
 }
 .ordered-items .list-elements li.item-7 {
-  -webkit-transform: translate(0, 720%);
-      -ms-transform: translate(0, 720%);
-          transform: translate(0, 720%);
+  -webkit-transform: translate(0, 744%);
+      -ms-transform: translate(0, 744%);
+          transform: translate(0, 744%);
 }
 .ordered-items .list-elements li.item-8 {
-  -webkit-transform: translate(0, 840%);
-      -ms-transform: translate(0, 840%);
-          transform: translate(0, 840%);
+  -webkit-transform: translate(0, 868%);
+      -ms-transform: translate(0, 868%);
+          transform: translate(0, 868%);
 }
 .ordered-items .list-elements li.item-9 {
-  -webkit-transform: translate(0, 960%);
-      -ms-transform: translate(0, 960%);
-          transform: translate(0, 960%);
+  -webkit-transform: translate(0, 992%);
+      -ms-transform: translate(0, 992%);
+          transform: translate(0, 992%);
 }
 .ordered-items .list-elements li.item-10 {
-  -webkit-transform: translate(0, 1080%);
-      -ms-transform: translate(0, 1080%);
-          transform: translate(0, 1080%);
+  -webkit-transform: translate(0, 1116%);
+      -ms-transform: translate(0, 1116%);
+          transform: translate(0, 1116%);
 }
 .ordered-items .list-elements li.moving {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);

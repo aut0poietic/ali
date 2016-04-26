@@ -1,3 +1,5 @@
+$item-translate-height: 124%;
+
 .ordered-items {
 	position : relative;
 
@@ -26,8 +28,7 @@
 
 			@for $i from 0 through 9 {
 				&.item-#{$i + 1} {
-					transform : translate(0, 120% * $i);
-					//transform : translate(0, calc(#{100% * $i} + #{$base-line-height * $i}));
+					transform : translate(0, $item-translate-height * $i);
 				}
 			}
 
