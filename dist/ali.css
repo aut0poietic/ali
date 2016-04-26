@@ -682,54 +682,54 @@ body.dialog-open {
   transition: transform .4s ease-in-out, box-shadow .4s ease-out;
 }
 .ordered-items .list-elements li.item-1 {
-  -webkit-transform: translate(0, calc(0% + 0px));
-      -ms-transform: translate(0, calc(0% + 0px));
-          transform: translate(0, calc(0% + 0px));
+  -webkit-transform: translate(0, 0%);
+      -ms-transform: translate(0, 0%);
+          transform: translate(0, 0%);
 }
 .ordered-items .list-elements li.item-2 {
-  -webkit-transform: translate(0, calc(100% + 24px));
-      -ms-transform: translate(0, calc(100% + 24px));
-          transform: translate(0, calc(100% + 24px));
+  -webkit-transform: translate(0, 120%);
+      -ms-transform: translate(0, 120%);
+          transform: translate(0, 120%);
 }
 .ordered-items .list-elements li.item-3 {
-  -webkit-transform: translate(0, calc(200% + 48px));
-      -ms-transform: translate(0, calc(200% + 48px));
-          transform: translate(0, calc(200% + 48px));
+  -webkit-transform: translate(0, 240%);
+      -ms-transform: translate(0, 240%);
+          transform: translate(0, 240%);
 }
 .ordered-items .list-elements li.item-4 {
-  -webkit-transform: translate(0, calc(300% + 72px));
-      -ms-transform: translate(0, calc(300% + 72px));
-          transform: translate(0, calc(300% + 72px));
+  -webkit-transform: translate(0, 360%);
+      -ms-transform: translate(0, 360%);
+          transform: translate(0, 360%);
 }
 .ordered-items .list-elements li.item-5 {
-  -webkit-transform: translate(0, calc(400% + 96px));
-      -ms-transform: translate(0, calc(400% + 96px));
-          transform: translate(0, calc(400% + 96px));
+  -webkit-transform: translate(0, 480%);
+      -ms-transform: translate(0, 480%);
+          transform: translate(0, 480%);
 }
 .ordered-items .list-elements li.item-6 {
-  -webkit-transform: translate(0, calc(500% + 120px));
-      -ms-transform: translate(0, calc(500% + 120px));
-          transform: translate(0, calc(500% + 120px));
+  -webkit-transform: translate(0, 600%);
+      -ms-transform: translate(0, 600%);
+          transform: translate(0, 600%);
 }
 .ordered-items .list-elements li.item-7 {
-  -webkit-transform: translate(0, calc(600% + 144px));
-      -ms-transform: translate(0, calc(600% + 144px));
-          transform: translate(0, calc(600% + 144px));
+  -webkit-transform: translate(0, 720%);
+      -ms-transform: translate(0, 720%);
+          transform: translate(0, 720%);
 }
 .ordered-items .list-elements li.item-8 {
-  -webkit-transform: translate(0, calc(700% + 168px));
-      -ms-transform: translate(0, calc(700% + 168px));
-          transform: translate(0, calc(700% + 168px));
+  -webkit-transform: translate(0, 840%);
+      -ms-transform: translate(0, 840%);
+          transform: translate(0, 840%);
 }
 .ordered-items .list-elements li.item-9 {
-  -webkit-transform: translate(0, calc(800% + 192px));
-      -ms-transform: translate(0, calc(800% + 192px));
-          transform: translate(0, calc(800% + 192px));
+  -webkit-transform: translate(0, 960%);
+      -ms-transform: translate(0, 960%);
+          transform: translate(0, 960%);
 }
 .ordered-items .list-elements li.item-10 {
-  -webkit-transform: translate(0, calc(900% + 216px));
-      -ms-transform: translate(0, calc(900% + 216px));
-          transform: translate(0, calc(900% + 216px));
+  -webkit-transform: translate(0, 1080%);
+      -ms-transform: translate(0, 1080%);
+          transform: translate(0, 1080%);
 }
 .ordered-items .list-elements li.moving {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
