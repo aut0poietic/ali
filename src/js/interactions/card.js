@@ -23,6 +23,8 @@
 			ali.Interaction.call( this, element, TYPE, DESCRIPTION );
 		}
 
+		this.$el.aria('tabindex', "-1");
+
 		// initialize the turn-to-back functionality
 		$( '.show-back', this.$el )
 			.aria( 'controls', this.$el.attr( 'id' ) )
@@ -54,12 +56,7 @@
 		$( '.card-front', this.$el ).aria( 'hidden', 'true' );
 		$( '.card-back', this.$el ).aria( 'hidden', 'false' );
 
-		var $buttons = $( '.card-back button', this.$el );
-		if ( $buttons.length > 0 ) {
-			setTimeout( function () {
-				$( $buttons[ 0 ] ).focus();
-			}, 100 );
-		}
+		this.$el.focus();
 	};
 
 	ali.Card.prototype.showFront = function ( e ) {
@@ -70,12 +67,7 @@
 		$( '.card-back', this.$el ).aria( 'hidden', 'true' );
 		$( '.card-front', this.$el ).aria( 'hidden', 'false' );
 
-		var $buttons = $( '.card-front button', this.$el );
-		if ( $buttons.length > 0 ) {
-			setTimeout( function () {
-				$( $buttons[ 0 ] ).focus();
-			}, 100 );
-		}
+		this.$el.focus();
 	};
 
 	ali.Card.prototype.evaluate = function ( e ) {

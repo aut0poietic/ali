@@ -80,20 +80,12 @@
 			this.complete( ali.STATUS.complete );
 		}
 
-		setTimeout( this.focusNextCard.bind( this ), 400 );
+		setTimeout( this.focusNextCard.bind( this ), 600 );
 	};
 
 	ali.CardCarousel.prototype.focusNextCard = function () {
-		var $buttons = $( '.card-wrapper[aria-hidden="false"] .card-front button', this.$el );
-
-		if ( $buttons.length > 0 ) {
-			setTimeout( function () {
-				console.log( $buttons );
-				$( $buttons[ 0 ] ).focus();
-			}, 100 );
-		}
+		$( '.card-wrapper[aria-hidden="false"] .card', this.$el ).focus();
 	};
-
 
 	/**
 	 * Event handler for the 'show-first' button. Additionally, resets all cards.
