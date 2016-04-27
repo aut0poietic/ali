@@ -1747,7 +1747,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
     ali.AnswerSet.prototype.init = function () {
         $(QUESTION, this.$el).each((function (i, el) {
             $(el).aria({
-                           'live' : "assertive",
+                           'live' : "off",
                            'atomic' : "true"
                        })
                 .attr('id', this.$el.attr('id') + '-' + i)
@@ -1782,7 +1782,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
     };
 
     /**
-     * 
+     *
      */
     ali.AnswerSet.prototype.allQuestionsComplete = function () {
         var num_questions = $(QUESTION).length, is_correct;
@@ -1807,6 +1807,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
      * @param is_correct
      */
     ali.AnswerSet.prototype.showFlag = function ($target, is_correct) {
+        $target.aria('live', 'assertive');
         var $flag = this.makeFlag(
             is_correct ? $target.attr(CORRECT_RESPONSE) : $target.attr(INCORRECT_RESPONSE),
             is_correct ? 'correct' : 'incorrect');
