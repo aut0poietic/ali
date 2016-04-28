@@ -1,7 +1,7 @@
 {
   "name": "ali",
-  "version": "0.1.0",
-  "description": "Ali is a set of learning interactions for delivery in any eLearning platform that supports HTML5, JavaScript and CSS.",
+  "version": "0.8.0",
+  "description": "A set of learning interactions for delivery in any eLearning platform that supports HTML5, JavaScript and CSS.",
   "author": "Jer Brand <thejhereg@gmail.com>",
   "main": "dist/ali.js",
   "repository": {
