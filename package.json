@@ -1,15 +1,15 @@
 {
-  "name": "ali",
+  "name": "ali-interactions",
   "version": "0.8.0",
   "description": "A set of learning interactions for delivery in any eLearning platform that supports HTML5, JavaScript and CSS.",
   "author": "Jer Brand <thejhereg@gmail.com>",
   "main": "dist/ali.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aut0poietic/ali"
+    "url": "https://github.com/aut0poietic/ali-interactions"
   },
   "bugs": {
-    "url": "https://github.com/aut0poietic/ali/issues"
+    "url": "https://github.com/aut0poietic/ali-interactions/issues"
   },
   "keywords": [
     "learning",
