@@ -16,7 +16,7 @@
     var DESCRIPTION = 'Sequenced elements interaction.';
     var TYPE = ali.TYPE.sequencing;
 
-    var TRANSITION_DURATION = 400;
+    var TRANSITION_DURATION = 400; 
 
     /**
      * Ordered Items interaction class
@@ -63,7 +63,7 @@
      * Initializes the Interaction. Called from constructor.
      */
     ali.OrderedItems.prototype.init = function () {
-        this.$items = $('li', this.$el);
+        this.$items = $('.list-elements li', this.$el);
         this.createElements();
 
         this.$selects = $('select', this.el);

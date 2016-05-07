@@ -1885,7 +1885,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 	 */
 	ali.MultipleChoice.prototype.init = function () {
 		this.$el.off( 'submit.ali' ).on( 'submit.ali', this.form_onSubmit.bind( this ) );
-		$( 'input', this.$el ).off( 'change.ali' ).on( 'change.ali', this.input_onChange.bind( this ) );
+		$( '.input-group input', this.$el ).off( 'change.ali' ).on( 'change.ali', this.input_onChange.bind( this ) );
 	};
 
 	/**
@@ -1989,7 +1989,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
     var DESCRIPTION = 'Sequenced elements interaction.';
     var TYPE = ali.TYPE.sequencing;
 
-    var TRANSITION_DURATION = 400;
+    var TRANSITION_DURATION = 400; 
 
     /**
      * Ordered Items interaction class
@@ -2036,7 +2036,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
      * Initializes the Interaction. Called from constructor.
      */
     ali.OrderedItems.prototype.init = function () {
-        this.$items = $('li', this.$el);
+        this.$items = $('.list-elements li', this.$el);
         this.createElements();
 
         this.$selects = $('select', this.el);

@@ -35,7 +35,7 @@
 	 */
 	ali.MultipleChoice.prototype.init = function () {
 		this.$el.off( 'submit.ali' ).on( 'submit.ali', this.form_onSubmit.bind( this ) );
-		$( 'input', this.$el ).off( 'change.ali' ).on( 'change.ali', this.input_onChange.bind( this ) );
+		$( '.input-group input', this.$el ).off( 'change.ali' ).on( 'change.ali', this.input_onChange.bind( this ) );
 	};
 
 	/**
