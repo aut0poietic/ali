@@ -1,6 +1,6 @@
 {
   "name": "ali-interactions",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "A set of learning interactions for delivery in any eLearning platform that supports HTML5, JavaScript and CSS.",
   "author": "Jer Brand <thejhereg@gmail.com>",
   "main": "dist/ali.js",
@@ -29,6 +29,6 @@
     "grunt-html-convert": "0.0.2",
     "load-grunt-tasks": "^3.4.1"
   },
-  "dependencies": { },
+  "dependencies": {},
   "license": "GPL-3.0"
 }
