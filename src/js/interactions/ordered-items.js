@@ -16,7 +16,7 @@
     var DESCRIPTION = 'Sequenced elements interaction.';
     var TYPE = ali.TYPE.sequencing;
 
-    var TRANSITION_DURATION = 400; 
+    var TRANSITION_DURATION = 400;
 
     /**
      * Ordered Items interaction class
@@ -222,7 +222,17 @@
 
         this.setCorrectResponses(correctOrder);
         this.setLearnerResponses(selectedOrder);
+
+        //Added in 0.8.3 - disable form on submit
+        this.$el.off('submit.ali').on('submit.ali', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        $('button').aria('disabled', 'true');
+
         this.complete(correct ? ali.STATUS.correct : ali.STATUS.incorrect);
+
+
     };
 
     /**
