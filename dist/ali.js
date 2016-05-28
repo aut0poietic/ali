@@ -457,24 +457,6 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 	ali.Interaction.prototype.$dialog = undefined;
 
 	/**
-	 * Utility function that creates an ID using the the ID of the passed element or the text of the passed element.
-	 * @param $el Element used to define the ID.
-	 * @returns {string} Target ID for use with `aria-controls`
-	 */
-	ali.Interaction.prototype.makeTargetID = function ( $el ) {
-		var str = $el.attr( 'id' );
-		if ( str === undefined ) {
-			str = $el.text().replace( /[\W_]+/g, "" ).toLowerCase();
-			if ( str.length > 10 ) {
-				str = str.substring( 0, 10 );
-			}
-		} else {
-			str += '-target';
-		}
-		return str;
-	};
-
-	/**
 	 * Because javascript and the LMS I work with on occasion don't agree on what true means
 	 * Used sparingly...
 	 * @param string {string|boolean}
@@ -941,7 +923,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
     ali.Accordion.prototype.initTab = function (i, el) {
         var $tab, $panel, id;
         $tab = $(el);
-        id = this.makeTargetID($tab);
+        id = "accordion-" + i;
         $panel = $tab.next(PANEL);
         $tab.aria(
             {

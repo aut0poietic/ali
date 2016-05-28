@@ -73,7 +73,7 @@
     ali.Accordion.prototype.initTab = function (i, el) {
         var $tab, $panel, id;
         $tab = $(el);
-        id = this.makeTargetID($tab);
+        id = "accordion-" + i;
         $panel = $tab.next(PANEL);
         $tab.aria(
             {
