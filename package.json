@@ -1,6 +1,6 @@
 {
   "name": "ali-interactions",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "A set of learning interactions for delivery in any eLearning platform that supports HTML5, JavaScript and CSS.",
   "author": "Jer Brand <thejhereg@gmail.com>",
   "main": "dist/ali.js",
