@@ -4,3 +4,4 @@
 node_modules/
 dist/index.html
 dist/normalize.css
+npm-debug.log
