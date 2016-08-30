@@ -2335,7 +2335,7 @@ htmlTemplates["dialog"] = "<div class=\"dialog\" role=\"alertdialog\" tabindex=\
 		e.stopPropagation();
 		var response = $( 'textarea', this.$el ).val();
 		if ( response.length > 0 ) {
-			$( 'button, textarea' ).aria( 'disabled', 'true' );
+			$( 'button, textarea', this.$el ).aria( 'disabled', 'true' );
 			this.setLearnerResponses( [ response ] );
 			this.complete( ali.STATUS.complete );
 			try {
